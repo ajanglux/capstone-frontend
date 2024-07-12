@@ -4,6 +4,7 @@ import Login from "../components/auth/Login.vue"
 import Register from "../components/auth/Register.vue"
 import BookingForm from "../components/BookingForm.vue"
 import Profile from "../components/Profile.vue"
+import BookingList from '../components/BookingList.vue';
 import { useAuthStore } from '../stores/useAuthStore.js'
 
 
@@ -48,6 +49,11 @@ const router = createRouter({
             path: '/profile',
             name: 'profile',
             component: Profile
+        },
+        {
+            path: '/bookinglist',
+            name: 'bookingList',
+            component: BookingList
         }
     ],
 })

@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <h4>
-                Booking
+                Add Booking
             </h4>
         </div>
         <div class="card-body">

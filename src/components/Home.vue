@@ -7,7 +7,7 @@
             </router-link>
         </li>
         <li class="nav-item">
-            <router-link to="/booking/create">
+            <router-link to="/bookingList">
                 Booking History
             </router-link>
         </li>
