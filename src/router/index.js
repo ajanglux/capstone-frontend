@@ -43,17 +43,20 @@ const router = createRouter({
         {
             path: '/booking/create',
             name: 'addBooking',
-            component: BookingForm
+            component: BookingForm,
+            beforeEnter: [checkIfLogged],
         },
         {
             path: '/profile',
             name: 'profile',
-            component: Profile
+            component: Profile,
+            beforeEnter: [checkIfLogged],
         },
         {
             path: '/bookinglist',
             name: 'bookingList',
-            component: BookingList
+            component: BookingList,
+            beforeEnter: [checkIfLogged],
         }
     ],
 })
