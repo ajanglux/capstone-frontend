@@ -2,39 +2,35 @@
     <div class="card">
         <div class="card-header">
             <h4>
-                Add Booking
+                {{ isEditing ? 'Edit Booking' : 'Add Booking' }}
             </h4>
         </div>
         <div class="card-body">
-
             <ul v-if="Object.keys(this.errorList).length > 0" class="alert alert-warning">
                 <li v-for="(error, index) in this.errorList" :key="index" class="mb-0 ms-3">
                     <strong>{{ error[0] }}</strong>
                 </li>
             </ul>
             <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
-                <input v-model="model.booking.meeting_title" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                <span class="input-group-text">Title</span>
+                <input v-model="model.booking.meeting_title" type="text" class="form-control">
             </div>
             <div class="input-group mb-4">
                 <span class="input-group-text">Details</span>
-                <textarea v-model="model.booking.description" class="form-control" aria-label="With textarea"></textarea>
+                <textarea v-model="model.booking.description" class="form-control"></textarea>
             </div>
-
             <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Date</span>
-                <input v-model="model.booking.booking_date" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                <span class="input-group-text">Date</span>
+                <input v-model="model.booking.booking_date" type="date" class="form-control">
             </div>
-
             <div class="input-group mb-3">
                 <span class="input-group-text">Start time</span>
-                <input v-model="model.booking.start_time" type="time" class="form-control" aria-label="Username">
+                <input v-model="model.booking.start_time" type="time" class="form-control">
                 <span class="input-group-text">End time</span>
-                <input v-model="model.booking.end_time" type="time" class="form-control" aria-label="Server">
+                <input v-model="model.booking.end_time" type="time" class="form-control">
             </div>
-
             <div class="input-group mb-3">
-               <button @click="saveBooking" type="submit" class="btn btn-primary">Submit</button>
+               <button @click="isEditing ? updateBooking() : saveBooking()" type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </div>
@@ -42,8 +38,10 @@
 
 <script>
 import axios from 'axios'
+
 export default {
-    name: 'addBooking',
+    name: 'BookingForm',
+    props: ['id'],
     data() {
         return {
             errorList: '',
@@ -55,37 +53,54 @@ export default {
                     start_time: '',
                     end_time: ''
                 }
-            }
+            },
+            isEditing: false,
+        }
+    },
+    mounted() {
+        if (this.id) {
+            this.isEditing = true;
+            this.getBookingDetails();
         }
     },
     methods: {
+        getBookingDetails() {
+            axios.get(`http://localhost:8000/api/booking/${this.id}`)
+                .then(response => {
+                    this.model.booking = response.data.data;
+                })
+                .catch(error => {
+                    console.error('Error fetching booking details:', error.response ? error.response.data : error.message);
+                });
+        },
         saveBooking() {
-            var mythis = this;
             axios.post('http://localhost:8000/api/booking', this.model.booking)
                 .then(response => {
-                    console.log(response.data);
                     alert(response.data.message);
-                    this.model.booking = {
-                        meeting_title: '',
-                        description: '',
-                        booking_date: '',
-                        start_time: '',
-                        end_time: ''
-                    }
-                    this.errorList = '';
+                    this.$router.push({ name: 'BookingList' });
                 })
-                .catch(function(error) {
-
-                    if(error.response.status == 422) {
-                        mythis.errorList = error.response.data.errors;
+                .catch(error => {
+                    if (error.response.status === 422) {
+                        this.errorList = error.response.data.errors;
                     } else {
-                        mythis.errorList = [['Something went wrong']];
+                        this.errorList = [['Something went wrong']];
                     }
-
+                });
+        },
+        updateBooking() {
+            axios.put(`http://localhost:8000/api/booking/${this.id}`, this.model.booking)
+                .then(response => {
+                    alert(response.data.message);
+                    this.$router.push({ name: 'BookingList' });
                 })
+                .catch(error => {
+                    if (error.response.status === 422) {
+                        this.errorList = error.response.data.errors;
+                    } else {
+                        this.errorList = [['Something went wrong']];
+                    }
+                });
         }
-    },
+    }
 }
 </script>
-
-

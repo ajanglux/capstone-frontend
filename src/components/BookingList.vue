@@ -16,7 +16,6 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <!-- <th>ID</th> -->
                         <th>Title</th>
                         <th>Details</th>
                         <th>Booking Date</th>
@@ -28,7 +27,6 @@
                 </thead>
                 <tbody v-if="booking.length > 0">
                     <tr v-for="(data, index) in booking" :key="index">
-                        <!-- <td>{{ data.id }}</td> -->
                         <td>{{ data.meeting_title }}</td>
                         <td>{{ data.description }}</td>
                         <td>{{ data.booking_date }}</td>
@@ -40,11 +38,9 @@
                             </span>
                         </td>
                         <td>
-                            <!-- <button type="button" class="btn btn-warning me-2">
-                                <router-link :to="'/booking/' + data.id + '/edit'" class="text-white">
-                                    Edit
-                                </router-link>
-                            </button> -->
+                            <router-link :to="{ name: 'EditBooking', params: { id: data.id }}" class="btn btn-warning me-2">
+                                Edit
+                            </router-link>
                             <button @click="deleteBooking(data.id)" type="button" class="btn btn-danger me-2">
                                 Delete
                             </button>

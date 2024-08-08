@@ -47,6 +47,13 @@ const router = createRouter({
             beforeEnter: [checkIfLogged],
         },
         {
+            path: '/booking/:id/edit',
+            name: 'EditBooking',
+            component: BookingForm,
+            beforeEnter: [checkIfLogged],
+            props: true
+        },
+        {
             path: '/profile',
             name: 'profile',
             component: Profile,
