@@ -114,7 +114,7 @@ export default {
             })
             .then(response => {
                 alert(response.data.message);
-                this.$router.push({ name: 'bookingList' });
+                this.$router.push({ name: 'appointments' });
             })
             .catch(error => {
                 if (error.response.status === 422) {

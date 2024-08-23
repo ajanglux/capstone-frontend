@@ -14,7 +14,7 @@
                 <!-- <span class="material-icons">home</span> -->
                 <span class="text">Home</span>
             </router-link>
-            <router-link class="button" to="/booking/create">
+            <router-link class="button" to="/appointments">
                 <!-- <span class="material-icons">home</span> -->
                 <span class="text">Appointments</span>
             </router-link>

@@ -1,7 +1,7 @@
 <template>
     <aside>
         <!-- <img class="sna-logo" src="/src/assets/SNA Logo with BG.png" alt=""> -->
-        <h2 class="sp-text">Welcome <br> User</h2>
+        <h2 class="sp-text">Welcome <br> Admin</h2>
         <br>
         <hr>
         <div class="menu-toggle-wrap">

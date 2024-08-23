@@ -1,7 +1,7 @@
 <template>
   <v-app>
    <div class="app">
-     <template v-if="!isLoginPage && !isRegisterPage"> 
+     <template v-if="!isLoginPage && !isRegisterPage && !isLandingPage"> 
        <Sidebar />
        <div class="headerAndContent">
          <Header />
@@ -20,8 +20,11 @@
 </template>
 
 <script>
+// User Side
 import Header from './components/layouts/Header.vue'
 import Sidebar from './components/layouts/Sidebar.vue'
+
+//Admin Side
 
 export default {
  name: 'App',
@@ -35,6 +38,9 @@ export default {
    },
    isRegisterPage() {
      return this.$route.path === '/register';
+   },
+   isLandingPage() {
+     return this.$route.path === '/';
    },
  },
 };

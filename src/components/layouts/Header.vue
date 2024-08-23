@@ -9,7 +9,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul v-if="!store.user" class="navbar-nav">
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                         <router-link class="nav-link" aria-current="page" to="/register">
                            <i class="bi bi-person-add"></i> Register
                         </router-link>
@@ -18,7 +18,7 @@
                         <router-link class="nav-link" aria-current="page" to="/login">
                             <i class="bi bi-box-arrow-right"></i> Login
                         </router-link>
-                    </li> -->
+                    </li>
                 </ul>
                 <ul v-else class="navbar-nav">
                     <!-- <li class="nav-item">
