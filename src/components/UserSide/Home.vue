@@ -1,6 +1,6 @@
 <template>
-    <div className="container">
-        <h1>HOME PAGE</h1>
+    <!-- <div className="container">
+        <h1>USER HOME PAGE</h1>
         <li class="nav-item">
             <router-link to="/booking/create">
                 Booking Form
@@ -8,9 +8,13 @@
         </li>
         <li class="nav-item">
             <router-link to="/bookingList">
-                Booking History
+                History
             </router-link>
         </li>
+    </div> -->
+    <div class="content">
+        <h1> yoko </h1>
+
     </div>
 </template>
 

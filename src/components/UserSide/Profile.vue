@@ -2,18 +2,27 @@
     <div className="container">
         <h1>PROFILE PAGE</h1>
             <p>User Information</p>
-                <p>Name: {{ store.user.name }}</p>
+            <br>
+                <p>BASIC INFO SA USER</p>
+                <p>Username: {{ store.user.name }}</p>
                 <p>Email: {{ store.user.email }}</p>
+                <br>
+                <p>ITO YONG INFO NA NEED KAPAG MAGBOBOOK NA YONG USER </p>
+                <p>First Name: </p>
+                <p>Last Name: </p>
+                <p>Phone Number:</p>
+                <p>Email: </p>
+                <p>Address: </p>
     </div>
 </template>
 
 <script setup>
-    import { useAuthStore } from '../stores/useAuthStore.js'
-    import router from '../router'
+    import { useAuthStore } from '../../stores/useAuthStore.js'
+    // import router from '../router'
     import { onMounted } from 'vue'
     import { useToast } from "vue-toastification"
-    import { BASE_URL } from '../helpers/baseUrl.js'
-    import { getHeaderConfig } from '../helpers/headerConfig'
+    import { BASE_URL } from '../../helpers/baseUrl.js'
+    import { getHeaderConfig } from '../../helpers/headerConfig.js'
 
     const toast = useToast()
 
@@ -38,4 +47,4 @@
 </script>
 
 <style>
-</style>
+</style>../../stores/useAuthStore.js../../helpers/baseUrl.js../../helpers/headerConfig.js

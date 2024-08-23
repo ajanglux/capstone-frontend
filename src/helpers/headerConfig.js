@@ -1,9 +1,8 @@
 export const getHeaderConfig = (token) => {
-    const config = {
+    return {
         headers: {
             "Authorization" : `Bearer ${token}`,
             "Accept": "application/json",
         }
-    }  
-    return config;
-}
+    };
+};

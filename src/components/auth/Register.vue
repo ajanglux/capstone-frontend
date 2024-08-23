@@ -15,19 +15,19 @@
                     <input 
                         type="text" 
                         v-model="data.user.name"
-                        placeholder="Name*" class="form-control">
+                        placeholder="Username" class="form-control">
                 </div>
                 <div class="form-group mb-3">
                     <input 
                         type="text" 
                         v-model="data.user.email"
-                        placeholder="Email*" class="form-control">
+                        placeholder="Email" class="form-control">
                 </div>
                 <div class="form-group mb-3">
                     <input 
                         type="password" 
                         v-model="data.user.password"
-                        placeholder="Password*" class="form-control">
+                        placeholder="Password" class="form-control">
                 </div>
                 <div class="form-group mb-3">
                   <Spinner v-if="data.loading" />
@@ -36,6 +36,12 @@
                   </button>
                 </div>
             </form>
+
+            <div class="nav-item">
+                <router-link class="nav-link" aria-current="page" to="/login">
+                  Login
+                </router-link>
+            </div>
           </div>
         </div>
       </div>

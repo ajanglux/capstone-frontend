@@ -1,11 +1,16 @@
-import { createRouter, createWebHashHistory } from "vue-router"
-import Home from "../components/Home.vue"
+import { createRouter, createWebHistory } from "vue-router"
+import { useAuthStore } from '../stores/useAuthStore.js'
+
+//User side
+import Home from "../components/UserSide/Home.vue"
 import Login from "../components/auth/Login.vue"
 import Register from "../components/auth/Register.vue"
-import BookingForm from "../components/BookingForm.vue"
-import Profile from "../components/Profile.vue"
-import BookingList from '../components/BookingList.vue';
-import { useAuthStore } from '../stores/useAuthStore.js'
+import BookingForm from "../components/UserSide/BookingForm.vue"
+import Profile from "../components/UserSide/Profile.vue"
+import BookingList from '../components/UserSide/BookingList.vue';
+
+// Admin side
+// import AdminBookingList from "../components/AdminSide/AdminBookingList.vue"
 
 
 function checkIfLogged() {
@@ -15,15 +20,15 @@ function checkIfLogged() {
 
 function checkIfNotLogged() {
     const store = useAuthStore();
-    if (store.access_token) return '/'
+    if (store.access_token) return '/home'
 }
 
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes: [
         {
-            path: "/",
+            path: "/home",
             name: "home",
             component: Home,
             beforeEnter: [checkIfLogged],
@@ -64,7 +69,12 @@ const router = createRouter({
             name: 'bookingList',
             component: BookingList,
             beforeEnter: [checkIfLogged],
-        }
+        },
+        // {
+        //     path: "/admin",
+        //     name: "admin",
+        //     component: AdminBookingList,
+        // },
     ],
 })
 
