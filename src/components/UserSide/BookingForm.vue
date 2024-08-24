@@ -1,62 +1,37 @@
 <template>
     <div class="card">
         <div class="card-header">
-            <h4>
-                {{ isEditing ? 'Edit Booking' : 'Add Booking' }}
-            </h4>
+            <h4>{{ isEditing ? 'Edit Booking' : 'Add Booking' }}</h4>
         </div>
         <div class="card-body">
-            <ul v-if="Object.keys(this.errorList).length > 0" class="alert alert-warning">
-                <li v-for="(error, index) in this.errorList" :key="index" class="mb-0 ms-3">
+            <ul v-if="Object.keys(errorList).length > 0" class="alert alert-warning">
+                <li v-for="(error, index) in errorList" :key="index" class="mb-0 ms-3">
                     <strong>{{ error[0] }}</strong>
                 </li>
             </ul>
-            <!-- Device Brand Field -->
+
+            <!-- Booking Form Fields -->
             <div class="input-group mb-3">
                 <span class="input-group-text">Device Brand</span>
-                <input 
-                    v-model="model.booking.meeting_title" 
-                    type="text" 
-                    class="form-control" 
-                    :disabled="isEditing"
-                >
+                <input v-model="model.booking.meeting_title" type="text" class="form-control" :disabled="isEditing" />
             </div>
-            <!-- Details Field -->
             <div class="input-group mb-4">
                 <span class="input-group-text">Details</span>
-                <textarea 
-                    v-model="model.booking.description" 
-                    class="form-control" 
-                    :disabled="isEditing" 
-                ></textarea>
+                <textarea v-model="model.booking.description" class="form-control" :disabled="isEditing"></textarea>
             </div>
-            <!-- Date Field -->
             <div class="input-group mb-3">
                 <span class="input-group-text">Date</span>
-                <input 
-                    v-model="model.booking.booking_date" 
-                    type="date" 
-                    class="form-control"
-                >
+                <input v-model="model.booking.booking_date" type="date" class="form-control" />
             </div>
-            <!-- Start and End Time Fields -->
             <div class="input-group mb-3">
                 <span class="input-group-text">Start time</span>
-                <input 
-                    v-model="model.booking.start_time" 
-                    type="time" 
-                    class="form-control"
-                >
+                <input v-model="model.booking.start_time" type="time" class="form-control" />
                 <span class="input-group-text">End time</span>
-                <input 
-                    v-model="model.booking.end_time" 
-                    type="time" 
-                    class="form-control"
-                >
+                <input v-model="model.booking.end_time" type="time" class="form-control" />
             </div>
-            <!-- Submit Button -->
+
             <div class="input-group mb-3">
-               <button @click="isEditing ? updateBooking() : saveBooking()" type="submit" class="btn btn-primary">Submit</button>
+                <button @click="isEditing ? updateBooking() : saveBooking()" type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </div>
@@ -64,21 +39,21 @@
 
 <script>
 import axios from 'axios';
-import { useAuthStore } from '../../stores/useAuthStore'; // Adjust the path as necessary
+import { useAuthStore } from '../../stores/useAuthStore';
 
 export default {
     name: 'BookingForm',
     props: ['id'],
     data() {
         return {
-            errorList: '',
+            errorList: [],
             model: {
                 booking: {
                     meeting_title: '',
                     description: '',
                     booking_date: '',
                     start_time: '',
-                    end_time: ''
+                    end_time: '',
                 }
             },
             isEditing: false,
@@ -133,7 +108,7 @@ export default {
             })
             .then(response => {
                 alert(response.data.message);
-                this.$router.push({ name: 'BookingList' });
+                this.$router.push({ name: 'appointments' });
             })
             .catch(error => {
                 if (error.response.status === 422) {
@@ -146,7 +121,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-/* Add any scoped styles here */
-</style>
