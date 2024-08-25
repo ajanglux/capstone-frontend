@@ -12,7 +12,7 @@ import LandingPage from '../components/UserSide/LandingPage.vue'
 import Appointment from "../components/UserSide/Appointment.vue"
 
 // Admin side
-// import AdminBookingList from "../components/AdminSide/AdminBookingList.vue"
+import AdminBookingList from "../components/AdminSide/AdminBookingList.vue"
 
 
 function checkIfLogged(to, from, next) {
@@ -57,6 +57,12 @@ const router = createRouter({
             beforeEnter: [checkIfNotLogged],
         },
         {
+            path: "/admin",
+            name: "admin",
+            component: AdminBookingList,
+            beforeEnter: [checkIfNotLogged],
+        },
+        {
             path: "/home",
             name: "home",
             component: Home,
@@ -93,11 +99,6 @@ const router = createRouter({
             component: BookingList,
             beforeEnter: [checkIfLogged],
         },
-        // {
-        //     path: "/admin",
-        //     name: "admin",
-        //     component: AdminBookingList,
-        // },
     ],
 })
 

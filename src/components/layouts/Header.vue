@@ -1,9 +1,9 @@
 <template>
     <nav class="navbar">
         <div class="container-fluid">
-            <router-link class="navbar-brand" to="/">
+            <!-- <router-link class="navbar-brand" to="/">
                 SAMPLE PA LANG DONUT JUDGE
-            </router-link>
+            </router-link> -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -20,22 +20,34 @@
                         </router-link>
                     </li>
                 </ul>
-                <ul v-else class="navbar-nav">
+                <div v-else class="dropdown">
                     <!-- <li class="nav-item">
                         <router-link class="nav-link active" aria-current="page" to="/">
                         <i class="bi bi-house-door-fill"></i> Home </router-link>
                     </li> -->
-                    <li class="nav-item">
+                    <button class="username">
+                        <span> {{ store.user.name }} </span>
+                    </button>
+                    <div class="dropdown-content">
                         <router-link class="nav-link" aria-current="page" to="/profile">
-                            <i class="bi bi-person-check-fill"></i> {{ store.user.name }}
+                            <i class="bi bi-person-check-fill"></i> Profile
                         </router-link>
-                    </li>
-                    <li class="nav-item">
                         <router-link to="#" class="nav-link" @click="userLogout" style="cursor:pointer">
                             <i class="bi bi-box-arrow-left"></i> Logout
                         </router-link>
-                    </li>
-                </ul>
+                    </div>
+
+                    <!-- <div class="nav-item">
+                        <router-link class="nav-link" aria-current="page" to="/profile">
+                            <i class="bi bi-person-check-fill"></i> {{ store.user.name }}
+                        </router-link>
+                    </div>
+                    <div class="nav-item">
+                        <router-link to="#" class="nav-link" @click="userLogout" style="cursor:pointer">
+                            <i class="bi bi-box-arrow-left"></i> Logout
+                        </router-link>
+                    </div> -->
+                </div>
             </div>
         </div>
     </nav>
@@ -89,15 +101,62 @@
 .navbar {
     width: 100%;
     height: 70px;
-    background-color: var(--main);
+    background-color: var(--header);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.200);
     align-content: space-evenly;
+    padding: 10px 20px;
+    color: var(--light);
 }
 
-.navbar-nav {
+/* .navbar-nav {
     padding-right: 10px;
     display: flex;
     list-style: none;
+} */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+
+    .username {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        font-size: 20px;
+        color: var(--light);
+
+        span {
+            font-family: 'Poppins';
+        }
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        width: 150px;
+        right: 0;
+        border-radius: 8px;
+
+        .nav-link {
+            padding: 10px;
+            color: black;
+            font-weight: 500;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .nav-link:hover {
+            background-color: pink;
+            border-radius: 8px;
+        }
+    }
+
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
 .container-fluid {

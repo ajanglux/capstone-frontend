@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
-    --main: #C08552;
+    --main: #0F4C7BFF;
+    --header: #0C3C61FF;
     --grey:#64748b;
-    --dark:#2F3F64;
-    --dark-alt: #334155;
     --light:#cdd1da;
+    --light2:#d7dbe4;
 }
 
 * {
@@ -15,8 +15,12 @@
 }
 
 body {
-    background: #62d497;
+    background: var(--light);
     font-family: 'Poppins';
+}
+
+.content {
+    padding: 40px 40px 40px 290px;
 }
 
 button {
@@ -57,4 +61,78 @@ button {
         transition: opacity 0.3s ease-out;
     }    
 
+}
+
+.container {
+    width: 100%;
+    background-color: var(--grey);
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+    color: var(--light);
+    padding: 30px;
+
+    .card-header {
+        margin-bottom: 10px;
+    }
+
+    .card-body {
+        width: 100%;
+
+        .input-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .input-group {
+            flex-basis: 100%;
+            margin-bottom: 10px;
+        }
+
+        .input-group-text {
+            font-size: 14px;
+        }
+
+        input {
+            font-family: 'Poppins';
+            height: 50px;
+            width: 100%;
+            border-radius: 10px;
+            outline: none;
+            border: none;
+            padding: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        textarea {
+            font-family: 'Poppins';
+            height: 100px;
+            width: 100%;
+            resize: none;
+            border-radius: 10px;
+            outline: none;
+            border: none;
+            padding: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:hover, textarea:hover {
+            background-color: var(--light2);
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+
+            .btn {
+                border: 2px solid var(--light);
+                padding: 10px 20px;
+                border-radius: 10px;
+                color: var(--light);
+                font-weight: 600;
+                font-size: 14px;
+                text-decoration: none;
+                font-family: 'Poppins';
+            }
+        }
+    }
 }

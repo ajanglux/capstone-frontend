@@ -1,69 +1,71 @@
 <template>
-    <div class="card">
-      <div class="card-header">
-        <h4>CURRENT APPOINTMENTS</h4>
-        <router-link class="button" to="/booking/create">
-          <!-- <span class="material-icons">home</span> -->
-          <span class="text">ADD BOOKING</span>
-        </router-link>
-      </div>
-      <div class="card-body">
-        <div v-if="success" class="alert alert-success alert-dismissible fade show" role="alert">
-          <strong>{{ success }}</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="content">
+      <div class="container">
+        <div class="card-header">
+          <h4>CURRENT APPOINTMENTS</h4>
+          <router-link class="button" to="/booking/create">
+            <!-- <span class="material-icons">home</span> -->
+            <span class="text">ADD BOOKING</span>
+          </router-link>
         </div>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Device Brand</th>
-              <th>Details</th>
-              <th>Booking Date</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Status</th>
-              <th v-if="showActions">Actions</th>
-            </tr>
-          </thead>
-          <tbody v-if="filteredBookings.length > 0">
-            <tr v-for="(data, index) in filteredBookings" :key="index">
-              <td>{{ data.meeting_title }}</td>
-              <td>{{ data.description }}</td>
-              <td>{{ data.booking_date }}</td>
-              <td>{{ data.start_time }}</td>
-              <td>{{ data.end_time }}</td>
-              <td>
-                <span :class="statusClass(data.status)">
-                  {{ data.status }}
-                </span>
-              </td>
-              <td v-if="showActions">
-                <!-- Reschedule button should be accessible unless status is 'cancelled' -->
-                <router-link 
-                  :to="{ name: 'EditBooking', params: { id: data.id }}" 
-                  class="btn btn-warning me-2" 
-                  :disabled="data.status === 'cancelled'"
-                >
-                  Reschedule
-                </router-link>
-                
-                <!-- Cancel button should be disabled if already cancelled -->
-                <button 
-                  @click="cancelBooking(data)" 
-                  type="button" 
-                  class="btn btn-secondary" 
-                  :disabled="data.status === 'cancelled'"
-                >
-                  Cancel
-                </button>
-              </td>
-            </tr>
-          </tbody>
-          <tbody v-else>
-            <tr>
-              <td colspan="7"><strong>No bookings available.</strong></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="card-body">
+          <div v-if="success" class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ success }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Device Brand</th>
+                <th>Details</th>
+                <th>Booking Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Status</th>
+                <th v-if="showActions">Actions</th>
+              </tr>
+            </thead>
+            <tbody v-if="filteredBookings.length > 0">
+              <tr v-for="(data, index) in filteredBookings" :key="index">
+                <td>{{ data.meeting_title }}</td>
+                <td>{{ data.description }}</td>
+                <td>{{ data.booking_date }}</td>
+                <td>{{ data.start_time }}</td>
+                <td>{{ data.end_time }}</td>
+                <td>
+                  <span :class="statusClass(data.status)">
+                    {{ data.status }}
+                  </span>
+                </td>
+                <td v-if="showActions">
+                  <!-- Reschedule button should be accessible unless status is 'cancelled' -->
+                  <router-link 
+                    :to="{ name: 'EditBooking', params: { id: data.id }}" 
+                    class="btn btn-warning me-2" 
+                    :disabled="data.status === 'cancelled'"
+                  >
+                    Reschedule
+                  </router-link>
+                  
+                  <!-- Cancel button should be disabled if already cancelled -->
+                  <button 
+                    @click="cancelBooking(data)" 
+                    type="button" 
+                    class="btn btn-secondary" 
+                    :disabled="data.status === 'cancelled'"
+                  >
+                    Cancel
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+            <tbody v-else>
+              <tr>
+                <td colspan="7"><strong>No bookings available.</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </template>
@@ -133,7 +135,7 @@
   })
   </script>
   
-  <style scoped>
-  /* Add any scoped styles here */
+  <style>
+  
   </style>
   

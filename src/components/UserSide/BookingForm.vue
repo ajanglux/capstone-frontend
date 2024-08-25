@@ -1,37 +1,45 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <h4>{{ isEditing ? 'Edit Booking' : 'Add Booking' }}</h4>
-        </div>
-        <div class="card-body">
-            <ul v-if="Object.keys(errorList).length > 0" class="alert alert-warning">
-                <li v-for="(error, index) in errorList" :key="index" class="mb-0 ms-3">
-                    <strong>{{ error[0] }}</strong>
-                </li>
-            </ul>
+    <div class="content">
+        <div class="container">
+            <div class="card-header">
+                <h2>{{ isEditing ? 'Edit Booking' : 'Add Booking' }}</h2>
+            </div>
+            <div class="card-body">
+                <ul v-if="Object.keys(errorList).length > 0" class="alert alert-warning">
+                    <li v-for="(error, index) in errorList" :key="index" class="mb-0 ms-3">
+                        <strong>{{ error[0] }}</strong>
+                    </li>
+                </ul>
 
-            <!-- Booking Form Fields -->
-            <div class="input-group mb-3">
-                <span class="input-group-text">Device Brand</span>
-                <input v-model="model.booking.meeting_title" type="text" class="form-control" :disabled="isEditing" />
-            </div>
-            <div class="input-group mb-4">
-                <span class="input-group-text">Details</span>
-                <textarea v-model="model.booking.description" class="form-control" :disabled="isEditing"></textarea>
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Date</span>
-                <input v-model="model.booking.booking_date" type="date" class="form-control" />
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Start time</span>
-                <input v-model="model.booking.start_time" type="time" class="form-control" />
-                <span class="input-group-text">End time</span>
-                <input v-model="model.booking.end_time" type="time" class="form-control" />
-            </div>
+                <!-- Booking Form Fields -->
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Device Brand</span>
+                    <input v-model="model.booking.meeting_title" type="text" class="form-control" :disabled="isEditing" />
+                </div>
+                <div class="input-group mb-4">
+                    <span class="input-group-text">Details</span>
+                    <textarea v-model="model.booking.description" class="form-control" :disabled="isEditing"></textarea>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Date</span>
+                    <input v-model="model.booking.booking_date" type="date" class="form-control" />
+                </div>
+                <div class="input-row">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Start time</span>
+                        <input v-model="model.booking.start_time" type="time" class="form-control" />
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">End time</span>
+                        <input v-model="model.booking.end_time" type="time" class="form-control" />
+                    </div>
+                </div>
 
-            <div class="input-group mb-3">
-                <button @click="isEditing ? updateBooking() : saveBooking()" type="submit" class="btn btn-primary">Submit</button>
+                <div class="buttons">
+                    <button @click="isEditing ? updateBooking() : saveBooking()" type="submit" class="btn">Submit</button>
+                    <router-link to="/appointments" class="btn">Cancel</router-link>
+                </div>
+
             </div>
         </div>
     </div>
