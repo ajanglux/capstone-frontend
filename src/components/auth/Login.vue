@@ -36,11 +36,10 @@
             </form>
 
             <div class="nav-item">
-                <router-link class="nav-link" aria-current="page" to="/register">
-                    Register
-                </router-link>
-              </div>
-
+              <router-link class="nav-link" aria-current="page" to="/register">
+                Register
+              </router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -78,10 +77,18 @@ const userAuth = async () => {
     if (response.data.error) {
       toast.error(response.data.error, { timeout: 3000 })
     } else {
-      store.setToken(response.data.currentToken)
-      store.setUser(response.data.user)
-      toast.success(response.data.message, { timeout: 3000 })
-      router.push('/home')
+      // Check if the user is a regular user (role === 0)
+      if (response.data.user.role === 0) {
+        store.setToken(response.data.currentToken)
+        store.setUser(response.data.user)
+        toast.success(response.data.message, { timeout: 3000 })
+        router.push('/home') // Regular user dashboard
+      } else {
+        // Display message for non-regular users
+        toast.error("Access Denied", { timeout: 3000 })
+        store.clearToken()  // Optional: clear token if mistakenly set
+        store.clearUser()   // Optional: clear user data
+      }
     }
   } catch (error) {
     data.loading = false
