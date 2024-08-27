@@ -7,7 +7,7 @@
           <div class="card-header bg-white">
             <h5 class="text-center mt-2">
               Register
-            </h5>
+            </h5> 
           </div>
           <div class="card-body">
             <form @submit.prevent="registerUser"> 
