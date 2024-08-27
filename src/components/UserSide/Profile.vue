@@ -65,7 +65,7 @@ export default {
             userProfile: {
                 first_name: '',
                 last_name: '',
-                phone_number: '',
+                phone_number: '09',
                 email: '',
                 address: '',
             },
@@ -86,6 +86,9 @@ export default {
             })
             .then(response => {
                 this.userProfile = response.data.data;
+                if (!this.userProfile.phone_number) {
+                    this.userProfile.phone_number = '09';
+                }
                 this.originalProfile = { ...this.userProfile };
                 this.isEditing = false;
             })
@@ -94,7 +97,6 @@ export default {
             });
         },
         saveProfile() {
-            // Validate phone number before saving
             if (!this.validatePhoneNumberFormat(this.userProfile.phone_number)) {
                 this.errorList = [{ phone_number: ['Phone number must start with 09 and be 11 digits long'] }];
                 return;
@@ -120,6 +122,9 @@ export default {
         },
         cancelEdit() {
             this.userProfile = { ...this.originalProfile };
+            if (!this.userProfile.phone_number) {
+                this.userProfile.phone_number = '09';
+            }
             this.isEditing = false;
         },
         validatePhoneNumber(event) {

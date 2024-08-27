@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <div class="container">
+        <div class="container" v-if="isProfileComplete">
             <div class="card-header">
                 <h2>{{ isEditing ? 'Edit Booking' : 'Add Booking' }}</h2>
             </div>
@@ -10,8 +10,6 @@
                         <strong>{{ error[0] }}</strong>
                     </li>
                 </ul>
-
-                <!-- Booking Form Fields -->
                 <div class="input-group mb-3">
                     <span class="input-group-text">Device Brand</span>
                     <input v-model="model.booking.meeting_title" type="text" class="form-control" :disabled="isEditing" />
@@ -39,8 +37,11 @@
                     <button @click="isEditing ? updateBooking() : saveBooking()" type="submit" class="btn">Submit</button>
                     <router-link to="/appointments" class="btn">Cancel</router-link>
                 </div>
-
             </div>
+        </div>
+        <div v-else>
+            <p>Your profile is incomplete. Please complete your profile before adding a booking.</p>
+            <router-link to="/profile" class="btn btn-primary">Complete Profile</router-link>
         </div>
     </div>
 </template>
@@ -65,9 +66,11 @@ export default {
                 }
             },
             isEditing: false,
+            isProfileComplete: false,
         }
     },
     mounted() {
+        this.checkUserProfile();
         if (this.id) {
             this.isEditing = true;
             this.getBookingDetails();
@@ -124,6 +127,24 @@ export default {
                 } else {
                     this.errorList = [['Something went wrong']];
                 }
+            });
+        },
+        checkUserProfile() {
+            const authStore = useAuthStore();
+            axios.get('http://localhost:8000/api/user/profile', {
+                headers: {
+                    Authorization: `Bearer ${authStore.access_token}`,
+                }
+            })
+            .then(response => {
+                const profile = response.data.data;
+                this.isProfileComplete = profile.first_name && profile.last_name && profile.phone_number && profile.address;
+                if (!this.isProfileComplete) {
+                    alert('Your profile is incomplete. Please complete your profile before adding a booking.');
+                }
+            })
+            .catch(error => {
+                console.error('Error checking user profile:', error.response ? error.response.data : error.message);
             });
         }
     }
