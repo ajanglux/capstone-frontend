@@ -24,7 +24,14 @@
 
                 <div class="input-group">
                     <span class="input-group-text">Phone Number</span>
-                    <input v-model="userProfile.phone_number" type="number" class="form-control" :disabled="!isEditing" />
+                    <input 
+                        v-model="userProfile.phone_number" 
+                        type="text" 
+                        class="form-control" 
+                        :disabled="!isEditing" 
+                        maxlength="11" 
+                        @input="validatePhoneNumber"
+                    />
                 </div>
                 <div class="input-group">
                     <span class="input-group-text">Email</span>
@@ -87,6 +94,12 @@ export default {
             });
         },
         saveProfile() {
+            // Validate phone number before saving
+            if (!this.validatePhoneNumberFormat(this.userProfile.phone_number)) {
+                this.errorList = [{ phone_number: ['Phone number must start with 09 and be 11 digits long'] }];
+                return;
+            }
+
             const authStore = useAuthStore();
             const url = 'http://localhost:8000/api/user/profile';
 
@@ -108,12 +121,26 @@ export default {
         cancelEdit() {
             this.userProfile = { ...this.originalProfile }; // Restore the original profile
             this.isEditing = false; // Exit editing mode
+        },
+        validatePhoneNumber(event) {
+            const input = event.target;
+            // Remove non-numeric characters
+            input.value = input.value.replace(/\D/g, '').slice(0, 11);
+            // Ensure the phone number starts with '09'
+            if (!input.value.startsWith('09')) {
+                input.value = '09' + input.value.replace(/^09/, '');
+            }
+            // Update the model
+            this.userProfile.phone_number = input.value;
+        },
+        validatePhoneNumberFormat(phoneNumber) {
+            // Check if the phone number starts with '09' and has exactly 11 digits
+            return /^09\d{9}$/.test(phoneNumber);
         }
     }
 };
 </script>
 
 <style>
-
-
+/* Add your styles here */
 </style>

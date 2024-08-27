@@ -1,44 +1,46 @@
 <template>
-  <div class="container">
-    <div class="row my-5">
-      <div class="col-md-6 mx-auto">
-        <ValidationErrors :errors="store.errors" />
-        <div class="card rounded-0 shadow-sm">
-          <div class="card-header bg-white">
-            <h5 class="text-center mt-2">Login</h5>
-          </div>
-          <div class="card-body">
-            <form @submit.prevent="userAuth">
-              <div class="form-group mb-3">
-                <input
-                  type="text"
-                  v-model="data.user.email"
-                  placeholder="Email"
-                  class="form-control"
-                  required
-                />
-              </div>
-              <div class="form-group mb-3">
-                <input
-                  type="password"
-                  v-model="data.user.password"
-                  placeholder="Password"
-                  class="form-control"
-                  required
-                />
-              </div>
-              <div class="form-group mb-3">
-                <Spinner v-if="data.loading" />
-                <button v-else type="submit" class="btn btn-dark btn-sm rounded-0">
-                  Login
-                </button>
-              </div>
-            </form>
+  <div class="content">
+    <div class="container">
+      <div class="row my-5">
+        <div class="col-md-6 mx-auto">
+          <ValidationErrors :errors="store.errors" />
+          <div class="card rounded-0 shadow-sm">
+            <div class="card-header bg-white">
+              <h5 class="text-center mt-2">Login</h5>
+            </div>
+            <div class="card-body">
+              <form @submit.prevent="userAuth">
+                <div class="form-group mb-3">
+                  <input
+                    type="text"
+                    v-model="data.user.email"
+                    placeholder="Email"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="form-group mb-3">
+                  <input
+                    type="password"
+                    v-model="data.user.password"
+                    placeholder="Password"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="form-group mb-3">
+                  <Spinner v-if="data.loading" />
+                  <button v-else type="submit" class="btn btn-dark btn-sm rounded-0">
+                    Login
+                  </button>
+                </div>
+              </form>
 
-            <div class="nav-item">
-              <router-link class="nav-link" aria-current="page" to="/register">
-                Register
-              </router-link>
+              <div class="nav-item">
+                <router-link class="nav-link" aria-current="page" to="/register">
+                  Register
+                </router-link>
+              </div>
             </div>
           </div>
         </div>

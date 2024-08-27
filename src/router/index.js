@@ -98,14 +98,14 @@ const router = createRouter({
       beforeEnter: [checkIfLogged, checkIfAdmin],
     },
     {
-      path: '/user/profile/:userId',
-      name: 'UserProfile',
+      path: '/admin/user-profile/:userId',
+      name: 'AdminUserProfile',
       component: ProfileView,
       beforeEnter: [checkIfLogged, checkIfAdmin],
       props: true
     },
     {
-      path: '/booking/:bookingId',
+      path: '/booking/:id',
       name: 'BookingDetails',
       component: BookingView,
       beforeEnter: [checkIfLogged, checkIfAdmin],

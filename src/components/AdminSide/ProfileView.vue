@@ -28,18 +28,18 @@
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text">Email</span>
-            <input v-model="userProfile.email" type="email" placeholder="<Optional>" class="form-control" :disabled="!isEditing" />
+            <input v-model="userProfile.email" type="email" placeholder="Optional" class="form-control" :disabled="!isEditing" />
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text">Address</span>
             <input v-model="userProfile.address" type="text" class="form-control" :disabled="!isEditing" />
           </div>
   
-          <div v-if="!isEditing" @click="isEditing = true" class="buttons">
-            <button class="btn btn-primary">Edit</button>
+          <div v-if="!isEditing" class="buttons">
+            <button @click="isEditing = true" class="btn btn-primary">Edit</button>
           </div>
           <div v-else class="buttons">
-            <button @click="saveProfile" type="submit" class="btn btn-success">Save</button>
+            <button @click="saveProfile" type="button" class="btn btn-success">Save</button>
             <button @click="cancelEdit" type="button" class="btn btn-secondary">Cancel</button>
           </div>
         </div>
@@ -47,69 +47,68 @@
     </div>
   </template>
   
-  <script>
-  import axios from 'axios';
-  import { useAuthStore } from '../../stores/useAuthStore';
+  <script setup>
+  import { ref, onMounted } from 'vue'
+  import axios from 'axios'
+  import { useAuthStore } from '../../stores/useAuthStore'
+  import { useRoute } from 'vue-router'
   
-  export default {
-    props: ['userId'],
-    data() {
-      return {
-        errorList: [],
-        userProfile: {
-          first_name: '',
-          last_name: '',
-          phone_number: '',
-          email: '',
-          address: '',
+  const authStore = useAuthStore()
+  const route = useRoute()
+  
+  const userProfile = ref({
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    email: '',
+    address: '',
+  })
+  const originalProfile = ref({})
+  const isEditing = ref(false)
+  const errorList = ref([])
+  
+  // Fetch user profile data
+  const fetchUserProfile = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/user/profile/${route.params.userId}`, {
+        headers: {
+          Authorization: `Bearer ${authStore.access_token}`,
         },
-        originalProfile: {},
-        isEditing: false,
-      };
-    },
-    mounted() {
-      this.fetchUserProfile();
-    },
-    methods: {
-      fetchUserProfile() {
-        const authStore = useAuthStore();
-        axios.get(`http://localhost:8000/api/user/profile/${this.userId}`, {
-          headers: {
-            Authorization: `Bearer ${authStore.access_token}`,
-          },
-        })
-        .then(response => {
-          this.userProfile = response.data.data;
-          this.originalProfile = { ...this.userProfile };
-          this.isEditing = false;
-        })
-        .catch(error => {
-          console.error('Error fetching user profile:', error.response ? error.response.data : error.message);
-        });
-      },
-      saveProfile() {
-        const authStore = useAuthStore();
-        axios.post(`http://localhost:8000/api/user/profile/${this.userId}`, this.userProfile, {
-          headers: {
-            Authorization: `Bearer ${authStore.access_token}`,
-          },
-        })
-        .then(response => {
-          this.userProfile = response.data.data;
-          this.originalProfile = { ...this.userProfile };
-          this.isEditing = false;
-        })
-        .catch(error => {
-          this.errorList = error.response?.data?.errors || [];
-          console.error('Error during profile save:', error.response ? error.response.data : error.message);
-        });
-      },
-      cancelEdit() {
-        this.userProfile = { ...this.originalProfile };
-        this.isEditing = false;
-      },
-    },
-  };
+      })
+      userProfile.value = response.data.data
+      originalProfile.value = { ...userProfile.value }
+      isEditing.value = false
+    } catch (error) {
+      console.error('Error fetching user profile:', error.response ? error.response.data : error.message)
+    }
+  }
+  
+  // Save the updated profile
+  const saveProfile = async () => {
+    try {
+      const response = await axios.put(`http://localhost:8000/api/user/profile/${route.params.userId}`, userProfile.value, {
+        headers: {
+          Authorization: `Bearer ${authStore.access_token}`,
+        },
+      })
+      userProfile.value = response.data.data
+      originalProfile.value = { ...userProfile.value }
+      isEditing.value = false
+    } catch (error) {
+      errorList.value = error.response?.data?.errors || []
+      console.error('Error during profile save:', error.response ? error.response.data : error.message)
+    }
+  }
+  
+  // Cancel edit mode
+  const cancelEdit = () => {
+    userProfile.value = { ...originalProfile.value }
+    isEditing.value = false
+  }
+  
+  onMounted(() => {
+    fetchUserProfile()
+  })
   </script>
   
   <style scoped>

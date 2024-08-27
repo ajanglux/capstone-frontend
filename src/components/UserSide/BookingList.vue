@@ -2,7 +2,7 @@
   <div class="content">
     <div class="container">
       <div class="card-header">
-        <h4>BOOKING HISTORY (CANCELLED ONLY)</h4>
+        <h4>BOOKING HISTORY (DECLINED AND CANCELLED)</h4>
       </div>
       <div class="card-body">
         <div v-if="success" class="alert alert-success alert-dismissible fade show" role="alert">
@@ -29,14 +29,14 @@
               <td>{{ data.end_time }}</td>
               <td>
                 <span :class="statusClass(data.status)">
-                  {{ data.status }}
+                  {{ formatStatus(data.status) }}
                 </span>
               </td>
             </tr>
           </tbody>
           <tbody v-else>
             <tr>
-              <td colspan="6"><strong>No cancelled bookings found.</strong></td>
+              <td colspan="6"><strong>No bookings found.</strong></td>
             </tr>
           </tbody>
         </table>
@@ -58,7 +58,7 @@ const getBooking = async () => {
   try {
     const response = await axios.get('http://localhost:8000/api/booking', {
       headers: {
-        Authorization: `Bearer ${store.access_token}` // Include the token in the headers
+        Authorization: `Bearer ${store.access_token}`
       }
     })
     booking.value = response.data.data.data
@@ -69,15 +69,30 @@ const getBooking = async () => {
 
 const statusClass = (status) => {
   switch (status) {
-    case 'cancelled':
+    case 'declined':
       return 'badge bg-danger'
+    case 'cancelled':
+      return 'badge bg-dark'
     default:
       return 'badge bg-secondary'
   }
 }
 
+const formatStatus = (status) => {
+  switch (status) {
+    case 'declined':
+      return 'Declined'
+    case 'cancelled':
+      return 'Cancelled'
+    default:
+      return 'Unknown'
+  }
+}
+
 const cancelledBookings = computed(() => {
-  return booking.value.filter(b => b.status === 'cancelled')
+  return booking.value
+    .filter(b => b.status === 'declined' || b.status === 'cancelled')
+    .sort((a, b) => new Date(b.booking_date) - new Date(a.booking_date))
 })
 
 onMounted(() => {
@@ -90,5 +105,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Add any scoped styles here */
+.input-group-text {
+  width: 150px;
+}
 </style>
