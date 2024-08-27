@@ -105,7 +105,7 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/booking/:id',
+      path: '/booking/:bookingId',
       name: 'BookingDetails',
       component: BookingView,
       beforeEnter: [checkIfLogged, checkIfAdmin],

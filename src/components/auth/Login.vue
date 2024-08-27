@@ -88,8 +88,8 @@ const userAuth = async () => {
       } else {
         // Display message for non-regular users
         toast.error("Access Denied", { timeout: 3000 })
-        store.clearToken()  // Optional: clear token if mistakenly set
-        store.clearUser()   // Optional: clear user data
+        store.clearToken()  
+        store.clearUser()   
       }
     }
   } catch (error) {

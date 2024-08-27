@@ -69,8 +69,8 @@ export default {
                 email: '',
                 address: '',
             },
-            originalProfile: {}, // To store the original profile
-            isEditing: false, // Default to false
+            originalProfile: {}, 
+            isEditing: false,
         };
     },
     mounted() {
@@ -86,8 +86,8 @@ export default {
             })
             .then(response => {
                 this.userProfile = response.data.data;
-                this.originalProfile = { ...this.userProfile }; // Store a copy of the original profile
-                this.isEditing = false; // Disable inputs by default if profile exists
+                this.originalProfile = { ...this.userProfile };
+                this.isEditing = false;
             })
             .catch(error => {
                 console.error('Error fetching user profile:', error.response ? error.response.data : error.message);
@@ -110,8 +110,8 @@ export default {
             })
             .then(response => {
                 this.userProfile = response.data.data;
-                this.originalProfile = { ...this.userProfile }; // Update original profile after saving
-                this.isEditing = false; // Disable inputs after successful save
+                this.originalProfile = { ...this.userProfile }; 
+                this.isEditing = false;
             })
             .catch(error => {
                 this.errorList = error.response?.data?.errors || [];
@@ -119,22 +119,18 @@ export default {
             });
         },
         cancelEdit() {
-            this.userProfile = { ...this.originalProfile }; // Restore the original profile
-            this.isEditing = false; // Exit editing mode
+            this.userProfile = { ...this.originalProfile };
+            this.isEditing = false;
         },
         validatePhoneNumber(event) {
             const input = event.target;
-            // Remove non-numeric characters
             input.value = input.value.replace(/\D/g, '').slice(0, 11);
-            // Ensure the phone number starts with '09'
             if (!input.value.startsWith('09')) {
                 input.value = '09' + input.value.replace(/^09/, '');
             }
-            // Update the model
             this.userProfile.phone_number = input.value;
         },
         validatePhoneNumberFormat(phoneNumber) {
-            // Check if the phone number starts with '09' and has exactly 11 digits
             return /^09\d{9}$/.test(phoneNumber);
         }
     }
