@@ -1,13 +1,15 @@
 <template>
-    <nav class="navbar">
+    <nav :class="['navbar', { 'navbar-expanded': isSidebarVisible }]">
         <div class="container-fluid">
-            <!-- <router-link class="navbar-brand" to="/">
-                SAMPLE PA LANG DONUT JUDGE
-            </router-link> -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <div class="menu">
+                <button class="menu-toggle" @click="toggleSidebar">
+                    <i class='bx bx-menu'></i>
+                </button>
+            </div>
+            <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            </button> -->
+            <div class="collapse navbar-collapse">
                 <ul v-if="!store.user" class="navbar-nav">
                     <li class="nav-item">
                         <router-link class="nav-link" aria-current="page" to="/register">
@@ -61,6 +63,7 @@
     import { useToast } from "vue-toastification"
     import { BASE_URL } from '../../helpers/baseUrl.js'
     import { getHeaderConfig } from '../../helpers/headerConfig'
+    import { isSidebarVisible, toggleSidebar } from '../../stores/store.js';
 
     const toast = useToast()
 
@@ -97,15 +100,29 @@
     })
 </script>
 
-<style>
+<style scoped>
 .navbar {
-    width: 100%;
     height: 70px;
+    margin-left: 0px;
+    width: 100%; /* Full width when sidebar is hidden */
     background-color: var(--header);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.200);
     align-content: space-evenly;
     padding: 10px 20px;
     color: var(--light);
+    transition: margin-left 0.3s ease, width 0.3s ease;
+
+    .menu {
+        i {
+            font-size: 24px;
+            color: var(--light);
+        }
+    }
+}
+
+.navbar-expanded {
+    margin-left: 250px; /* Adjust this value to match the sidebar width */
+    width: calc(100% - 250px); /* Adjust the width to fit the content */
 }
 
 /* .navbar-nav {
@@ -117,25 +134,35 @@
 .dropdown {
     position: relative;
     display: inline-block;
+    margin-top: -3px;
 
     .username {
         font-weight: 600;
         letter-spacing: 0.5px;
         font-size: 20px;
         color: var(--light);
+        border-radius: 7px;
+        background-color: var(--main);
+        padding: 4px 15px;
+        transition: all 0.3s ease-in-out;
 
         span {
             font-family: 'Poppins';
         }
     }
 
+    .username:hover {
+        background-color: var(--main-hover);
+    }
+
     .dropdown-content {
         display: none;
         position: absolute;
-        background-color: white;
+        background-color: var(--light2);
         width: 150px;
         right: 0;
-        border-radius: 8px;
+        border-radius: 7px;
+        box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
 
         .nav-link {
             padding: 10px;
@@ -148,8 +175,9 @@
         }
 
         .nav-link:hover {
-            background-color: pink;
-            border-radius: 8px;
+            background-color: var(--grey);
+            color: var(--light);
+            border-radius: 6px;
         }
     }
 

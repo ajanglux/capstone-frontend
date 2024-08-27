@@ -2,9 +2,9 @@
   <div class="content">
     <div class="container">
       <div class="card-header">
-        <h4>ALL BOOKINGS</h4>
+        <h2>ALL BOOKINGS</h2>
       </div>
-      <div class="card-body">
+      <div class="table-body">
         <div v-if="success" class="alert alert-success alert-dismissible fade show" role="alert">
           <strong>{{ success }}</strong>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -35,10 +35,10 @@
                 </span>
               </td>
               <td>{{ data.user.name }}</td>
-              <td>
+              <td class="actions">
                 <button class="btn btn-success btn-sm me-1" @click="approveBooking(data.id)">Approve</button>
                 <button class="btn btn-danger btn-sm me-1" @click="declineBooking(data.id)">Decline</button>
-                <button class="btn btn-primary btn-sm me-1" @click="viewUserProfile(data.user.id)">View User Profile</button>
+                <button class="btn btn-secondary btn-sm me-1" @click="viewUserProfile(data.user.id)">View User Profile</button>
                 <button class="btn btn-secondary btn-sm" @click="viewBookingDetails(data.id)">View Booking Details</button>
               </td>
             </tr>

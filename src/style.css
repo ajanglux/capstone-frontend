@@ -2,25 +2,43 @@
 
 :root {
     --main: #0F4C7BFF;
+    --main-hover: rgb(12, 68, 110);
     --header: #0C3C61FF;
     --grey:#64748b;
+    --table:#b9babe;
     --light:#cdd1da;
     --light2:#d7dbe4;
+    --redbtn:#912b2b;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    text-decoration: none;
 }
 
 body {
     background: var(--light);
     font-family: 'Poppins';
+    overflow-x: hidden;
+}
+
+body.sidebar-hidden .navbar {
+    margin-left: 0px !important;
+}
+
+body.sidebar-hidden .content {
+    padding-left: 40px !important; /* Adjust or set to 0px when the sidebar is hidden */
 }
 
 .content {
-    padding: 40px 40px 40px 290px;
+    padding: 40px 40px 40px 290px; /* Default padding when sidebar is visible */
+    transition: padding-left 0.3s ease;
+}
+
+.content-expanded {
+    padding-left: 40px; /* Adjust this to 0 or a smaller value when sidebar is hidden */
 }
 
 button {
@@ -29,6 +47,7 @@ button {
     border: none;
     outline: none;
     background: none;
+    font-family: 'Poppins';
 }
 
 .app {

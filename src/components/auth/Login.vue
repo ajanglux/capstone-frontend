@@ -1,6 +1,6 @@
 <template>
-  <div class="content">
-    <div class="container">
+  <div class="login-content">
+    <div class="login-container">
       <div class="row my-5">
         <div class="col-md-6 mx-auto">
           <ValidationErrors :errors="store.errors" />
@@ -107,5 +107,7 @@ onUnmounted(() => store.clearErrors())
 </script>
 
 <style>
-/* Add your styles here */
+.login-content {
+  margin: 30px;
+}
 </style>
