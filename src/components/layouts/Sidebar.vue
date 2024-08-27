@@ -1,14 +1,9 @@
 <template>
-    <aside>
+    <aside :class="{ 'hide': !isSidebarVisible }">
         <div class="logo">
             <img class="app-logo" src="/src/assets/techfix.png" alt="">
         </div>
         <!-- <h2 class="sp-text">Welcome <br> User</h2> -->
-        <div class="menu-toggle-wrap">
-            <!-- <button class="menu-toggle" @click="ToggleMenu"> 
-                <span class="material-icons">keyboard_double_arrow_right</span> 
-            </button> -->
-        </div>
         <div class="menu">
             <router-link class="button" active-class="active" to="/home">
                 <i class='bx bxs-home' ></i>
@@ -50,85 +45,73 @@
 
 
 <script setup>
-
-
+    import { isSidebarVisible } from '../../stores/store.js';
 </script>
 
-<style>
+<style scoped>
+.hide {
+    transform: translateX(-100%);
+}
 
-    aside {
-        min-width: 250px;
-        background-color: var(--main);
-        height: 100vh;
-        /* padding: 20px; */
-        display: block;
-        position: fixed;
-        box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
-        z-index: 999;
-        color: var(--light);
+aside {
+    min-width: 250px;
+    background-color: var(--main);
+    height: 100vh;
+    display: block;
+    position: fixed;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    color: var(--light);
+    transition: transform 0.3s ease-in-out;
 
-        .logo {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-
-            .app-logo {
-                width: 200px;
-                height: 200px;
-            }
-        }
-
-        h2 {
-            margin: 50px 0;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        /* flex-direction: column;
-        width: calc(2.5rem + 32px);
-        min-height: 100vh;
-        overflow: hidden;
-        padding: 1rem;
-        background-color: var(--dark);
-        color: var(--light);
-        position: -webkit-sticky;
-        position: sticky;
-        transition: 0.2s ease-out; */
-
-        .menu {
-            display: inline-grid;
-            width: 100%;
-            margin-top: 20px;
-
-            i {
-                font-size: 20px;
-            }
-
-            .text {
-                font-size: 16px;
-                position: absolute;
-                margin-left: 5px;
-            }
-
-            .button {
-                color: var(--light);
-                text-decoration: none;
-                padding: 15px 20px;
-                transition: all 0.3s ease-in-out;
-                border-top-left-radius: 50px;
-                border-bottom-left-radius: 50px;
-            }
-
-            .button:hover {
-                background-color: var(--light);
-                color: black;
-            }
-
-            .button.active {
-                background-color: var(--light);
-                color: black;
-            }
-        }
+    .logo {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
     }
 
+    .menu {
+        margin-top: 20px;
+
+        .button {
+            color: var(--light);
+            text-decoration: none;
+            padding: 15px 20px;
+            transition: all 0.3s ease-in-out;
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+        }
+
+        .button:hover {
+            background-color: var(--light);
+            color: black;
+        }
+
+        .button.active {
+            background-color: var(--light);
+            color: black;
+        }
+    }
+}
+
+/* @media screen and (max-width: 1024px) {
+    aside {
+        transform: translateX(-100%);
+    }
+} */
+
+/* @media screen and (max-width: 1024px) {
+    .hide {
+        transform: translateX(-100%);
+    }
+
+    .navbar {
+        margin-left: 0px;
+        width: 100%;
+    }
+
+    .content-expanded {
+        padding-left: 40px;
+    }
+} */
 </style>

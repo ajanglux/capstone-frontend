@@ -2,9 +2,9 @@
   <div class="content">
     <div class="container">
       <div class="card-header">
-        <h4>BOOKINGS</h4>
+        <h2>BOOKINGS</h2>
       </div>
-      <div class="card-body">
+      <div class="table-body">
         <div v-if="success" class="alert alert-success alert-dismissible fade show" role="alert">
           <strong>{{ success }}</strong>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
