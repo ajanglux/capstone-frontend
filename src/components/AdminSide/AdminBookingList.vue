@@ -65,12 +65,11 @@ const bookings = ref([])
 const success = ref('')
 const router = useRouter()
 
-// Fetch bookings from the server
 const getBookings = async () => {
   try {
     const response = await axios.get('http://localhost:8000/api/booking', {
       headers: {
-        Authorization: `Bearer ${store.access_token}` // Include the token in the headers
+        Authorization: `Bearer ${store.access_token}` 
       }
     })
     bookings.value = response.data.data.data
@@ -93,20 +92,18 @@ const statusClass = (status) => {
   }
 }
 
-// Convert booking date and time to a Date object
 const toDateTime = (booking) => {
-  const dateTimeString = `${booking.booking_date}T${booking.start_time}` // Combine date and time
+  const dateTimeString = `${booking.booking_date}T${booking.start_time}` 
   return new Date(dateTimeString)
 }
 
-// Filter and sort bookings
 const filteredBookings = computed(() => {
   return bookings.value
-    .filter(booking => booking.status === 'pending') // Filter based on status
-    .sort((a, b) => toDateTime(a) - toDateTime(b)) // Sort by combined date and time (earliest to latest)
+    .filter(booking => booking.status === 'pending') 
+    .sort((a, b) => toDateTime(a) - toDateTime(b)) 
 })
 
-// Action functions
+
 const approveBooking = async (id) => {
   try {
     await axios.put(`http://localhost:8000/api/booking/${id}/approve`, {}, {
@@ -141,7 +138,7 @@ const viewUserProfile = (userId) => {
 }
 
 const viewBookingDetails = (bookingId) => {
-  router.push({ name: 'BookingDetails', params: { id: bookingId } })
+  router.push({ name: 'BookingDetails', params: { bookingId: bookingId } })
 }
 
 onMounted(() => {

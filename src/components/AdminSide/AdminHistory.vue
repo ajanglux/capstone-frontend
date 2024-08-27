@@ -56,7 +56,6 @@ const store = useAuthStore()
 const bookings = ref([])
 const success = ref('')
 
-// Fetch bookings from the server
 const getBookings = async () => {
   try {
     const response = await axios.get('http://localhost:8000/api/booking', {
@@ -98,11 +97,10 @@ const formatStatus = (status) => {
   }
 }
 
-// Filter and sort bookings to show approved, declined, or cancelled bookings with latest first
 const filteredBookings = computed(() => {
   return bookings.value
     .filter(booking => ['approved', 'declined', 'cancelled'].includes(booking.status))
-    .sort((a, b) => new Date(b.booking_date) - new Date(a.booking_date)) // Sort by booking_date (latest first)
+    .sort((a, b) => new Date(b.booking_date) - new Date(a.booking_date)) 
 })
 
 onMounted(() => {

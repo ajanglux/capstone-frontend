@@ -109,7 +109,7 @@ const router = createRouter({
       name: 'BookingDetails',
       component: BookingView,
       beforeEnter: [checkIfLogged, checkIfAdmin],
-      props: true
+      props: true,
     },
     {
       path: "/admin-history",

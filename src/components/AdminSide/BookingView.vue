@@ -30,17 +30,20 @@
             <span class="input-group-text">End Time</span>
             <input v-model="booking.end_time" type="text" class="form-control" disabled />
           </div>
-          <div class="input-group mb-3">
+          <!-- <div class="input-group mb-3">
             <span class="input-group-text">Status</span>
             <input v-model="booking.status" type="text" class="form-control" disabled />
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text">User</span>
             <input v-model="booking.user.name" type="text" class="form-control" disabled />
-          </div>
+          </div> -->
         </div>
         <div v-else>
           <p>No booking details available.</p>
+        </div>
+        <div v-if="!isEditing" class="buttons">
+          <button @click="cancelEdit" type="button" class="btn btn-secondary">Cancel</button>
         </div>
       </div>
     </div>
@@ -50,6 +53,7 @@
 <script>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/useAuthStore';
 
 export default {
@@ -61,6 +65,7 @@ export default {
   },
   setup(props) {
     const authStore = useAuthStore();
+    const router = useRouter();
     const booking = ref(null);
     const error = ref('');
 
@@ -77,13 +82,17 @@ export default {
       }
     };
 
+    const cancelEdit = () => {
+      router.push('/admin-bookinglist');
+    };
+
     onMounted(() => {
       fetchBookingDetails();
     });
 
-    return { booking, error };
+    return { booking, error, cancelEdit };
   },
-}
+};
 </script>
 
 <style scoped>

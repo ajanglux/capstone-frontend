@@ -77,12 +77,12 @@
           store.setToken(response.data.currentToken)
           store.setUser(response.data.user)
           toast.success(response.data.message, { timeout: 3000 })
-          router.push('/admin-dashboard')  // Admin dashboard
+          router.push('/admin-dashboard')
         } else {
           // Display message for non-admin users
           toast.error("You are not an admin", { timeout: 3000 })
-          store.clearToken()  // Optional: clear any token if mistakenly set
-          store.clearUser()   // Optional: clear user data
+          store.clearToken()
+          store.clearUser()
         }
       }
     } catch (error) {

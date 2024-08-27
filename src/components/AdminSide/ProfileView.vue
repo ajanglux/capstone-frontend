@@ -36,10 +36,6 @@
         </div>
 
         <div v-if="!isEditing" class="buttons">
-          <button @click="isEditing = true" class="btn btn-primary">Edit</button>
-        </div>
-        <div v-else class="buttons">
-          <button @click="saveProfile" type="button" class="btn btn-success">Save</button>
           <button @click="cancelEdit" type="button" class="btn btn-secondary">Cancel</button>
         </div>
       </div>
@@ -51,10 +47,11 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useAuthStore } from '../../stores/useAuthStore'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
 const route = useRoute()
+const router = useRouter()
 
 const userProfile = ref({
   first_name: '',
@@ -67,7 +64,6 @@ const originalProfile = ref({})
 const isEditing = ref(false)
 const errorList = ref([])
 
-// Fetch user profile data
 const fetchUserProfile = async () => {
   try {
     const response = await axios.get(`http://localhost:8000/api/admin/user/profile/${route.params.userId}`, {
@@ -83,27 +79,8 @@ const fetchUserProfile = async () => {
   }
 }
 
-// Save the updated profile
-const saveProfile = async () => {
-  try {
-    const response = await axios.put(`http://localhost:8000/api/admin/user/profile/${route.params.userId}`, userProfile.value, {
-      headers: {
-        Authorization: `Bearer ${authStore.access_token}`,
-      },
-    })
-    userProfile.value = response.data.data
-    originalProfile.value = { ...userProfile.value }
-    isEditing.value = false
-  } catch (error) {
-    errorList.value = error.response?.data?.errors || []
-    console.error('Error during profile save:', error.response ? error.response.data : error.message)
-  }
-}
-
-// Cancel edit mode
 const cancelEdit = () => {
-  userProfile.value = { ...originalProfile.value }
-  isEditing.value = false
+  router.push('/admin-bookinglist')
 }
 
 onMounted(() => {
