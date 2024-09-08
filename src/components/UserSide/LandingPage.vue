@@ -2,27 +2,27 @@
     <div class="landing-page">
         
       <header>
-        <h1>Welcome to TechFix</h1>
-        <p>Your repair starts here!</p>
+        <div class="button-container">
+          <button @click="handleClick('Button 1')" class="button">Home</button>
+          <button @click="handleClick('Button 2')" class="button">Our Services</button>
+          <button @click="handleClick('Button 3')" class="button">Contact Us</button>
+        </div>
+
+        <img alt="Vue Logo" src="C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\techfix.png" class="logo" />
+
+        <h2 class="title">Welcome to <br>TechFix</h2>
+        <p class="p1">Your repair starts here!</p>
       </header>
 
       <main>
-        <div class="nav-item">
-          <router-link class="nav-link" aria-current="page" to="/register">
-            Register
-          </router-link>
-  
-          <router-link class="nav-link" aria-current="page" to="/login">
-            Login
-          </router-link>
-        </div>
-      </main>
 
+      </main>
+ 
       <footer>
         <p>&copy; 2024 TechFix. All rights reserved.</p>
       </footer>
 
-    </div>
+    </div> 
   </template>
   
   <script>
@@ -37,7 +37,7 @@
     font-family: Arial, sans-serif;
     text-align: center;
     color: #fff;
-    background: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\White BG.jpg') no-repeat center center fixed;
+    background: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\BG(1).PNG') no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
     min-width: 225vh;
@@ -49,49 +49,61 @@
   
   /* Header styling */
   header {
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     padding: 20px;
     margin-top: 100px;
     border-radius: 10px;
   }
   
-  header h1 {
+  .title {
     margin: 0;
-    font-size: 2.5em;
+    font-size: 2.0em;
+    text-align: justify;
+    color: rgb(255, 255, 255);
   }
-  
-  header p {
-    font-size: 1.5em;
+
+  .p1 {
+    text-align: justify;
+    color: rgb(255, 255, 255);
+  } 
+
+  .logo {
+    width: 250px;
+    height: 250px;
   }
-  
-  /* Main content styling */
+
+  header {
+    font-size: 1.2em;
+    margin-top: -2vh;
+    margin-right: 120vh;
+  }
+
   main {
-    margin: 20px 0;
+
   }
-  
-  .nav-item {
-    margin: 20px 0;
+
+  .button-container {
     display: flex;
-    flex-direction: row;
-    gap: 15px; /* Space between the links */
-  }
-  
-  .nav-link {
-    display: inline-block;
-    margin: 10px;
-    padding: 10px 10px;
-    text-decoration: none;
-    color: #fff;
-    background-color: #4287d1;
+    justify-content: center;
+    width: 400px;
+    margin: 20px auto;
+}
+
+  .button {
+    position: relative;
+    color: white;
+    border: none;
+    padding: 1px 2px;
+    font-size: 16px;
+    cursor: pointer;
     border-radius: 5px;
-    font-size: 1.0rem;
+
+    margin: 2vh;
   }
-  
+
   .nav-link:hover {
     background-color: #0056b3;
   }
-  
-  /* Footer styling */
+
   footer {
     margin-top: 20px;
     padding: 10px;
@@ -106,12 +118,8 @@
   
   /* Responsive styling */
   @media (max-width: 600px) {
-    header h1 {
+    header h2 {
       font-size: 2em;
-    }
-  
-    header p {
-      font-size: 1.2em;
     }
   
     .nav-link {
