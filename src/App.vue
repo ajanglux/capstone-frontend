@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import Header from './components/layouts/Header.vue';
-import Sidebar from './components/layouts/Sidebar.vue';
 import AdminHeader from './components/layouts/AdminHeader.vue';
 import AdminSidebar from './components/layouts/AdminSideBar.vue';
 import { useAuthStore } from './stores/useAuthStore.js';
@@ -42,8 +40,6 @@ import { useAuthStore } from './stores/useAuthStore.js';
 export default {
   name: 'App',
   components: {
-    Header,
-    Sidebar,
     AdminHeader,
     AdminSidebar,
   },

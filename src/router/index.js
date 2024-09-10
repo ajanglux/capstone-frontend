@@ -116,13 +116,11 @@ const router = createRouter({
       beforeEnter: [checkIfLogged, checkIfAdmin],
     },
     {
-      path: "/service-form",
-      name: "service-form",
+      path: '/service-form/:id?',
+      name: 'ServiceForm',
       component: ServiceForm,
-      beforeEnter: [checkIfLogged, checkIfAdmin],
+      props: true,
     },
-
-
 
 
     //USERS (ignore mo muna yong ibang components gagamitin ko pa ata)
