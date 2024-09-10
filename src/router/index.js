@@ -1,29 +1,28 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from '../stores/useAuthStore.js';
 
-import Home from "../components/UserSide/Home.vue";
-import Login from "../components/auth/Login.vue";
 import AdminLoginVue from "../components/auth/AdminLogin.vue";
 
 // User Side
 import Register from "../components/auth/Register.vue";
-import BookingForm from "../components/UserSide/BookingForm.vue";
-import Profile from "../components/UserSide/Profile.vue";
-import BookingList from '../components/UserSide/BookingList.vue';
+import Profile from "../components/UserSide/Profile.vue";;
 import LandingPage from '../components/UserSide/LandingPage.vue';
-import Appointment from "../components/UserSide/Appointment.vue";
 
 // Admin Side
-import AdminBookingList from '../components/AdminSide/AdminBookingList.vue';
 import AdminDashboard from '../components/AdminSide/AdminDashboard.vue';
-import AdminHistory from '../components/AdminSide/AdminHistory.vue';
+import InquiriesList from '../components/AdminSide/InquiriesList.vue';
 import BookingView from "../components/AdminSide/BookingView.vue";
-import ProfileView from "../components/AdminSide/ProfileView.vue";
+
+import RepairList from '../components/AdminSide/RepairList.vue';
+import RepairForm from '../components/AdminSide/RepairForm.vue';
+
+import ServiceList from '../components/AdminSide/ServiceList.vue';
+import ServiceForm from '../components/AdminSide/ServiceForm.vue';
 
 function checkIfLogged(to, from, next) {
   const store = useAuthStore();
   if (!store.access_token) {
-    next('/login'); 
+    next('/admin-login'); 
   } else {
     next(); 
   }
@@ -32,7 +31,7 @@ function checkIfLogged(to, from, next) {
 function checkIfNotLogged(to, from, next) {
   const store = useAuthStore();
   if (store.access_token) {
-    next('/home'); 
+    next('/'); 
   } else {
     next(); 
   }
@@ -52,7 +51,7 @@ function checkIfUser(to, from, next) {
   if (store.user?.role === 0) {
     next(); 
   } else {
-    next('/login'); 
+    next('/'); 
   }
 }
 
@@ -63,12 +62,6 @@ const router = createRouter({
       path: "/",
       name: "landing",
       component: LandingPage,
-      beforeEnter: [checkIfNotLogged],
-    },
-    {
-      path: "/login",
-      name: "login",
-      component: Login,
       beforeEnter: [checkIfNotLogged],
     },
     {
@@ -92,17 +85,10 @@ const router = createRouter({
       beforeEnter: [checkIfLogged, checkIfAdmin],
     },
     {
-      path: "/admin-bookinglist",
-      name: "admin-bookinglist",
-      component: AdminBookingList,
+      path: "/repair-list",
+      name: "repair-list",
+      component: RepairList,
       beforeEnter: [checkIfLogged, checkIfAdmin],
-    },
-    {
-      path: '/admin/user-profile/:userId',
-      name: 'AdminUserProfile',
-      component: ProfileView,
-      beforeEnter: [checkIfLogged, checkIfAdmin],
-      props: true
     },
     {
       path: '/booking/:bookingId',
@@ -112,48 +98,40 @@ const router = createRouter({
       props: true,
     },
     {
-      path: "/admin-history",
-      name: "admin-history",
-      component: AdminHistory,
+      path: "/inquiries",
+      name: "inquiries",
+      component: InquiriesList,
+      beforeEnter: [checkIfLogged, checkIfAdmin],
+    },
+    {
+      path: "/repair-form",
+      name: "repair-form",
+      component: RepairForm,
+      beforeEnter: [checkIfLogged, checkIfAdmin],
+    },
+    {
+      path: "/service-list",
+      name: "service-list",
+      component: ServiceList,
+      beforeEnter: [checkIfLogged, checkIfAdmin],
+    },
+    {
+      path: "/service-form",
+      name: "service-form",
+      component: ServiceForm,
       beforeEnter: [checkIfLogged, checkIfAdmin],
     },
 
-    //USERS
-    {
-      path: "/home",
-      name: "home",
-      component: Home,
-      beforeEnter: [checkIfLogged, checkIfUser], 
-    },
-    {
-      path: '/appointments',
-      name: 'appointments',
-      component: Appointment,
-      beforeEnter: [checkIfLogged, checkIfUser], 
-    },
-    {
-      path: '/booking/create',
-      name: 'addBooking',
-      component: BookingForm,
-      beforeEnter: [checkIfLogged, checkIfUser], 
-    },
-    {
-      path: '/booking/:id/edit',
-      name: 'EditBooking',
-      component: BookingForm,
-      beforeEnter: [checkIfLogged, checkIfUser], 
-      props: true,
-    },
+
+
+
+    //USERS (ignore mo muna yong ibang components gagamitin ko pa ata)
+    
+    // checkIfNotLogged ang ilagay mo sa beforeEnter kapag mag a-add ka components
     {
       path: '/profile',
       name: 'profile',
       component: Profile,
-      beforeEnter: [checkIfLogged, checkIfUser], 
-    },
-    {
-      path: '/bookinglist',
-      name: 'bookingList',
-      component: BookingList,
       beforeEnter: [checkIfLogged, checkIfUser], 
     },
   ],

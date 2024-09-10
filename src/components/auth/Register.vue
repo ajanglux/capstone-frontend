@@ -37,11 +37,11 @@
                 </div>
             </form>
 
-            <div class="nav-item">
+            <!-- <div class="nav-item">
                 <router-link class="nav-link" aria-current="page" to="/login">
                   Login
                 </router-link>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@
       toast.success(response.data.message, {
         timeout: 3000
       })
-      router.push('/login')
+      router.push('/admin-login')
     } catch (error) {
       data.loading = false
       if(error.response.status === 422) {

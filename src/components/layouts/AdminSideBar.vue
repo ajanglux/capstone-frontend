@@ -3,55 +3,30 @@
         <div class="logo">
             <img class="app-logo" src="/src/assets/techfix.png" alt="">
         </div>
-        <!-- <h2 class="sp-text">Welcome <br> User</h2> -->
         <div class="menu-toggle-wrap">
-            <!-- <button class="menu-toggle" @click="ToggleMenu"> 
-                <span class="material-icons">keyboard_double_arrow_right</span> 
-            </button> -->
         </div>
         <div class="menu">
             <router-link class="button" active-class="active" to="/admin-dashboard">
                 <i class='bx bxs-home' ></i>
                 <span class="text">Dashboard</span>
             </router-link>
-            <router-link class="button" active-class="active" to="/admin-bookinglist">
+            <router-link class="button" active-class="active" to="/repair-list">
                 <i class='bx bxs-book-add'></i>
-                <span class="text">Appointments</span>
+                <span class="text">Repair List</span>
             </router-link>
-            <router-link class="button" active-class="active" to="/admin-history">
+            <router-link class="button" active-class="active" to="/inquiries">
                 <i class='bx bx-history' ></i>
-                <span class="text">History</span>
+                <span class="text">Inquiries</span>
             </router-link>
-            <!-- <router-link class="button" to="/items">
-                <span class="material-icons">inventory</span>
-                <span class="text">Items</span>
+            <router-link class="button" active-class="active" to="/service-list">
+                <i class='bx bx' ></i>
+                <span class="text">Services</span>
             </router-link>
-            <router-link class="button" to="/borrowing">
-                <span class="material-icons">pending_actions</span>
-                <span class="text">Borrowing</span>
-            </router-link>
-            <router-link class="button" to="/damaged">
-                <span class="material-icons">construction</span>
-                <span class="text">Damaged Items</span>
-            </router-link>
-            <router-link class="button" to="/unusable">
-                <span class="material-icons">dangerous</span>
-                <span class="text">Unusable Items</span>
-            </router-link> -->
         </div>
-        <!-- <button class="menu-logout" @click="logout">
-            <span class="material-icons">logout</span>
-            <span class="text">Logout</span>
-        </button> -->
     </aside>
 </template>
 
-
-
-
 <script setup>
-
-
 </script>
 
 <style>
@@ -98,7 +73,6 @@
         .menu {
             display: inline-grid;
             width: 100%;
-            margin-top: 20px;
 
             i {
                 font-size: 20px;

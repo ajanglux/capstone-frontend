@@ -8,7 +8,7 @@
           <button @click="handleClick('Button 3')" class="button">Contact Us</button>
         </div>
 
-        <img alt="Vue Logo" src="C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\techfix.png" class="logo" />
+        <img class="app-logo" src="/src/assets/techfix.png" alt="">
 
         <h2 class="title">Welcome to <br>TechFix</h2>
         <p class="p1">Your repair starts here!</p>
@@ -31,14 +31,14 @@
   }
   </script>
   
-  <style>
+  <style scoped>
   /* Background image and general page styling */
   .landing-page {
     font-family: Arial, sans-serif;
     text-align: center;
     color: #fff;
-    background: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\BG(1).PNG') no-repeat center center fixed;
-    background-size: cover;
+    /* background: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\BG(1).PNG') no-repeat center center fixed; */
+    background-color: var(--main);
     min-height: 100vh;
     min-width: 225vh;
     display: flex;
