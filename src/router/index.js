@@ -7,6 +7,8 @@ import AdminLoginVue from "../components/auth/AdminLogin.vue";
 import Register from "../components/auth/Register.vue";
 import Profile from "../components/UserSide/Profile.vue";;
 import LandingPage from '../components/UserSide/LandingPage.vue';
+import Service from '../components/UserSide/Services.vue';
+import Contact from '../components/UserSide/ContactUs.vue';
 
 // Admin Side
 import AdminDashboard from '../components/AdminSide/AdminDashboard.vue';
@@ -131,6 +133,16 @@ const router = createRouter({
       name: 'profile',
       component: Profile,
       beforeEnter: [checkIfLogged, checkIfUser], 
+    },
+    {
+      path: '/services',
+      name: 'services',
+      component: Service,
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      component: Contact,
     },
   ],
 });

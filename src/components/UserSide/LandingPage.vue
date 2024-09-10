@@ -3,25 +3,28 @@
         
       <header>
         <div class="button-container">
-          <button @click="handleClick('Button 1')" class="button">Home</button>
-          <button @click="handleClick('Button 2')" class="button">Our Services</button>
-          <button @click="handleClick('Button 3')" class="button">Contact Us</button>
-        </div>
+        <router-link class="button" active-class="active" to="/home">
+          <span class="text">Home</span>
+        </router-link>
+        <router-link class="button" active-class="active" to="/services">
+          <span class="text">Our Services</span>
+        </router-link>
+        <router-link class="button" active-class="active" to="/contact">
+          <span class="text">Contact Us</span>
+        </router-link>
+      </div>
+    </header>
 
         <img class="app-logo" src="/src/assets/techfix.png" alt="">
 
         <h2 class="title">Welcome to <br>TechFix</h2>
         <p class="p1">Your repair starts here!</p>
-      </header>
+
 
       <main>
 
       </main>
  
-      <footer>
-        <p>&copy; 2024 TechFix. All rights reserved.</p>
-      </footer>
-
     </div> 
   </template>
   
@@ -49,71 +52,72 @@
   
   /* Header styling */
   header {
-    padding: 20px;
-    margin-top: 100px;
-    border-radius: 10px;
-  }
+  background-color: rgb(16, 17, 104);
+  color: white;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: flex-end; /* Align everything to the right */
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 1.2em;
+}
   
   .title {
     margin: 0;
     font-size: 2.0em;
     text-align: justify;
     color: rgb(255, 255, 255);
+
+    margin-right: 120vh;
   }
 
   .p1 {
     text-align: justify;
     color: rgb(255, 255, 255);
+
+    margin-right: 120vh;
   } 
 
-  .logo {
-    width: 250px;
-    height: 250px;
-  }
+  .app-logo {
+    width: 350px;
+    height: 350px;
 
-  header {
-    font-size: 1.2em;
-    margin-top: -2vh;
+    margin-top: 15vh;
     margin-right: 120vh;
   }
 
-  main {
-
-  }
-
-  .button-container {
-    display: flex;
-    justify-content: center;
-    width: 400px;
-    margin: 20px auto;
+  .button-container { 
+  display: flex;
+  gap: 10px; /* Space between buttons */
+  margin-right: 20px; /* Adjust to create space from the right edge */
 }
 
-  .button {
-    position: relative;
-    color: white;
-    border: none;
-    padding: 1px 2px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
+.button { 
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.5); /* Background color for buttons */
+  text-decoration: none; /* Remove underline for router-link */
+  display: flex;
+  transition: background-color 0.3s ease;
+}
 
-    margin: 2vh;
+  .button:hover { 
+    background-color: rgba(0, 0, 0, 0.7);
   }
+
 
   .nav-link:hover {
     background-color: #0056b3;
-  }
-
-  footer {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-  }
-  
-  footer p {
-    margin: 0;
-    font-size: 0.9em;
   }
   
   /* Responsive styling */
