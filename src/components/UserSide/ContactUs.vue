@@ -3,7 +3,7 @@
 <div class="background-container">
   <div class="container">
     <div class="contact-info">
-      <h1>Contact Us</h1>
+      <h1 class="h1">Contact Us</h1>
       <br/>
       <br>
       <div class="contact-detail">
@@ -75,6 +75,11 @@ export default {
   width: 100%;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   margin: 0 0px;
+}
+
+.h1 {
+  position: relative;
+  margin-left: 14vh;
 }
 
 .contact-info, .contact-form-container {
