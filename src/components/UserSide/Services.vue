@@ -79,22 +79,22 @@ h1 {
 
 /* Specific background images for grid items */
 .grid-item-1 {
-  background-image: url('@/assets/Hardware Cleaning BG.PNG');
+  background-image: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Hardware Cleaning BG.PNG');
 }
 .grid-item-2 {
-  background-image: url('@/assets/Virus & Malware Removal.PNG');
+  background-image: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Virus & Malware Removal.PNG');
 }
 .grid-item-3 {
-  background-image: url('@/assets/Hardware and Software Removal.PNG');
+  background-image: url('/C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Hardware and Software Removal.PNG');
 }
 .grid-item-4 {
-  background-image: url('@/assets/Networking.PNG');
+  background-image: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Networking.PNG');
 }
 .grid-item-5 {
-  background-image: url('@/assets/Reprogram and Reformat.PNG');
+  background-image: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Reprogram and Reformat.PNG');
 }
 .grid-item-6 {
-  background-image: url('@/assets/Computer Check Up.jpg');
+  background-image: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Computer Check Up.jpg');
 }
 
 @media (max-width: 768px) {
