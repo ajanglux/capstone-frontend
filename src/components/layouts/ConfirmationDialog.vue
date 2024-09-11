@@ -2,7 +2,7 @@
     <div v-if="show" class="dialog-overlay">
       <div class="dialog-content">
         <h3>Confirm Deletion</h3>
-        <p>Are you sure you want to delete this service?</p>
+        <p>Are you sure you want to delete?</p>
         <button @click="$emit('confirm')">Yes</button>
         <button @click="$emit('close')">No</button>
       </div>

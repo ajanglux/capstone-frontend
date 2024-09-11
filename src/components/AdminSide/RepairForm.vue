@@ -10,6 +10,7 @@
             <strong>{{ error }}</strong>
           </li>
         </ul>
+
         <!-- Customer Details -->
         <div class="input-group mb-3">
           <span class="input-group-text">First Name</span>
@@ -23,7 +24,7 @@
           <span class="input-group-text">Tel. No.</span>
           <input v-model="model.phone_number" type="text" class="form-control" :disabled="isEditing" />
         </div>
-        <div>
+        <div class="input-group mb-3">
           <span class="input-group-text">Email</span>
           <input v-model="model.email" type="text" class="form-control" :disabled="isEditing" />
         </div>
@@ -36,28 +37,29 @@
         <div class="buttons">
           <h2>Product Information</h2>
         </div>
-
         <div class="input-group mb-3">
           <span class="input-group-text">Brand</span>
-          <input v-model="productInfo.brand" type="text" class="form-control" />
+          <input v-model="productInfo.brand" type="text" class="form-control" :disabled="isEditing" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Model</span>
-          <input v-model="productInfo.model" type="text" class="form-control" />
+          <input v-model="productInfo.model" type="text" class="form-control" :disabled="isEditing" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Serial Number</span>
-          <input v-model="productInfo.serial_number" type="text" class="form-control" />
+          <input v-model="productInfo.serial_number" type="text" class="form-control" :disabled="isEditing" />
         </div>
-        <div>
+        <div class="input-group mb-3">
           <span class="input-group-text">Purchase Date</span>
-          <input v-model="productInfo.purchase_date" type="date" class="form-control" />
+          <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isEditing" />
         </div>
 
         <!-- Submit and Cancel Buttons -->
         <div class="buttons">
-          <button @click="isEditing ? updateRepair() : saveRepair()" type="button" class="btn">Submit</button>
-          <router-link to="/repair-list" class="btn">Cancel</router-link>
+          <button @click="isEditing ? updateRepair() : saveRepair()" type="button" class="btn btn-primary">
+            {{ isEditing ? 'Update' : 'Submit' }}
+          </button>
+          <router-link to="/repair-list" class="btn btn-secondary">Cancel</router-link>
         </div>
       </div>
     </div>
@@ -102,41 +104,44 @@ export default {
     async getRepairDetails() {
       try {
         const authStore = useAuthStore();
-        const response = await axios.get(`${BASE_URL}/customer-details/${this.id}`, getHeaderConfig(authStore.access_token));
-        this.model = response.data.data.customer;
-        this.productInfo = response.data.data.product;
+        const [customerResponse, productResponse] = await Promise.all([
+          axios.get(`${BASE_URL}/customer-details/${this.id}`, getHeaderConfig(authStore.access_token)),
+          axios.get(`${BASE_URL}/product-infos/${this.id}`, getHeaderConfig(authStore.access_token))
+        ]);
+
+        this.model = customerResponse.data.data || {};
+        this.productInfo = productResponse.data || {};
       } catch (error) {
         console.error('Error fetching repair details:', error);
+        this.errorList = [error.response?.data?.message || error.message];
       }
     },
     async saveRepair() {
       try {
         const authStore = useAuthStore();
-        const payload = {
-          customer: this.model,
-          product: this.productInfo
-        };
-        await axios.post(`${BASE_URL}/customer-details`, payload, getHeaderConfig(authStore.access_token));
+        const customerResponse = await axios.post(`${BASE_URL}/customer-details`, this.model, getHeaderConfig(authStore.access_token));
+        const productResponse = await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: customerResponse.data.data.id }, getHeaderConfig(authStore.access_token));
         alert('Repair saved successfully!');
         this.$router.push({ name: 'repair-list' });
       } catch (error) {
-        this.errorList = error.response.data.errors || [error.message];
+        this.errorList = error.response?.data?.errors || [error.message];
       }
     },
     async updateRepair() {
       try {
         const authStore = useAuthStore();
-        const payload = {
-          customer: this.model,
-          product: this.productInfo
-        };
-        await axios.put(`${BASE_URL}/customer-details/${this.id}`, payload, getHeaderConfig(authStore.access_token));
+        await axios.put(`${BASE_URL}/customer-details/${this.id}`, this.model, getHeaderConfig(authStore.access_token));
+        await axios.put(`${BASE_URL}/product-infos/${this.id}`, this.productInfo, getHeaderConfig(authStore.access_token));
         alert('Repair updated successfully!');
         this.$router.push({ name: 'repair-list' });
       } catch (error) {
-        this.errorList = error.response.data.errors || [error.message];
+        this.errorList = error.response?.data?.errors || [error.message];
       }
     }
   }
 };
 </script>
+
+<style scoped>
+/* Add your styles here */
+</style>

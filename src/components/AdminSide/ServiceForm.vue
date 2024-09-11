@@ -12,11 +12,11 @@
         </ul>
         <div class="input-group mb-3">
           <span class="input-group-text">Service:</span>
-          <input v-model="model.service_title" type="text" class="form-control" />
+          <input v-model="model.service_title" type="text" class="form-control" :disabled="isEditing" />
         </div>
         <div class="input-group mb-4">
           <span class="input-group-text">Details</span>
-          <textarea v-model="model.description" class="form-control"></textarea>
+          <textarea v-model="model.description" class="form-control" :disabled="isEditing" ></textarea>
         </div>
         <div class="buttons">
           <button @click="isEditing ? updateService() : saveService()" type="submit" class="btn">Submit</button>

@@ -35,23 +35,24 @@ const routes = [
     beforeEnter: [checkIfLogged, checkIfAdmin],
   },
   {
-    path: '/booking/:bookingId',
-    name: 'BookingDetails',
-    component: () => import('../components/AdminSide/BookingView.vue'),
+    path: "/repair-form/:id?",
+    name: "repair-form",
+    component: () => import('../components/AdminSide/RepairForm.vue'),
+    props: route => ({ id: Number(route.params.id) }), // Convert id to number if needed
     beforeEnter: [checkIfLogged, checkIfAdmin],
-    props: true,
   },
+  // {
+  //   path: '/booking/:bookingId',
+  //   name: 'BookingDetails',
+  //   component: () => import('../components/AdminSide/BookingView.vue'),
+  //   beforeEnter: [checkIfLogged, checkIfAdmin],
+  //   props: true,
+  // },
   {
     path: "/inquiries",
     name: "inquiries",
     component: () => import('../components/AdminSide/InquiriesList.vue'),
     beforeEnter: [checkIfLogged, checkIfAdmin],
-  },
-  {
-    path: "/repair-form/:id?",
-    name: "repair-form",
-    component: () => import('../components/AdminSide/RepairForm.vue'),
-    props: true,
   },
   {
     path: "/service-list",
@@ -64,6 +65,7 @@ const routes = [
     name: 'ServiceForm',
     component: () => import('../components/AdminSide/ServiceForm.vue'),
     props: true,
+    beforeEnter: [checkIfLogged, checkIfAdmin],
   },
 
   // LANDING PAGE
@@ -90,7 +92,7 @@ const routes = [
 function checkIfLogged(to, from, next) {
   const store = useAuthStore();
   if (!store.access_token) {
-    next('/admin-login'); 
+    next('/'); 
   } else {
     next(); 
   }

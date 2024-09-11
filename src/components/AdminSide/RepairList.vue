@@ -27,10 +27,9 @@
               <td>{{ index + 1 }}</td>
               <td>{{ formatDate(repair.created_at) }}</td>
               <td>{{ repair.code }}</td>
-              <td>{{ repair.first_name }} {{ repair.last_name }}</td>
+              <td>{{ repair.first_name || 'N/A' }} {{ repair.last_name || 'N/A' }}</td>
               <td>{{ repair.status || 'ON GOING' }}</td>
               <td class="actions">
-                <!-- Passing id via route params -->
                 <router-link :to="{ name: 'repair-form', params: { id: repair.id } }" class="btn btn-success btn-sm me-1">
                   View
                 </router-link>
@@ -47,7 +46,7 @@
     <ConfirmationDialog
       :show="showDeleteDialog"
       @close="showDeleteDialog = false"
-      @confirm="deleteRepair(selectedRepairId)"
+      @confirm="deleteRepair"
     />
   </div>
 </template>
@@ -76,9 +75,9 @@ const fetchRepairs = async () => {
   }
 };
 
-const deleteRepair = async (id) => {
+const deleteRepair = async () => {
   try {
-    await axios.delete(`${BASE_URL}/customer-details/${id}`, getHeaderConfig(authStore.access_token));
+    await axios.delete(`${BASE_URL}/customer-details/${selectedRepairId.value}`, getHeaderConfig(authStore.access_token));
     fetchRepairs();
     showDeleteDialog.value = false;
   } catch (error) {
@@ -104,6 +103,11 @@ onMounted(() => {
   fetchRepairs();
 });
 </script>
+
+<style>
+/* Your styles remain unchanged */
+</style>
+
 
 <style>
 
@@ -218,8 +222,4 @@ onMounted(() => {
     }
   }
 }
-</style>
-  
-  
-  
-  
+</style> 
