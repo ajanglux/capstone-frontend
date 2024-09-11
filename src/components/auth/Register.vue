@@ -1,53 +1,49 @@
 <template>
   <div class="container">
-    <div class="row my-5">
-      <div class="col-md-6 mx-auto">
-        <ValidationErrors :errors="store.errors"></ValidationErrors>
-        <div class="card rounded-0 shadow-sm">
-          <div class="card-header bg-white">
-            <h5 class="text-center mt-2">
-              Register
-            </h5> 
-          </div>
-          <div class="card-body">
-            <form @submit.prevent="registerUser"> 
-                <div class="form-group mb-3">
-                    <input 
-                        type="text" 
-                        v-model="data.user.name"
-                        placeholder="Username" class="form-control">
-                </div>
-                <div class="form-group mb-3">
-                    <input 
-                        type="text" 
-                        v-model="data.user.email"
-                        placeholder="Email" class="form-control">
-                </div>
-                <div class="form-group mb-3">
-                    <input 
-                        type="password" 
-                        v-model="data.user.password"
-                        placeholder="Password" class="form-control">
-                </div>
-                <div class="form-group mb-3">
-                  <Spinner v-if="data.loading" />
-                  <button v-else type="submit" class="btn btn-dark btn-sm rounded-0">
-                    Submit
-                  </button>
-                </div>
-            </form>
-
-            <!-- <div class="nav-item">
-                <router-link class="nav-link" aria-current="page" to="/login">
-                  Login
-                </router-link>
-            </div> -->
-          </div>
+    <div class="signup-card-wrapper">
+      <div class="signup-card">
+        <div class="card-header text-center bg-white">
+          <h3 class="mt-2">Register</h3>
+        </div>
+        <div class="card-body">
+          <form @submit.prevent="registerUser">
+            <div class="form-group mb-3">
+              <input 
+                type="text" 
+                v-model="data.user.name"
+                placeholder="Username" 
+                class="form-control rounded-0"
+                required>
+            </div>
+            <div class="form-group mb-3">
+              <input 
+                type="email" 
+                v-model="data.user.email"
+                placeholder="Email" 
+                class="form-control rounded-0"
+                required>
+            </div>
+            <div class="form-group mb-3">
+              <input 
+                type="password" 
+                v-model="data.user.password"
+                placeholder="Password" 
+                class="form-control rounded-0"
+                required>
+            </div>
+            <div class="form-group mb-3 text-center">
+              <Spinner v-if="data.loading" />
+              <button v-else type="submit" class="btn btn-dark btn-sm rounded-0 w-100">
+                Submit
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
   import { onUnmounted, reactive } from "vue"
@@ -95,5 +91,101 @@
 
 </script>
 
-<style>
+<style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: rgb(12, 68, 110); /* Blue background */
+  padding: 30px;
+}
+
+.signup-card-wrapper {
+  background-color: #f0f4f8; /* Light blue-gray background behind the card */
+  padding: 60px;
+  border-radius: 12px;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+  max-width: 800px; /* Widen the overall wrapper */
+  width: 100%;
+}
+
+.signup-card {
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 60px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.signup-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.15);
+}
+
+input::placeholder {
+  color: #999;
+  font-size: 14px;
+}
+
+input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus {
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25) !important;
+  border-color: #007bff !important;
+}
+
+.btn {
+  letter-spacing: 1px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  background-color: #333;
+  color: white;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border: none;
+}
+
+.btn:hover {
+  background-color: #555;
+  transform: translateY(-2px);
+}
+
+.form-control {
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.card-header h3 {
+  font-weight: bold;
+  font-size: 3.5rem; /* Double the original size */
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.signup-card {
+  animation: slideIn 0.6s ease-out;
+}
 </style>
