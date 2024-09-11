@@ -39,7 +39,7 @@
   background: var(--header);
   min-height: 100vh;
   width: 100%;
-  margin-top: 80px; /* Add margin to push the content below the header */
+  margin-top: 80px;
 }
 
 h1 {
@@ -52,18 +52,18 @@ h1 {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns */
-  grid-template-rows: repeat(2, 1fr); /* 2 rows */
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr); 
   gap: 20px;
   width: 100%;
-  max-width: 1200px; /* Max width for grid items */
+  max-width: 1200px;
   margin-bottom: 8vh;
 }
 
 .grid-item-1, .grid-item-2, .grid-item-3, .grid-item-4, .grid-item-5, .grid-item-6 {
   display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
+  justify-content: center;
+  align-items: center;
   background-size: cover;
   background-position: center;
   padding: 20px;
@@ -73,7 +73,7 @@ h1 {
   font-weight: bolder;
   color: #ffffff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 1); 
-  height: 100%; /* Ensure grid items take up full height */
+  height: 100%;
   overflow: hidden;
 }
 
@@ -99,7 +99,7 @@ h1 {
 
 @media (max-width: 768px) {
   .grid-container {
-    grid-template-columns: 1fr; /* Single column layout on smaller screens */
+    grid-template-columns: 1fr;
     grid-template-rows: repeat(6, auto);
   }
 }

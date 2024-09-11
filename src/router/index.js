@@ -48,10 +48,10 @@ const routes = [
     beforeEnter: [checkIfLogged, checkIfAdmin],
   },
   {
-    path: "/repair-form",
+    path: "/repair-form/:id?",
     name: "repair-form",
     component: () => import('../components/AdminSide/RepairForm.vue'),
-    beforeEnter: [checkIfLogged, checkIfAdmin],
+    props: true,
   },
   {
     path: "/service-list",

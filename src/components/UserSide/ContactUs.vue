@@ -54,14 +54,14 @@ export default {
   position: relative;
   background: var(--light);
   background-size: cover;
-  height: 100vh; /* Set height to full viewport */
-  width: 100%; /* Full width */
+  height: 100vh;
+  width: 100%; 
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
-  padding: 0; /* Remove padding to allow full centering */
-  z-index: 1; /* Ensure the background stays below the header */
+  padding: 0;
+  z-index: 1;
 }
 
 .container {
@@ -72,9 +72,9 @@ export default {
   background: var(--header);
   border-radius: 5px;
   max-width: 1100px;
-  width: 100%; /* Make the container fill up to its max width */
+  width: 100%;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-  margin: 0 0px; /* Add some margin to avoid touching edges */
+  margin: 0 0px;
 }
 
 .contact-info, .contact-form-container {

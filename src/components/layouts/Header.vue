@@ -27,7 +27,7 @@ header {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000; /* Ensures header stays above other content */
+    z-index: 1000;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: flex-end;
@@ -38,8 +38,8 @@ header {
 
 .button-container { 
     display: flex;
-    gap: 10px; /* Space between buttons */
-    margin-right: 20px; /* Adjust to create space from the right edge */
+    gap: 10px; 
+    margin-right: 20px;
 }
 
 .button { 
@@ -50,8 +50,8 @@ header {
     font-size: 16px;
     cursor: pointer;
     border-radius: 10px;
-    background-color: var(--main); /* Background color for buttons */
-    text-decoration: none; /* Remove underline for router-link */
+    background-color: var(--main);
+    text-decoration: none;
     display: flex;
 }
 

@@ -55,10 +55,10 @@ import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
-import ConfirmationDialog from '../layouts/ConfirmationDialog.vue'; // Adjust path as needed
+import ConfirmationDialog from '../layouts/ConfirmationDialog.vue';
 
 const authStore = useAuthStore();
-const services = ref([]); // Initialize as an array
+const services = ref([]);
 const errors = ref(null);
 const showDeleteDialog = ref(false);
 const selectedServiceId = ref(null);
@@ -66,9 +66,9 @@ const selectedServiceId = ref(null);
 const fetchServices = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/services`, getHeaderConfig(authStore.access_token));
-    services.value = response.data.data; // Ensure accessing data correctly
+    services.value = response.data.data;
   } catch (error) {
-    console.error('Error fetching services:', error); // Add logging for debugging
+    console.error('Error fetching services:', error);
     errors.value = error.response?.data?.message || 'Error fetching services';
   }
 };
@@ -76,10 +76,10 @@ const fetchServices = async () => {
 const deleteService = async (id) => {
   try {
     await axios.delete(`${BASE_URL}/services/${id}`, getHeaderConfig(authStore.access_token));
-    fetchServices(); // Refresh the service list
-    showDeleteDialog.value = false; // Close dialog after deletion
+    fetchServices();
+    showDeleteDialog.value = false;
   } catch (error) {
-    console.error('Error deleting service:', error); // Add logging for debugging
+    console.error('Error deleting service:', error);
     errors.value = error.response?.data?.message || 'Error deleting service';
   }
 };

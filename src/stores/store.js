@@ -16,14 +16,10 @@ const handleResize = () => {
 };
 
 onMounted(() => {
-    handleResize(); // Check screen size on mount
+    handleResize(); 
     window.addEventListener('resize', handleResize);
 });
 
 onUnmounted(() => {
     window.removeEventListener('resize', handleResize);
 });
-
-// watchEffect(() => {
-//     document.body.classList.toggle('sidebar-hidden', !isSidebarVisible.value);
-// });

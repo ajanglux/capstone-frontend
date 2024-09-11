@@ -63,7 +63,7 @@ const fetchServiceDetails = async () => {
 const saveService = async () => {
   try {
     await axios.post(`${BASE_URL}/services`, model.value, getHeaderConfig(authStore.access_token));
-    showSuccessModal.value = true;  // Show success modal on save
+    showSuccessModal.value = true;
   } catch (error) {
     errorList.value.push(error.response?.data?.message || 'Error saving service');
   }
@@ -72,7 +72,7 @@ const saveService = async () => {
 const updateService = async () => {
   try {
     await axios.put(`${BASE_URL}/services/${route.params.id}`, model.value, getHeaderConfig(authStore.access_token));
-    showSuccessModal.value = true;  // Show success modal on update
+    showSuccessModal.value = true;
   } catch (error) {
     errorList.value.push(error.response?.data?.message || 'Error updating service');
   }
@@ -80,7 +80,7 @@ const updateService = async () => {
 
 const handleSuccessClose = () => {
   showSuccessModal.value = false;
-  router.push('/service-list');  // Redirect to service list when modal is closed
+  router.push('/service-list');
 };
 
 if (isEditing.value) {

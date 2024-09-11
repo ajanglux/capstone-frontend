@@ -16,7 +16,6 @@
         <template v-else>
           <Sidebar v-if="!isLandingPage" />
           <div class="headerAndContent">
-            <!-- Header is shown for landing page, services, contact, and other regular user pages -->
             <Header v-if="isLandingPage || !isAdmin" />
             <router-view v-slot="{ Component }">
               <transition name="fade" mode="out-in">
@@ -58,7 +57,7 @@ export default {
     },
     isAdmin() {
       const store = useAuthStore();
-      return store.isAdmin; // Checking if user is admin
+      return store.isAdmin;
     },
   },
 };
