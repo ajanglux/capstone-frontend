@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div class="app">
-      <template v-if="!isLoginPage && !isRegisterPage && !isLandingPage && !isAdminLoginPage">
+      <template v-if="!isRegisterPage && !isAdminLoginPage">
         <template v-if="isAdmin">
           <AdminSidebar />
           <div class="headerAndContent">
@@ -14,9 +14,10 @@
           </div>
         </template>
         <template v-else>
-          <Sidebar />
+          <Sidebar v-if="!isLandingPage" />
           <div class="headerAndContent">
-            <Header />
+            <!-- Header is shown for landing page, services, contact, and other regular user pages -->
+            <Header v-if="isLandingPage || !isAdmin" />
             <router-view v-slot="{ Component }">
               <transition name="fade" mode="out-in">
                 <Component :is="Component" />
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import Header from './components/layouts/Header.vue';
 import AdminHeader from './components/layouts/AdminHeader.vue';
 import AdminSidebar from './components/layouts/AdminSideBar.vue';
 import { useAuthStore } from './stores/useAuthStore.js';
@@ -40,13 +42,11 @@ import { useAuthStore } from './stores/useAuthStore.js';
 export default {
   name: 'App',
   components: {
+    Header,
     AdminHeader,
     AdminSidebar,
   },
   computed: {
-    isLoginPage() {
-      return this.$route.path === '/login';
-    },
     isRegisterPage() {
       return this.$route.path === '/register';
     },

@@ -1,25 +1,91 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from '../stores/useAuthStore.js';
 
-import AdminLoginVue from "../components/auth/AdminLogin.vue";
+const routes = [
+  {
+    path: "/",
+    name: "landing",
+    component: () => import('../components/UserSide/LandingPage.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import('../components/auth/Register.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
+  {
+    path: "/admin-login",
+    name: "admin-login",
+    component: () => import('../components/auth/AdminLogin.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
 
-// User Side
-import Register from "../components/auth/Register.vue";
-import Profile from "../components/UserSide/Profile.vue";;
-import LandingPage from '../components/UserSide/LandingPage.vue';
-import Service from '../components/UserSide/Services.vue';
-import Contact from '../components/UserSide/ContactUs.vue';
+  // ADMIN
+  {
+    path: "/admin-dashboard",
+    name: "admin-dashboard",
+    component: () => import('../components/AdminSide/AdminDashboard.vue'),
+    beforeEnter: [checkIfLogged, checkIfAdmin],
+  },
+  {
+    path: "/repair-list",
+    name: "repair-list",
+    component: () => import('../components/AdminSide/RepairList.vue'),
+    beforeEnter: [checkIfLogged, checkIfAdmin],
+  },
+  {
+    path: '/booking/:bookingId',
+    name: 'BookingDetails',
+    component: () => import('../components/AdminSide/BookingView.vue'),
+    beforeEnter: [checkIfLogged, checkIfAdmin],
+    props: true,
+  },
+  {
+    path: "/inquiries",
+    name: "inquiries",
+    component: () => import('../components/AdminSide/InquiriesList.vue'),
+    beforeEnter: [checkIfLogged, checkIfAdmin],
+  },
+  {
+    path: "/repair-form",
+    name: "repair-form",
+    component: () => import('../components/AdminSide/RepairForm.vue'),
+    beforeEnter: [checkIfLogged, checkIfAdmin],
+  },
+  {
+    path: "/service-list",
+    name: "service-list",
+    component: () => import('../components/AdminSide/ServiceList.vue'),
+    beforeEnter: [checkIfLogged, checkIfAdmin],
+  },
+  {
+    path: '/service-form/:id?',
+    name: 'ServiceForm',
+    component: () => import('../components/AdminSide/ServiceForm.vue'),
+    props: true,
+  },
 
-// Admin Side
-import AdminDashboard from '../components/AdminSide/AdminDashboard.vue';
-import InquiriesList from '../components/AdminSide/InquiriesList.vue';
-import BookingView from "../components/AdminSide/BookingView.vue";
-
-import RepairList from '../components/AdminSide/RepairList.vue';
-import RepairForm from '../components/AdminSide/RepairForm.vue';
-
-import ServiceList from '../components/AdminSide/ServiceList.vue';
-import ServiceForm from '../components/AdminSide/ServiceForm.vue';
+  // LANDING PAGE
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('../components/UserSide/Profile.vue'),
+    beforeEnter: [checkIfLogged], 
+  },
+  {
+    path: '/services',
+    name: 'services',
+    component: () => import('../components/UserSide/Services.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: () => import('../components/UserSide/ContactUs.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
+];
 
 function checkIfLogged(to, from, next) {
   const store = useAuthStore();
@@ -48,103 +114,9 @@ function checkIfAdmin(to, from, next) {
   }
 }
 
-function checkIfUser(to, from, next) {
-  const store = useAuthStore();
-  if (store.user?.role === 0) {
-    next(); 
-  } else {
-    next('/'); 
-  }
-}
-
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    {
-      path: "/",
-      name: "landing",
-      component: LandingPage,
-      beforeEnter: [checkIfNotLogged],
-    },
-    {
-      path: "/register",
-      name: "register",
-      component: Register,
-      beforeEnter: [checkIfNotLogged],
-    },
-    {
-      path: "/admin-login",
-      name: "admin-login",
-      component: AdminLoginVue,
-      beforeEnter: [checkIfNotLogged],
-    },
-
-    // ADMIN
-    {
-      path: "/admin-dashboard",
-      name: "admin-dashboard",
-      component: AdminDashboard,
-      beforeEnter: [checkIfLogged, checkIfAdmin],
-    },
-    {
-      path: "/repair-list",
-      name: "repair-list",
-      component: RepairList,
-      beforeEnter: [checkIfLogged, checkIfAdmin],
-    },
-    {
-      path: '/booking/:bookingId',
-      name: 'BookingDetails',
-      component: BookingView,
-      beforeEnter: [checkIfLogged, checkIfAdmin],
-      props: true,
-    },
-    {
-      path: "/inquiries",
-      name: "inquiries",
-      component: InquiriesList,
-      beforeEnter: [checkIfLogged, checkIfAdmin],
-    },
-    {
-      path: "/repair-form",
-      name: "repair-form",
-      component: RepairForm,
-      beforeEnter: [checkIfLogged, checkIfAdmin],
-    },
-    {
-      path: "/service-list",
-      name: "service-list",
-      component: ServiceList,
-      beforeEnter: [checkIfLogged, checkIfAdmin],
-    },
-    {
-      path: '/service-form/:id?',
-      name: 'ServiceForm',
-      component: ServiceForm,
-      props: true,
-    },
-
-
-    //USERS (ignore mo muna yong ibang components gagamitin ko pa ata)
-    
-    // checkIfNotLogged ang ilagay mo sa beforeEnter kapag mag a-add ka components
-    {
-      path: '/profile',
-      name: 'profile',
-      component: Profile,
-      beforeEnter: [checkIfLogged, checkIfUser], 
-    },
-    {
-      path: '/services',
-      name: 'services',
-      component: Service,
-    },
-    {
-      path: '/contact',
-      name: 'contact',
-      component: Contact,
-    },
-  ],
+  routes,
 });
 
 export default router;
