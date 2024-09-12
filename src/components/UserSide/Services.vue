@@ -8,8 +8,8 @@
           <img src="../../assets/Hardware and Software Removal.PNG" >
         </div>
         <div class="info">
-            <h2> Sample </h2>
-            <p> sample ulit kasi ayoko na ng yoko </p>
+            <h2> Service </h2>
+            <p> Description </p>
         </div>
     </div>
 
@@ -18,7 +18,7 @@
           <img src="../../assets/Computer Check Up.jpg" >
         </div>
         <div class="info">
-            <h2> Sample </h2>
+            <h2> Service </h2>
             <p> sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko </p>
         </div>
     </div>
@@ -28,7 +28,7 @@
           <img src="../../assets/Virus & Malware Removal.PNG" >
         </div>
         <div class="info">
-            <h2> Sample </h2>
+            <h2> Service </h2>
             <p> sample ulit kasi ayoko na ng yoko </p>
         </div>
     </div>
@@ -38,7 +38,7 @@
           <img src="../../assets/Virus & Malware Removal.PNG" >
         </div>
         <div class="info">
-            <h2> Sample </h2>
+            <h2> Service </h2>
             <p> sample ulit kasi ayoko na ng yoko </p>
         </div>
     </div>

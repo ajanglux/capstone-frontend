@@ -23,7 +23,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(repair, index) in repairs" :key="repair.id">
+            <tr v-for="(repair, index) in ongoingRepairs" :key="repair.id">
               <td>{{ index + 1 }}</td>
               <td>{{ formatDate(repair.created_at) }}</td>
               <td>{{ repair.code }}</td>
@@ -36,8 +36,8 @@
                 <button class="btn btn-danger btn-sm me-1" @click="confirmDelete(repair.id)">Delete</button>
               </td>
             </tr>
-            <tr v-if="repairs.length === 0">
-              <td colspan="6"><strong>No repairs found.</strong></td>
+            <tr v-if="ongoingRepairs.length === 0">
+              <td colspan="6"><strong>No ongoing repairs found.</strong></td>
             </tr>
           </tbody>
         </table>
@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
@@ -74,6 +74,10 @@ const fetchRepairs = async () => {
     errors.value = error.response?.data?.message || 'Error fetching repairs';
   }
 };
+
+const ongoingRepairs = computed(() => {
+  return repairs.value.filter(repair => repair.status === 'on-going');
+});
 
 const deleteRepair = async () => {
   try {
@@ -103,11 +107,6 @@ onMounted(() => {
   fetchRepairs();
 });
 </script>
-
-<style>
-/* Your styles remain unchanged */
-</style>
-
 
 <style>
 

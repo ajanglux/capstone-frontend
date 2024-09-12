@@ -23,20 +23,23 @@
     </div>
 
     <div class="contact-form-container">
-      <form class="contact-form">
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" name="fullName" required />
+        <form class="contact-form" @submit.prevent="saveCustomerDetail">
+          <label for="firstName">First Name</label>
+          <input v-model="customerDetail.first_name" type="text" id="firstName" name="firstName" required />
 
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required />
+          <label for="lastName">Last Name</label>
+          <input v-model="customerDetail.last_name" type="text" id="lastName" name="lastName" required />
 
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" name="phone" required />
+          <label for="phone">Phone Number</label>
+          <input v-model="customerDetail.phone_number" type="tel" id="phone" name="phone" required />
 
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="4" required></textarea>
+          <label for="email">Email</label>
+          <input v-model="customerDetail.email" type="email" id="email" name="email" />
 
-        <button type="submit">Submit</button>
+          <label for="address">Address</label>
+          <input v-model="customerDetail.address" type="text" id="address" name="address" />
+
+          <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
   </div>
@@ -44,8 +47,42 @@
 </template>
   
 <script>
+import axios from 'axios';
+import { BASE_URL } from '../../helpers/baseUrl';
+
 export default {
-  name: 'ContactUs',
+  data() {
+    return {
+      customerDetail: {
+        first_name: '',
+        last_name: '',
+        phone_number: '',
+        email: '',
+        address: ''
+      }
+    };
+  },
+  methods: {
+    async saveCustomerDetail() {
+      try {
+        const response = await axios.post(`${BASE_URL}/customer-details`, this.customerDetail);
+        alert('Customer details saved successfully!');
+        this.resetForm();
+      } catch (error) {
+        console.error('Error saving customer details:', error);
+        alert('An error occurred while saving customer details.');
+      }
+    },
+    resetForm() {
+      this.customerDetail = {
+        first_name: '',
+        last_name: '',
+        phone_number: '',
+        email: '',
+        address: ''
+      };
+    }
+  }
 };
 </script>
   

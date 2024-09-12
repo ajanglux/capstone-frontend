@@ -63,6 +63,10 @@
         </div>
       </div>
     </div>
+    <SuccessModal
+      v-if="showSuccessModal"
+      @close="showSuccessModal = false"
+    />
   </div>
 </template>
 
@@ -71,10 +75,14 @@ import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
+import SuccessModal from '../layouts/SuccessModal.vue';
 
 export default {
   name: 'RepairForm',
   props: ['id'],
+  components: {
+    SuccessModal
+  },
   data() {
     return {
       errorList: [],
@@ -92,6 +100,7 @@ export default {
         purchase_date: ''
       },
       isEditing: false,
+      showSuccessModal: false
     };
   },
   mounted() {
@@ -119,10 +128,14 @@ export default {
     async saveRepair() {
       try {
         const authStore = useAuthStore();
-        const customerResponse = await axios.post(`${BASE_URL}/customer-details`, this.model, getHeaderConfig(authStore.access_token));
-        const productResponse = await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: customerResponse.data.data.id }, getHeaderConfig(authStore.access_token));
-        alert('Repair saved successfully!');
-        this.$router.push({ name: 'repair-list' });
+        
+        const repairData = { ...this.model, status: 'on-going' };
+        
+        const customerResponse = await axios.post(`${BASE_URL}/customer-details`, repairData, getHeaderConfig(authStore.access_token));
+        await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: customerResponse.data.data.id }, getHeaderConfig(authStore.access_token));
+        
+        this.showSuccessModal = true;
+        setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
         this.errorList = error.response?.data?.errors || [error.message];
       }
@@ -132,8 +145,9 @@ export default {
         const authStore = useAuthStore();
         await axios.put(`${BASE_URL}/customer-details/${this.id}`, this.model, getHeaderConfig(authStore.access_token));
         await axios.put(`${BASE_URL}/product-infos/${this.id}`, this.productInfo, getHeaderConfig(authStore.access_token));
-        alert('Repair updated successfully!');
-        this.$router.push({ name: 'repair-list' });
+        
+        this.showSuccessModal = true;
+        setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
         this.errorList = error.response?.data?.errors || [error.message];
       }
@@ -142,6 +156,5 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Add your styles here */
+<style>
 </style>

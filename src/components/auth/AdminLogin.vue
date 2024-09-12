@@ -3,7 +3,7 @@
     <div class="login-card-wrapper">
       <div class="login-card">
         <div class="card-header text-center bg-white">
-          <h3 class="mt-2">ADMIN Login</h3>
+          <h3 class="mt-2">ADMIN LOGIN</h3>
         </div>
         <div class="card-body">
           <form @submit.prevent="adminAuth">
@@ -102,13 +102,13 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: rgb(12, 68, 110); /* Blue background */
+  background-color: rgb(12, 68, 110);
   padding: 30px;
 }
 
 /* Login Card Wrapper */
 .login-card-wrapper {
-  background-color: #f0f4f8; /* Light blue-gray background behind the card */
+  background-color: var(--grey);
   padding: 60px;
   border-radius: 12px;
   box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
@@ -120,9 +120,13 @@
 .login-card {
   border-radius: 10px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  background-color: white;
+  background-color: var(--light);
   padding: 60px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  h3 {
+    color: var(--main);
+  }
 }
 
 .login-card:hover {

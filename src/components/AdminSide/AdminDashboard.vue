@@ -102,6 +102,7 @@ export default {
         background-color: var(--white);
         padding: 30px;
         width: 100%;
+        border-radius: 10px;
 
         .pie {
             width: 50%;
@@ -113,6 +114,7 @@ export default {
         background-color: var(--white);
         padding: 30px;
         width: 100%;
+        border-radius: 10px;
 
         .bar {
             width: 100%;
