@@ -2,13 +2,46 @@
 <div class="content-container">
   <h1>We Offer</h1>
 
-  <div class="grid-container">
-    <div class="grid-item-1">Hardware <br>Cleaning</div>
-    <div class="grid-item-2">Virus/Malware <br>Removal</div>
-    <div class="grid-item-3">Software or Hardware <br>Removal</div>
-    <div class="grid-item-4">Networking</div>
-    <div class="grid-item-5">Reformat & <br> Reprogram</div>
-    <div class="grid-item-6">Check Up for <br> Computer</div>
+  <div class="cards">
+    <div class="card">
+        <div class="img">
+          <img src="../../assets/Hardware and Software Removal.PNG" >
+        </div>
+        <div class="info">
+            <h2> Sample </h2>
+            <p> sample ulit kasi ayoko na ng yoko </p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="img">
+          <img src="../../assets/Computer Check Up.jpg" >
+        </div>
+        <div class="info">
+            <h2> Sample </h2>
+            <p> sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko </p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="img">
+          <img src="../../assets/Virus & Malware Removal.PNG" >
+        </div>
+        <div class="info">
+            <h2> Sample </h2>
+            <p> sample ulit kasi ayoko na ng yoko </p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="img">
+          <img src="../../assets/Virus & Malware Removal.PNG" >
+        </div>
+        <div class="info">
+            <h2> Sample </h2>
+            <p> sample ulit kasi ayoko na ng yoko </p>
+        </div>
+    </div>
   </div>
 
 </div>
@@ -40,61 +73,64 @@
   min-height: 100vh;
   width: 100%;
   margin-top: 80px;
+
+  h1 {
+    text-align: center;
+    font-size: 4.5em;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+    color: #fff;
+  }
 }
 
-h1 {
-  text-align: center;
-  font-size: 4.5em;
-  font-weight: bold;
-  margin: 0 0 20px 0;
-  color: #fff;
-}
-
-.grid-container {
+.cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr); 
-  gap: 20px;
-  width: 100%;
-  max-width: 1200px;
-  margin-bottom: 8vh;
-}
-
-.grid-item-1, .grid-item-2, .grid-item-3, .grid-item-4, .grid-item-5, .grid-item-6 {
-  display: flex;
   justify-content: center;
-  align-items: center;
-  background-size: cover;
-  background-position: center;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  font-size: 2.5em;
-  font-weight: bolder;
-  color: #ffffff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 1); 
+  align-items: start;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 30px;
+  padding: 0 100px;
+  margin-bottom: 50px;
   height: 100%;
-  overflow: hidden;
-}
+  align-items: stretch;
+  transition: all 0.5s ease;
 
-/* Specific background images for grid items */
-.grid-item-1 {
-  background-image: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Hardware Cleaning BG.PNG');
-}
-.grid-item-2 {
-  background-image: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Virus & Malware Removal.PNG');
-}
-.grid-item-3 {
-  background-image: url('/C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Hardware and Software Removal.PNG');
-}
-.grid-item-4 {
-  background-image: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Networking.PNG');
-}
-.grid-item-5 {
-  background-image: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Reprogram and Reformat.PNG');
-}
-.grid-item-6 {
-  background-image: url('C:\Users\Seann\Documents\GitHub\capstone-frontend\src\assets\Computer Check Up.jpg');
+    .card {
+        flex: 1;
+        padding: 20px;
+        /* background-color: var(--grey); */
+        color: var(--light2);
+        /* box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.322); */
+        transition: all 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+
+        &:hover {
+          background-color: var(--main-hover);
+          border-radius: 20px;
+        }
+
+        .img {
+          width: 100%;
+          margin-bottom: 10px;
+
+          img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            object-position: center;
+            align-content: center;
+            border-radius: 10px;
+          }
+        }
+
+        .info {
+          h2 {
+            font-size: 35px;
+          }
+        }
+    }
 }
 
 @media (max-width: 768px) {

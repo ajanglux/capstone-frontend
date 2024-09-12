@@ -7,11 +7,11 @@
         </div>
         <div class="menu">
             <router-link class="button" active-class="active" to="/admin-dashboard">
-                <i class='bx bxs-home' ></i>
+                <i class='bx bx-grid-alt'></i>
                 <span class="text">Dashboard</span>
             </router-link>
             <router-link class="button" active-class="active" to="/repair-list">
-                <i class='bx bxs-book-add'></i>
+                <i class='bx bx-list-plus' ></i>
                 <span class="text">Repair List</span>
             </router-link>
             <router-link class="button" active-class="active" to="/inquiries">
@@ -19,7 +19,7 @@
                 <span class="text">Inquiries</span>
             </router-link>
             <router-link class="button" active-class="active" to="/service-list">
-                <i class='bx bx' ></i>
+                <i class='bx bx-cog' ></i>
                 <span class="text">Services</span>
             </router-link>
         </div>
@@ -46,6 +46,7 @@
             align-items: center;
             display: flex;
             justify-content: center;
+            padding: 20px 0;
 
             .app-logo {
                 width: 200px;
