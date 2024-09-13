@@ -32,13 +32,13 @@
 
         <div class="charts">
             <div class="pie-chart">
-                <h1> Total ewan </h1>
+                <h1> Total Repairs </h1>
                 <div class="pie">
                     <PieChart />
                 </div>
             </div>
             <div class="bar-chart">
-                <h1> Total ewan </h1>
+                <h1> Total Repairs </h1>
                 <div class="bar">
                     <BarChart />
                 </div>
