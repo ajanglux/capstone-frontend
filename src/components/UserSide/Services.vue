@@ -1,53 +1,45 @@
 <template>
-<div class="content-container">
-  <h1>We Offer</h1>
+  <div class="content-container">
+    <h1>We Offer</h1>
 
-  <div class="cards">
-    <div class="card">
-        <div class="img">
-          <img src="../../assets/Hardware and Software Removal.PNG" >
-        </div>
-        <div class="info">
-            <h2> Service </h2>
-            <p> Description </p>
-        </div>
+    <div v-if="errors" class="error">
+      {{ errors }}
     </div>
 
-    <div class="card">
+    <div v-else class="cards">
+      <div v-for="service in services" :key="service.id" class="card">
         <div class="img">
-          <img src="../../assets/Computer Check Up.jpg" >
+          <img :src="service.image_url" alt="Service Image" class="img-thumbnail" />
         </div>
         <div class="info">
-            <h2> Service </h2>
-            <p> sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko sample ulit kasi ayoko na ng yoko </p>
+          <h2>{{ service.service_title }}</h2>
+          <p>{{ service.description }}</p>
         </div>
-    </div>
-
-    <div class="card">
-        <div class="img">
-          <img src="../../assets/Virus & Malware Removal.PNG" >
-        </div>
-        <div class="info">
-            <h2> Service </h2>
-            <p> sample ulit kasi ayoko na ng yoko </p>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="img">
-          <img src="../../assets/Virus & Malware Removal.PNG" >
-        </div>
-        <div class="info">
-            <h2> Service </h2>
-            <p> sample ulit kasi ayoko na ng yoko </p>
-        </div>
+      </div>
     </div>
   </div>
-
-</div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { BASE_URL } from '../../helpers/baseUrl';
+
+const services = ref([]);
+const errors = ref(null);
+
+const fetchServices = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/services`);
+    services.value = response.data.data;
+  } catch (error) {
+    errors.value = error.response?.data?.message || 'Error fetching services';
+  }
+};
+
+onMounted(() => {
+  fetchServices();
+});
 </script>
 
 <style scoped>

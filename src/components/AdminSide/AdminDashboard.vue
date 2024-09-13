@@ -1,31 +1,10 @@
 <template>
     <div class="content">
         <div class="cards">
-            <div class="card">
+            <div class="card" v-for="(card, index) in stats" :key="index">
                 <div class="info">
-                    <p> Total Number of Pending Repairs </p>
-                    <h1> 12 </h1>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="info">
-                    <p> Total Number of Inquiries </p>
-                    <h1> 23 </h1>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="info">
-                    <p> Total Number of Services </p>
-                    <h1> 23 </h1>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="info">
-                    <p> Total Number of Clients </p>
-                    <h1> 23 </h1>
+                    <p> {{ card.label }} </p>
+                    <h1> {{ card.value }} </h1>
                 </div>
             </div>
         </div>
@@ -48,15 +27,53 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { BASE_URL } from '../../helpers/baseUrl';
+import { getHeaderConfig } from '../../helpers/headerConfig';
+import { useAuthStore } from '../../stores/useAuthStore';
 import BarChart from '../layouts/BarChart.vue';
 import PieChart from '../layouts/PieChart.vue';
 
 export default {
-  name: 'App',
-  components: { BarChart, PieChart }
+  name: 'AdminDashboard',
+  components: { BarChart, PieChart },
+  data() {
+    return {
+      stats: []
+    };
+  },
+  mounted() {
+    this.fetchDashboardStats();
+  },
+  methods: {
+    async fetchDashboardStats() {
+      const authStore = useAuthStore();
+      const token = authStore.access_token;
+
+      if (!token) {
+        console.error('No token found. Please log in.');
+        return;
+      }
+
+      try {
+        const headers = getHeaderConfig(token); 
+        console.log('Fetching stats with headers:', headers);
+
+        const response = await axios.get(`${BASE_URL}/admin-dashboard-stats`, headers);
+        this.stats = [
+          { label: 'Total Number of Inquiries', value: response.data.pendingRepairs },
+          { label: 'Total Number of Repairs', value: response.data.ongoingRepairs },
+          { label: 'Total Number of Services', value: response.data.totalServices },
+          { label: 'Total Number of Clients', value: response.data.totalClients }
+        ];
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+      }
+    }
+  }
 }
-    
 </script>
+
 
 <style scoped>
 .cards {
