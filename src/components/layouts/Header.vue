@@ -9,6 +9,9 @@
         <span class="text">Our Services</span>
         </router-link>
         <router-link class="button" active-class="active" to="/contact">
+        <span class="text">Check Status</span>
+        </router-link>
+        <router-link class="button" active-class="active" to="/contact">
         <span class="text">Contact Us</span>
         </router-link>
     </div>

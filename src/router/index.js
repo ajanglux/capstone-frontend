@@ -82,6 +82,12 @@ const routes = [
     beforeEnter: [checkIfNotLogged],
   },
   {
+    path: '/checkstatus',
+    name: 'checkstatus',
+    component: () => import('../components/UserSide/CheckStatus.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
+  {
     path: '/contact',
     name: 'contact',
     component: () => import('../components/UserSide/ContactUs.vue'),
