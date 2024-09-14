@@ -16,13 +16,13 @@
         <div class="table-header">
           <div class="searchbar">
             <i class='bx bx-search'></i>
-            <input type="text" placeholder="Search..." >
+            <input type="text" placeholder="Search..." v-model="searchQuery">
           </div>
           <div class="filters">
-            <select name="" id="">
-              <option value="">On-going</option>
-              <option value="">Doned</option>
-              <option value="">Completed</option>
+            <select v-model="selectedStatus">
+              <option value="">All</option>
+              <option value="on-going">On-going</option>
+              <option value="finished">Finished</option>
             </select>
           </div>
         </div>
@@ -93,6 +93,9 @@ const showSuccessModal = ref(false);
 const successMessage = ref('');
 const selectedRepairId = ref(null);
 
+const selectedStatus = ref('');
+const searchQuery = ref('');
+
 const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
@@ -104,9 +107,24 @@ const fetchRepairs = async () => {
 };
 
 const filteredRepairs = computed(() => {
-  return repairs.value.filter(repair => 
-    repair.status === 'on-going' || repair.status === 'finished'
-  );
+  return repairs.value.filter(repair => {
+
+    let matchesStatus = true;
+
+    if (selectedStatus.value === '') {
+      matchesStatus = repair.status === 'on-going' || repair.status === 'finished';
+    } else {
+      matchesStatus = repair.status === selectedStatus.value;
+    }
+
+    const searchText = searchQuery.value.toLowerCase();
+    const matchesSearch =
+      repair.code.toLowerCase().includes(searchText) ||
+      (repair.first_name && repair.first_name.toLowerCase().includes(searchText)) ||
+      (repair.last_name && repair.last_name.toLowerCase().includes(searchText));
+
+    return matchesStatus && matchesSearch;
+  });
 });
 
 const deleteRepair = async () => {
@@ -161,6 +179,4 @@ onMounted(() => {
 </script>
 
 <style>
-
-
-</style> 
+</style>

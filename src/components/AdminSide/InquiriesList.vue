@@ -5,6 +5,14 @@
         <h2>LIST OF INQUIRIES</h2>
       </div>
       <div class="table-body">
+
+        <div class="table-header">
+          <div class="searchbar">
+            <i class='bx bx-search'></i>
+            <input type="text" placeholder="Search..." v-model="searchQuery">
+          </div>
+        </div>
+
         <div v-if="errors" class="alert alert-danger">
           <strong>{{ errors }}</strong>
         </div>
@@ -21,7 +29,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(repair, index) in ongoingRepairs" :key="repair.id">
+            <tr v-for="(repair, index) in filteredRepairs" :key="repair.id">
               <td>{{ index + 1 }}</td>
               <td>{{ repair.first_name || 'N/A' }} {{ repair.last_name || 'N/A' }}</td>
               <td>{{ repair.email }}</td>
@@ -35,7 +43,7 @@
                 <button class="btn btn-danger btn-sm me-1" @click="confirmDelete(repair.id)">Delete</button>
               </td>
             </tr>
-            <tr v-if="ongoingRepairs.length === 0">
+            <tr v-if="filteredRepairs.length === 0">
               <td colspan="7"><strong>No pending inquiries found.</strong></td>
             </tr>
           </tbody>
@@ -70,6 +78,8 @@ const showDeleteDialog = ref(false);
 const showSuccessModal = ref(false);
 const selectedRepairId = ref(null);
 
+const searchQuery = ref('');
+
 const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
@@ -80,8 +90,14 @@ const fetchRepairs = async () => {
   }
 };
 
-const ongoingRepairs = computed(() => {
-  return repairs.value.filter(repair => repair.status === 'pending');
+const filteredRepairs = computed(() => {
+  return repairs.value
+    .filter(repair => repair.status === 'pending')
+    .filter(repair => {
+      const searchText = searchQuery.value.toLowerCase();
+      const fullName = `${repair.first_name || ''} ${repair.last_name || ''}`.toLowerCase();
+      return fullName.includes(searchText);
+    });
 });
 
 const setOngoing = async (id) => {
