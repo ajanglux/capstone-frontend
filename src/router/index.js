@@ -38,16 +38,15 @@ const routes = [
     path: "/repair-form/:id?",
     name: "repair-form",
     component: () => import('../components/AdminSide/RepairForm.vue'),
-    props: route => ({ id: Number(route.params.id) }), // Convert id to number if needed
+    props: route => ({ id: Number(route.params.id) }),
     beforeEnter: [checkIfLogged, checkIfAdmin],
   },
-  // {
-  //   path: '/booking/:bookingId',
-  //   name: 'BookingDetails',
-  //   component: () => import('../components/AdminSide/BookingView.vue'),
-  //   beforeEnter: [checkIfLogged, checkIfAdmin],
-  //   props: true,
-  // },
+  {
+    path: "/repair-history",
+    name: "repair-history",
+    component: () => import('../components/AdminSide/RepairHistory.vue'),
+    beforeEnter: [checkIfLogged, checkIfAdmin],
+  },
   {
     path: "/inquiries",
     name: "inquiries",

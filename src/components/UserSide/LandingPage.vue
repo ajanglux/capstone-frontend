@@ -12,9 +12,9 @@
       </div>
       
       <div class="image-container">
-        <img class="side-image" src="C:/Users/Seann/Documents/GitHub/capstone-frontend/src/assets/Computer Check Up.jpg" 
+        <img class="side-image" src="/src/assets/Computer Check Up.jpg" 
         alt="Home Repair Picture service">
-        <img class="side-image side-image-2" src="C:/Users/Seann/Documents/GitHub/capstone-frontend/src/assets/Hardware and Software Removal.jpg" 
+        <img class="side-image side-image-2" src="/src/assets/Hardware and Software Removal.jpg" 
         alt="Home Repair Picture service 2">
         
         <!-- Introductory text below images -->
@@ -23,15 +23,12 @@
         </div>
       </div>
     </div>
-
-    <!-- Scrollable Section Below (for new content) -->
     <div class="scrollable-section">
       <div class="more-info">
         <h3>More Information</h3>
         <p>
           Add Additionalc content here
        </p> 
-        <!-- Additional content can be placed here -->
       </div>
     </div>
   </div>

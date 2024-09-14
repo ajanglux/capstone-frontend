@@ -22,11 +22,11 @@
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Tel. No.</span>
-          <input v-model="model.phone_number" type="text" class="form-control" :disabled="isEditing" />
+          <input v-model="phoneNumber" @input="validatePhoneNumber" type="text" class="form-control" :disabled="isEditing" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Email</span>
-          <input v-model="model.email" type="text" class="form-control" :disabled="isEditing" />
+          <input v-model="model.email" type="email" class="form-control" :disabled="isEditing" />
         </div>
         <div class="input-group mb-4">
           <span class="input-group-text">Address</span>
@@ -100,8 +100,14 @@ export default {
         purchase_date: ''
       },
       isEditing: false,
-      showSuccessModal: false
+      showSuccessModal: false,
+      phoneNumber: ''
     };
+  },
+  watch: {
+    phoneNumber(value) {
+      this.model.phone_number = value;
+    }
   },
   mounted() {
     if (this.id) {
@@ -120,10 +126,21 @@ export default {
 
         this.model = customerResponse.data.data || {};
         this.productInfo = productResponse.data || {};
+        this.phoneNumber = this.model.phone_number;
       } catch (error) {
         console.error('Error fetching repair details:', error);
         this.errorList = [error.response?.data?.message || error.message];
       }
+    },
+    validatePhoneNumber(event) {
+      const input = event.target;
+      const value = input.value.replace(/\D/g, '');
+      if (value.length > 11) {
+        input.value = value.slice(0, 11);
+      } else {
+        input.value = value;
+      }
+      this.phoneNumber = input.value;
     },
     async saveRepair() {
       try {

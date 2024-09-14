@@ -1,8 +1,7 @@
 <template>
     <div class="success-modal-overlay">
       <div class="success-modal-content">
-        <h2>Success!</h2>
-        <p>Your service has been saved successfully.</p>
+        <h2>Successful!</h2>
         <button class="btn" @click="$emit('close')">Close</button>
       </div>
     </div>
@@ -26,7 +25,7 @@
   }
   
   .success-modal-content {
-    background: white;
+    background:var(--light);
     padding: 2rem;
     border-radius: 8px;
     text-align: center;

@@ -15,7 +15,7 @@
                 <span class="text">Repair List</span>
             </router-link>
             <router-link class="button" active-class="active" to="/inquiries">
-                <i class='bx bx-history' ></i>
+                <i class='bx bx-list-ul'></i>
                 <span class="text">Inquiries</span>
             </router-link>
             <router-link class="button" active-class="active" to="/service-list">
@@ -95,7 +95,7 @@
             }
 
             .button:hover {
-                background-color: var(--light);
+                background-color: var(--light2);
                 color: black;
             }
 

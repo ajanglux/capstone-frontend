@@ -8,7 +8,7 @@
         <router-link class="button" active-class="active" to="/services">
         <span class="text">Our Services</span>
         </router-link>
-        <router-link class="button" active-class="active" to="/contact">
+        <router-link class="button" active-class="active" to="/checkstatus">
         <span class="text">Check Status</span>
         </router-link>
         <router-link class="button" active-class="active" to="/contact">

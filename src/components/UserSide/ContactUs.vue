@@ -1,28 +1,27 @@
 <template>
+  <div class="background-container">
+    <div class="container">
+      <div class="contact-info">
+        <h1 class="h1">Contact Us</h1>
+        <br />
+        <br>
+        <div class="contact-detail">
+          <i class="fas fa-envelope"></i>
+          <h4>Email: intelvision@yahoo.com</h4>
+        </div>
+        <br>
+        <div class="contact-detail">
+          <i class="fas fa-phone"></i>
+          <h4>Contact No.: 123-456-7890</h4>
+        </div>
+        <br>
+        <div class="contact-detail">
+          <i class="fas fa-map-marker-alt"></i>
+          <h4>Address: 1234 Elm Street, City, Country</h4>
+        </div>
+      </div>
 
-<div class="background-container">
-  <div class="container">
-    <div class="contact-info">
-      <h1 class="h1">Contact Us</h1>
-      <br/>
-      <br>
-      <div class="contact-detail">
-        <i class="fas fa-envelope"></i>
-        <h4>Email: intelvision@yahoo.com</h4>
-      </div>
-      <br>
-      <div class="contact-detail">
-        <i class="fas fa-phone"></i>
-        <h4>Contact No.: 123-456-7890</h4>
-      </div>
-      <br>
-      <div class="contact-detail">
-        <i class="fas fa-map-marker-alt"></i>
-        <h4>Address: 1234 Elm Street, City, Country</h4>
-      </div>
-    </div>
-
-    <div class="contact-form-container">
+      <div class="contact-form-container">
         <form class="contact-form" @submit.prevent="saveCustomerDetail">
           <label for="firstName">First Name</label>
           <input v-model="customerDetail.first_name" type="text" id="firstName" name="firstName" required />
@@ -31,7 +30,16 @@
           <input v-model="customerDetail.last_name" type="text" id="lastName" name="lastName" required />
 
           <label for="phone">Phone Number</label>
-          <input v-model="customerDetail.phone_number" type="tel" id="phone" name="phone" required />
+          <input 
+            v-model="customerDetail.phone_number" 
+            type="text" 
+            id="phone" 
+            name="phone" 
+            required 
+            @input="validatePhoneNumber"
+            placeholder="09"
+          />
+          <p v-if="phoneNumberError" class="error-message">Phone number must be exactly 11 digits and numeric.</p>
 
           <label for="email">Email</label>
           <input v-model="customerDetail.email" type="email" id="email" name="email" />
@@ -40,49 +48,65 @@
           <input v-model="customerDetail.address" type="text" id="address" name="address" />
 
           <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+        </form>
+      </div>
     </div>
+    <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
   </div>
-</div>
 </template>
-  
-<script>
+
+<script setup>
+import { ref, computed } from 'vue';
 import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
+import SuccessModal from '../layouts/SuccessModal.vue';
 
-export default {
-  data() {
-    return {
-      customerDetail: {
-        first_name: '',
-        last_name: '',
-        phone_number: '',
-        email: '',
-        address: ''
-      }
-    };
-  },
-  methods: {
-    async saveCustomerDetail() {
-      try {
-        const response = await axios.post(`${BASE_URL}/customer-details`, this.customerDetail);
-        alert('Customer details saved successfully!');
-        this.resetForm();
-      } catch (error) {
-        console.error('Error saving customer details:', error);
-        alert('An error occurred while saving customer details.');
-      }
-    },
-    resetForm() {
-      this.customerDetail = {
-        first_name: '',
-        last_name: '',
-        phone_number: '',
-        email: '',
-        address: ''
-      };
-    }
+const customerDetail = ref({
+  first_name: '',
+  last_name: '',
+  phone_number: '',
+  email: '',
+  address: ''
+});
+
+const showSuccessModal = ref(false);
+const phoneNumberError = ref(false);
+
+const validatePhoneNumber = (event) => {
+  const input = event.target;
+  const value = input.value.replace(/\D/g, '');
+
+  customerDetail.value.phone_number = value;
+  phoneNumberError.value = value.length !== 11;
+};
+
+const isPhoneNumberValid = computed(() => customerDetail.value.phone_number.length === 11);
+
+const saveCustomerDetail = async () => {
+  if (!isPhoneNumberValid.value) {
+    alert('Phone number must be exactly 11 digits.');
+    return;
   }
+
+  try {
+    await axios.post(`${BASE_URL}/customer-details`, customerDetail.value);
+    showSuccessModal.value = true;
+    resetForm();
+  } catch (error) {
+    console.error('Error saving customer details:', error);
+    alert('An error occurred while saving customer details.');
+  }
+};
+
+const resetForm = () => {
+  customerDetail.value = {
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    email: '',
+    address: ''
+  };
+  phoneNumberError.value = false;
 };
 </script>
   
@@ -96,7 +120,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
   padding: 0;
   z-index: 1;
 }
@@ -195,5 +218,10 @@ export default {
 
 .contact-form button:hover {
   background-color: var(--main-hover);
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
 }
 </style>

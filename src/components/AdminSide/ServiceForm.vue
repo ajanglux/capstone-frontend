@@ -21,21 +21,16 @@
           <textarea v-model="model.description" class="form-control" :disabled="isEditing"></textarea>
         </div>
 
-        <!-- Image Preview -->
         <div class="mb-4">
           <label>Current Image:</label>
-          <!-- Check if the image exists -->
           <div v-if="imagePreview">
             <img :src="imagePreview" alt="Service Image" class="img-thumbnail" style="max-width: 200px;" />
           </div>
-
-          <!-- Display "No image available" if no image is set -->
           <div v-else>
             <p>No image available</p>
           </div>
         </div>
 
-        <!-- Image Upload (disabled if editing) -->
         <div class="input-group mb-4" v-if="!isEditing">
           <span class="input-group-text">Upload Image</span>
           <input type="file" @change="handleFileUpload" class="form-control" />
@@ -48,7 +43,6 @@
       </div>
     </div>
 
-    <!-- Success Modal -->
     <SuccessModal v-if="showSuccessModal" @close="handleSuccessClose" />
   </div>
 </template>
@@ -70,42 +64,38 @@ const isEditing = ref(!!route.params.id);
 const model = ref({
   service_title: '',
   description: '',
-  image_url: '', // Existing image URL
+  image_url: '',
 });
 const errorList = ref([]);
 const showSuccessModal = ref(false);
-const selectedFile = ref(null); // To hold the uploaded image file
-const imagePreview = ref(''); // To preview the uploaded image
+const selectedFile = ref(null);
+const imagePreview = ref('');
 
-// Fetch service details if editing
 const fetchServiceDetails = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/services/${route.params.id}`, getHeaderConfig(authStore.access_token));
     model.value = response.data.data;
 
-    // Ensure image preview uses the full URL returned from the backend
     imagePreview.value = model.value.image_url ? model.value.image_url : '';
   } catch (error) {
     errorList.value.push(error.response?.data?.message || 'Error fetching service details');
   }
 };
 
-// Handle file selection for image upload
 const handleFileUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
     selectedFile.value = file;
-    imagePreview.value = URL.createObjectURL(file); // Generate local preview URL
+    imagePreview.value = URL.createObjectURL(file);
   }
 };
 
-// Save service (with image upload if any)
 const saveService = async () => {
   const formData = new FormData();
   formData.append('service_title', model.value.service_title);
   formData.append('description', model.value.description);
   if (selectedFile.value) {
-    formData.append('image', selectedFile.value); // Attach the selected image file
+    formData.append('image', selectedFile.value);
   }
 
   try {
@@ -121,13 +111,12 @@ const saveService = async () => {
   }
 };
 
-// Update service (with image upload if any)
 const updateService = async () => {
   const formData = new FormData();
   formData.append('service_title', model.value.service_title);
   formData.append('description', model.value.description);
   if (selectedFile.value) {
-    formData.append('image', selectedFile.value); // Attach the selected image file if updated
+    formData.append('image', selectedFile.value);
   }
 
   try {
@@ -156,5 +145,4 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Add necessary styles */
 </style>

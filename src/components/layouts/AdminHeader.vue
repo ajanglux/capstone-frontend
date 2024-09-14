@@ -1,9 +1,6 @@
 <template>
     <nav class="navbar">
         <div class="container-fluid">
-            <!-- <router-link class="navbar-brand" to="/">
-                SAMPLE PA LANG DONUT JUDGE
-            </router-link> -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -21,32 +18,14 @@
                     </li>
                 </ul>
                 <div v-else class="dropdown">
-                    <!-- <li class="nav-item">
-                        <router-link class="nav-link active" aria-current="page" to="/">
-                        <i class="bi bi-house-door-fill"></i> Home </router-link>
-                    </li> -->
                     <button class="username">
                         <span> ADMIN </span>
                     </button>
                     <div class="dropdown-content">
-                        <!-- <router-link class="nav-link" aria-current="page" to="/profile">
-                            <i class="bi bi-person-check-fill"></i> Profile
-                        </router-link> -->
                         <router-link to="#" class="nav-link" @click="userLogout" style="cursor:pointer">
                             <i class="bi bi-box-arrow-left"></i> Logout
                         </router-link>
                     </div>
-
-                    <!-- <div class="nav-item">
-                        <router-link class="nav-link" aria-current="page" to="/profile">
-                            <i class="bi bi-person-check-fill"></i> {{ store.user.name }}
-                        </router-link>
-                    </div>
-                    <div class="nav-item">
-                        <router-link to="#" class="nav-link" @click="userLogout" style="cursor:pointer">
-                            <i class="bi bi-box-arrow-left"></i> Logout
-                        </router-link>
-                    </div> -->
                 </div>
             </div>
         </div>
