@@ -119,6 +119,7 @@ button {
             border: none;
             padding: 10px;
             transition: all 0.3s ease-in-out;
+            background-color: var(--light);
         }
 
         textarea {
@@ -131,6 +132,7 @@ button {
             border: none;
             padding: 10px;
             transition: all 0.3s ease-in-out;
+            background-color: var(--light);
         }
 
         input:hover, textarea:hover {

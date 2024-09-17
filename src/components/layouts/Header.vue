@@ -1,18 +1,22 @@
 <template>
 <div class="landing-page">
     <header>
+        <div class="left-side">
+            <img class="app-logo" src="/src/assets/techfix-no.png" alt="TechFix Logo">
+            <h3>TechFix</h3>
+        </div>
     <div class="button-container">
         <router-link class="button" active-class="active" to="/">
-        <span class="text">Home</span>
+            <span class="text">Home</span>
         </router-link>
         <router-link class="button" active-class="active" to="/services">
-        <span class="text">Our Services</span>
+            <span class="text">Our Services</span>
         </router-link>
         <router-link class="button" active-class="active" to="/checkstatus">
-        <span class="text">Check Status</span>
+            <span class="text">Check Status</span>
         </router-link>
         <router-link class="button" active-class="active" to="/contact">
-        <span class="text">Contact Us</span>
+            <span class="text">Contact Us</span>
         </router-link>
     </div>
     </header>
@@ -33,10 +37,25 @@ header {
     z-index: 1000;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-    padding: 25px;
-    font-size: 1.2em;
+    padding: 20px;
+    font-size: 1em;
+
+    .left-side {
+        display: flex;
+    }
+
+    .app-logo {
+        width: 50px;
+        height: 35px;
+    }
+
+    h3 {
+        color: azure;
+        padding-left: 10px;
+        padding-top: 3px;
+    }
 }
 
 .button-container { 
@@ -50,7 +69,7 @@ header {
     color: white;
     border: none;
     padding: 8px 16px;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     border-radius: 10px;
     background-color: var(--main);

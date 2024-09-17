@@ -5,11 +5,10 @@
         <h2>LIST OF INQUIRIES</h2>
       </div>
       <div class="table-body">
-
         <div class="table-header">
           <div class="searchbar">
-            <i class='bx bx-search'></i>
-            <input type="text" placeholder="Search..." v-model="searchQuery">
+            <i class="bx bx-search"></i>
+            <input type="text" placeholder="Search..." v-model="searchQuery" />
           </div>
         </div>
 
@@ -37,10 +36,16 @@
               <td>{{ repair.address }}</td>
               <td>{{ repair.status || 'PENDING' }}</td>
               <td class="actions">
-                <button class="btn btn-success btn-sm me-1" @click="setOngoing(repair.id)" :disabled="repair.status !== 'pending'">
-                  On-going
-                </button>
-                <button class="btn btn-danger btn-sm me-1" @click="confirmDelete(repair.id)">Delete</button>
+                <div class="custom-select">
+                  <div class="select-icon">
+                    <i class="bx bx-chevron-down"></i>
+                    <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
+                      <option value="">Select</option>
+                      <option value="on-going" :disabled="repair.status !== 'pending'">On-going</option>
+                      <option value="delete">Delete</option>
+                    </select>
+                  </div>
+                </div>
               </td>
             </tr>
             <tr v-if="filteredRepairs.length === 0">
@@ -50,15 +55,14 @@
         </table>
       </div>
     </div>
+
     <ConfirmationDialog
       :show="showDeleteDialog"
       @close="showDeleteDialog = false"
       @confirm="deleteRepair"
     />
-    <SuccessModal
-      v-if="showSuccessModal"
-      @close="showSuccessModal = false"
-    />
+
+    <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
   </div>
 </template>
 
@@ -77,13 +81,16 @@ const errors = ref(null);
 const showDeleteDialog = ref(false);
 const showSuccessModal = ref(false);
 const selectedRepairId = ref(null);
-
+const selectedActions = ref({});
 const searchQuery = ref('');
 
 const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
     repairs.value = response.data.data;
+    repairs.value.forEach(repair => {
+      selectedActions.value[repair.id] = '';
+    });
   } catch (error) {
     console.error('Error fetching repairs:', error);
     errors.value = error.response?.data?.message || 'Error fetching repairs';
@@ -99,6 +106,15 @@ const filteredRepairs = computed(() => {
       return fullName.includes(searchText);
     });
 });
+
+const handleActionChange = (repairId) => {
+  const action = selectedActions.value[repairId];
+  if (action === 'on-going') {
+    setOngoing(repairId);
+  } else if (action === 'delete') {
+    confirmDelete(repairId);
+  }
+};
 
 const setOngoing = async (id) => {
   try {
@@ -116,6 +132,7 @@ const deleteRepair = async () => {
     await axios.delete(`${BASE_URL}/customer-details/${selectedRepairId.value}`, getHeaderConfig(authStore.access_token));
     fetchRepairs();
     showDeleteDialog.value = false;
+    showSuccessModal.value = true;
   } catch (error) {
     console.error('Error deleting repair:', error);
     errors.value = error.response?.data?.message || 'Error deleting repair';
@@ -132,5 +149,25 @@ onMounted(() => {
 });
 </script>
 
-<style>
+<style scoped>
+.custom-select {
+  position: relative;
+  display: inline-block;
+  width: 80%;
+
+  select {
+    width: 100%;
+    padding-right: 30px;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+}
 </style>

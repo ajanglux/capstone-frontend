@@ -82,15 +82,17 @@ try {
 };
 
 const filteredRepairs = computed(() => {
-return repairs.value
+  return repairs.value
     .filter((repair) => repair.status === 'completed')
     .filter((repair) => {
-    const searchText = searchQuery.value.toLowerCase();
-    return (
+      const searchText = searchQuery.value.toLowerCase();
+      const fullName = `${repair.first_name || ''} ${repair.last_name || ''}`.toLowerCase().trim();
+      return (
         repair.code.toLowerCase().includes(searchText) ||
+        fullName.includes(searchText) ||
         (repair.first_name && repair.first_name.toLowerCase().includes(searchText)) ||
         (repair.last_name && repair.last_name.toLowerCase().includes(searchText))
-    );
+      );
     });
 });
 

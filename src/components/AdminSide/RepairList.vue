@@ -48,12 +48,16 @@
               <td>{{ repair.first_name || 'N/A' }} {{ repair.last_name || 'N/A' }}</td>
               <td>{{ repair.status || 'ON GOING' }}</td>
               <td class="actions">
-                <router-link :to="{ name: 'repair-form', params: { id: repair.id } }" class="btn btn-success btn-sm me-1">
-                  View
-                </router-link>
-                <button class="btn btn-danger btn-sm me-1" @click="confirmDelete(repair.id)">Delete</button>
-                <button class="btn btn-warning btn-sm me-1" @click="markAsFinished(repair.id)">Finished</button>
-                <button class="btn btn-danger btn-sm me-1" @click="markAsCompleted(repair.id)">Completed</button>
+                <div class="custom-select">
+                  <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
+                    <option value="">Select Action</option>
+                    <option value="view">View</option>
+                    <option value="delete">Delete</option>
+                    <option value="finished" :disabled="repair.status === 'finished'">Finished</option>
+                    <option value="completed" :disabled="repair.status === 'completed'">Completed</option>
+                  </select>
+                  <i class="bx bx-chevron-down"></i>
+                </div>
               </td>
             </tr>
             <tr v-if="filteredRepairs.length === 0">
@@ -78,6 +82,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
@@ -86,13 +91,14 @@ import ConfirmationDialog from '../layouts/ConfirmationDialog.vue';
 import SuccessModal from '../layouts/SuccessModal.vue';
 
 const authStore = useAuthStore();
+const router = useRouter();
 const repairs = ref([]);
 const errors = ref(null);
 const showDeleteDialog = ref(false);
 const showSuccessModal = ref(false);
 const successMessage = ref('');
 const selectedRepairId = ref(null);
-
+const selectedActions = ref({});
 const selectedStatus = ref('');
 const searchQuery = ref('');
 
@@ -100,6 +106,9 @@ const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
     repairs.value = response.data.data;
+    repairs.value.forEach(repair => {
+      selectedActions.value[repair.id] = '';
+    });
   } catch (error) {
     console.error('Error fetching repairs:', error);
     errors.value = error.response?.data?.message || 'Error fetching repairs';
@@ -108,7 +117,6 @@ const fetchRepairs = async () => {
 
 const filteredRepairs = computed(() => {
   return repairs.value.filter(repair => {
-
     let matchesStatus = true;
 
     if (selectedStatus.value === '') {
@@ -118,14 +126,33 @@ const filteredRepairs = computed(() => {
     }
 
     const searchText = searchQuery.value.toLowerCase();
+    const fullName = `${repair.first_name || ''} ${repair.last_name || ''}`.toLowerCase().trim();
     const matchesSearch =
       repair.code.toLowerCase().includes(searchText) ||
+      fullName.includes(searchText) ||
       (repair.first_name && repair.first_name.toLowerCase().includes(searchText)) ||
       (repair.last_name && repair.last_name.toLowerCase().includes(searchText));
 
     return matchesStatus && matchesSearch;
   });
 });
+
+const handleActionChange = (repairId) => {
+  const action = selectedActions.value[repairId];
+  if (action === 'view') {
+    viewRepair(repairId);
+  } else if (action === 'delete') {
+    confirmDelete(repairId);
+  } else if (action === 'finished') {
+    markAsFinished(repairId);
+  } else if (action === 'completed') {
+    markAsCompleted(repairId);
+  }
+};
+
+const viewRepair = (id) => {
+  router.push({ name: 'repair-form', params: { id } });
+};
 
 const deleteRepair = async () => {
   try {
@@ -178,5 +205,25 @@ onMounted(() => {
 });
 </script>
 
-<style>
+<style scoped>
+.custom-select {
+  position: relative;
+  display: inline-block;
+  width: 50%;
+
+  select {
+    width: 100%;
+    padding-right: 30px;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+}
 </style>

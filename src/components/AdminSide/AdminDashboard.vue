@@ -62,7 +62,7 @@ export default {
         const response = await axios.get(`${BASE_URL}/admin-dashboard-stats`, headers);
         this.stats = [
           { label: 'Total Number of Inquiries', value: response.data.pendingRepairs },
-          { label: 'Total Number of Repairs', value: response.data.ongoingRepairs },
+          { label: 'Total Number of On-going Repairs', value: response.data.ongoingRepairs },
           { label: 'Total Number of Services', value: response.data.totalServices },
           { label: 'Total Number of Clients', value: response.data.totalClients }
         ];

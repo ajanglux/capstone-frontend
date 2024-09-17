@@ -8,12 +8,12 @@ const routes = [
     component: () => import('../components/UserSide/LandingPage.vue'),
     beforeEnter: [checkIfNotLogged],
   },
-  {
-    path: "/register",
-    name: "register",
-    component: () => import('../components/auth/Register.vue'),
-    beforeEnter: [checkIfNotLogged],
-  },
+  // {
+  //   path: "/register",
+  //   name: "register",
+  //   component: () => import('../components/auth/Register.vue'),
+  //   beforeEnter: [checkIfNotLogged],
+  // },
   {
     path: "/admin-login",
     name: "admin-login",

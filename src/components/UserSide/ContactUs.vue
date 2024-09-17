@@ -1,35 +1,20 @@
 <template>
   <div class="background-container">
-    <div class="container">
+    <div class="con-container">
       <div class="contact-info">
-        <h1 class="h1">Contact Us</h1>
-        <br />
-        <br>
-        <div class="contact-detail">
-          <i class="fas fa-envelope"></i>
-          <h4>Email: intelvision@yahoo.com</h4>
-        </div>
-        <br>
-        <div class="contact-detail">
-          <i class="fas fa-phone"></i>
-          <h4>Contact No.: 123-456-7890</h4>
-        </div>
-        <br>
-        <div class="contact-detail">
-          <i class="fas fa-map-marker-alt"></i>
-          <h4>Address: 1234 Elm Street, City, Country</h4>
-        </div>
+        <h2>Contact Us</h2>
+        <p> </p>
+        <p1></p1>
       </div>
 
       <div class="contact-form-container">
         <form class="contact-form" @submit.prevent="saveCustomerDetail">
-          <label for="firstName">First Name</label>
-          <input v-model="customerDetail.first_name" type="text" id="firstName" name="firstName" required />
+          <div class="name">
+            <input v-model="customerDetail.first_name" type="text" id="firstName" name="firstName" placeholder="Firstname" required />
 
-          <label for="lastName">Last Name</label>
-          <input v-model="customerDetail.last_name" type="text" id="lastName" name="lastName" required />
+            <input v-model="customerDetail.last_name" type="text" id="lastName" name="lastName" placeholder="Lastname" required />
+          </div>
 
-          <label for="phone">Phone Number</label>
           <input 
             v-model="customerDetail.phone_number" 
             type="text" 
@@ -37,21 +22,51 @@
             name="phone" 
             required 
             @input="validatePhoneNumber"
-            placeholder="09"
+            placeholder="Phone Number"
           />
           <p v-if="phoneNumberError" class="error-message">Phone number must be exactly 11 digits and numeric.</p>
 
-          <label for="email">Email</label>
-          <input v-model="customerDetail.email" type="email" id="email" name="email" />
+          <input v-model="customerDetail.email" type="email" id="email" name="email" placeholder="Email" />
 
-          <label for="address">Address</label>
-          <input v-model="customerDetail.address" type="text" id="address" name="address" />
+          <input 
+            v-model="customerDetail.address" 
+            type="text" 
+            id="address" 
+            name="address" 
+            placeholder="Barangay / Street or Municipality / City or Province" 
+            required 
+            @input="validateAddress"
+          />
+          <p v-if="addressError" class="error-message">Address must include Barangay, Street, and City separated by comma (,).</p>
 
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit">Submit</button>
         </form>
       </div>
     </div>
     <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
+
+    <div class="cards">
+      <div class="card">
+        <div class="info">
+          <p>Email:</p>
+          <h1>intelvision@yahoo.com</h1>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="info">
+          <p>Contact Number:</p>
+          <h1>123-456-7890</h1>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="info">
+          <p>Address:</p>
+          <h1>1234 Elm Street, City, Country</h1>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -71,6 +86,7 @@ const customerDetail = ref({
 
 const showSuccessModal = ref(false);
 const phoneNumberError = ref(false);
+const addressError = ref(false);
 
 const validatePhoneNumber = (event) => {
   const input = event.target;
@@ -80,11 +96,22 @@ const validatePhoneNumber = (event) => {
   phoneNumberError.value = value.length !== 11;
 };
 
+const validateAddress = () => {
+  const addressParts = customerDetail.value.address.split(',');
+  addressError.value = addressParts.length < 3;
+};
+
 const isPhoneNumberValid = computed(() => customerDetail.value.phone_number.length === 11);
+const isAddressValid = computed(() => !addressError.value);
 
 const saveCustomerDetail = async () => {
   if (!isPhoneNumberValid.value) {
     alert('Phone number must be exactly 11 digits.');
+    return;
+  }
+
+  if (!isAddressValid.value) {
+    alert('Address must include Barangay, Street, and City.');
     return;
   }
 
@@ -107,117 +134,115 @@ const resetForm = () => {
     address: ''
   };
   phoneNumberError.value = false;
+  addressError.value = false;
 };
 </script>
+
   
 <style scoped>
 .background-container {
   position: relative;
-  background: var(--light);
+  background: var(--header);
   background-size: cover;
   height: 100vh;
   width: 100%; 
-  display: flex;
   justify-content: center;
   align-items: center;
   padding: 0;
   z-index: 1;
 }
 
-.container {
+.con-container {
   display: flex;
-  justify-content: space-between;
-  padding: 50px;
-  padding-right: 32px;
-  background: var(--header);
-  border-radius: 5px;
-  max-width: 1100px;
+  margin-top: 10.5pc;
+
+  .contact-info {
+    margin: 0 0 1.5pc 17pc;
+    background: var(--light);
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    padding: 25px;
+    width: 100%;
+
+  }
+
+  .contact-form-container {
+    flex: 1;
+    padding: 20px;
+    background: var(--header);
+    border-radius: 15px;
+    margin: 0 15pc 0 1pc;
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      .name {
+        display: flex;
+        gap: 1pc;
+      }
+
+      input {
+        padding: 8px;
+        margin-bottom: 20px;
+        border-radius: 15px;
+        background-color: var(--light);
+      }
+
+      button {
+        background-color: var(--main);
+        color: white;
+        padding: 10px;
+        margin-left: 100px;
+        margin-right: 100px;
+        border-radius: 13px;
+      }
+
+      button:hover {
+        background-color: var(--main-hover);
+
+      }
+    }
+  }
+}
+
+.cards {
+  display: flex;
+  margin-top: 3pc;
+  gap: 30px;
   width: 100%;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-  margin: 0 0px;
-}
+  align-items: stretch;
+  transition: all 0.5s ease;
+  padding: 20px 0 0 17pc;
 
-.h1 {
-  position: relative;
-  margin-left: 14vh;
-}
+  .card {
+    width: 25%;    
+    padding: 20px;
+    border-radius: 5px;
+    background-color: var(--light);
+    color: #333;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    
+    .info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      
+      p {
+        font-size: 16px;
+      }
 
-.contact-info, .contact-form-container {
-  flex: 1;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 8px;
-  margin-right: 20px;
-}
-
-.contact-info {
-  margin-right: 40px;
-}
-
-.contact-info h1 {
-  font-family: 'Poppins';
-  font-size: 2.2em;
-  margin-bottom: 15px;
-  color: #333;
-}
-
-.contact-detail {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.contact-detail i {
-  font-family: 'Poppins';
-  margin-right: 10px;
-  font-size: 1.3em;
-  color: #007bff;
-}
-
-.contact-detail h4 {
-  font-family: 'Poppins';
-  font-size: 1.1em;
-  margin: 0;
-  color: #333;
-}
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.contact-form label {
-  font-family: 'Poppins';
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #333;
-}
-
-.contact-form input,
-.contact-form textarea {
-  padding: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.contact-form textarea {
-  resize: vertical;
-}
-
-.contact-form button {
-  padding: 8px 18px;
-  background-color: var(--main);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1.1em;
-}
-
-.contact-form button:hover {
-  background-color: var(--main-hover);
+      h1 {
+        font-size: 16px;
+      }
+    }
+  }
 }
 
 .error-message {

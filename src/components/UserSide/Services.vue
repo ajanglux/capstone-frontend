@@ -1,6 +1,6 @@
 <template>
   <div class="content-container">
-    <h1>We Offer</h1>
+    <h1>WE OFFER</h1>
 
     <div v-if="errors" class="error">
       {{ errors }}
@@ -43,35 +43,24 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.services {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  color: #fff;
-  background: var(--grey);
-  background-size: cover;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
 .content-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   padding: 20px;
   background: var(--header);
   min-height: 100vh;
   width: 100%;
-  margin-top: 80px;
+  margin-top: 70px;
 
   h1 {
-    text-align: center;
-    font-size: 4.5em;
-    font-weight: bold;
-    margin: 0 0 20px 0;
-    color: #fff;
+    font-family: 'Poppins';
+    /* text-align: center; */
+    font-size: 3.5em;
+    /* font-weight: bold; */
+    margin: 20px 0 18px 20px;
+    color: var(--light);
   }
 }
 
@@ -83,8 +72,8 @@ onMounted(() => {
   grid-template-rows: auto;
   gap: 30px;
   padding: 0 100px;
-  margin-bottom: 50px;
-  height: 100%;
+  margin-bottom: 30px;
+  height: 50%;
   align-items: stretch;
   transition: all 0.5s ease;
 
@@ -109,7 +98,7 @@ onMounted(() => {
 
           img {
             width: 100%;
-            height: 400px;
+            height: 350px;
             object-fit: cover;
             object-position: center;
             align-content: center;
@@ -131,6 +120,4 @@ onMounted(() => {
     grid-template-rows: repeat(6, auto);
   }
 }
-
-
 </style>
