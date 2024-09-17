@@ -23,6 +23,7 @@
               <option value="">All</option>
               <option value="on-going">On-going</option>
               <option value="finished">Finished</option>
+              <option value="ready-for-pickup">Ready</option>
             </select>
           </div>
         </div>
@@ -54,6 +55,7 @@
                     <option value="view">View</option>
                     <option value="delete">Delete</option>
                     <option value="finished" :disabled="repair.status === 'finished'">Finished</option>
+                    <option value="ready-for-pickup" :disabled="repair.status === 'ready-for-pickup'">Ready For Pickup</option>
                     <option value="completed" :disabled="repair.status === 'completed'">Completed</option>
                   </select>
                   <i class="bx bx-chevron-down"></i>
@@ -120,7 +122,7 @@ const filteredRepairs = computed(() => {
     let matchesStatus = true;
 
     if (selectedStatus.value === '') {
-      matchesStatus = repair.status === 'on-going' || repair.status === 'finished';
+      matchesStatus = repair.status === 'on-going' || repair.status === 'finished' || repair.status === 'ready-for-pickup';
     } else {
       matchesStatus = repair.status === selectedStatus.value;
     }
@@ -145,6 +147,8 @@ const handleActionChange = (repairId) => {
     confirmDelete(repairId);
   } else if (action === 'finished') {
     markAsFinished(repairId);
+  } else if (action === 'ready-for-pickup') {
+    markAsReady(repairId);
   } else if (action === 'completed') {
     markAsCompleted(repairId);
   }
@@ -186,6 +190,10 @@ const updateStatus = async (id, status) => {
 
 const markAsFinished = (id) => {
   updateStatus(id, 'finished');
+};
+
+const markAsReady = (id) => {
+  updateStatus(id, 'ready-for-pickup');
 };
 
 const markAsCompleted = (id) => {

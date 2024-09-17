@@ -1,179 +1,118 @@
 <template>
   <div class="background-container">
-    <div class="exclusive-content">
-      <!-- Access Code Form -->
-      <div v-if="!accessGranted" class="access-form">
-        <h2>Enter Access Code</h2>
-        <input v-model="accessCode" type="text" placeholder="Enter code here" />
-        <button @click="validateCode">Submit</button>
-        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      </div>
-  
-      <!-- Check Status Section -->
-      <div v-if="accessGranted" class="check-status">
-        <h2>Check Repair Status</h2>
-        <router-link class="status-button" :to="statusLink">Check Status</router-link>
-      </div>
-  
-      <!-- Exclusive Content View -->
-      <div v-else class="content-box">
-        <h2>Exclusive Content</h2>
-        <p>This information is available only to users with the correct code.</p>
-        <button @click="viewDetails">View Details</button>
+    <div class="con-container">
+      <div class="contact-info">
+        <h2>Enter Code: </h2>
+        <input type="text" v-model="code" placeholder="Code" @input="fetchStatus" />
+
+        <div v-if="isLoading">
+          <p>Loading status...</p>
+        </div>
+
+        <div v-if="errorMessage" class="error">
+          <p>{{ errorMessage }}</p>
+        </div>
+
+        <div v-if="status">
+          <div class="info" v-if="status === 'on-going'">
+            <p>Progress Status: On-going</p>
+            <h1>Your device is being worked on.</h1>
+          </div>
+
+          <div class="info" v-if="status === 'finished'">
+            <p>Progress Status: Finished</p>
+            <h1>Your device repair is finished.</h1>
+          </div>
+
+          <div class="info" v-if="status === 'ready-for-pickup'">
+            <p>Progress Status: Ready for Pick up</p>
+            <h1>Your device is ready for pickup.</h1>
+          </div>
+
+          <div class="info" v-if="status === 'completed'">
+            <p>Progress Status: Completed</p>
+            <h1>Your repair has been successfully completed.</h1>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-data() {
-  return {
-    accessCode: '', // User input for the code
-    validCode: '12345', // The correct access code (you can replace this with dynamic logic)
-    accessGranted: false, // Whether the user is granted access or not
-    errorMessage: '', // Error message for incorrect code
-  };
-},
-computed: {
-  // Compute the link for the Check Status button
-  statusLink() {
-    return this.accessGranted ? '/checkstatus' : '#'; // Set link to # if not granted
-  }
-},
-methods: {
-  // Function to validate the access code
-  validateCode() {
-    if (this.accessCode === this.validCode) {
-      this.accessGranted = true; // Grant access if the code matches
-      this.errorMessage = '';
-    } else {
-      this.errorMessage = 'Invalid code. Please try again.';
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import { BASE_URL } from '../../helpers/baseUrl';
+
+const code = ref('');
+const status = ref(null);
+const errorMessage = ref('');
+const isLoading = ref(false);
+
+const fetchStatus = async () => {
+
+  status.value = null;
+  errorMessage.value = '';
+  isLoading.value = true;
+
+  try {
+    if (code.value) {
+      const response = await axios.get(`${BASE_URL}/customer-details/status/${code.value}`);
+      status.value = response.data.data.status;
     }
-  },
-  // Function to view more details
-  viewDetails() {
-    alert('Here are the exclusive details!'); // Replace with actual details or routing
+  } catch (error) {
+    errorMessage.value = 'Invalid code or no status found.';
+  } finally {
+    isLoading.value = false;
   }
-}
 };
 </script>
-
-
+  
 <style scoped>
-/* Styling for background and container */
 .background-container {
-position: relative;
-background: var(--light);
-background-size: cover;
-height: 100vh;
-width: 100%;
-display: flex;
-justify-content: center;
-align-items: center;
-color: #fff;
-padding: 0;
+  position: relative;
+  background: var(--header);
+  background-size: cover;
+  height: 100vh;
+  width: 100%; 
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  z-index: 1;
 }
 
-/* Container for exclusive content */
-.exclusive-content {
-background-color: #2a2a2a;
-padding: 20px;
-border-radius: 10px;
-text-align: center;
-width: 400px;
-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
+.con-container {
+  display: flex;
+  margin-top: 10pc;
+  height: 65%;
 
-/* Styling for the check status section */
-.check-status {
-margin-top: 30px;
-text-align: center;
-}
+  .contact-info {
+    margin: 0 15pc 0 15pc;
+    background: var(--light);
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    padding: 25px;
+    /* padding-bottom: 20pc; */
+    width: 100%;
 
-.check-status h2 {
-color: #fff;
-margin-bottom: 10px;
-}
+    .info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 5px;
+      
+      p {
+        font-size: 16px;
+        padding-top: 7px;
+      }
 
-.status-button {
-padding: 10px 20px;
-background-color: #008cba;
-border: none;
-border-radius: 5px;
-color: white;
-cursor: pointer;
-text-decoration: none;
-}
+      h1 {
+        font-size: 16px;
+      }
+    }
 
-.status-button:hover {
-background-color: #005f6b;
-}
-
-/* Styling for the access form */
-.access-form {
-display: flex;
-flex-direction: column;
-align-items: center;
-}
-
-.access-form h2 {
-margin-bottom: 15px;
-color: #fff;
-}
-
-.access-form input {
-padding: 10px;
-border-radius: 5px;
-border: none;
-width: 100%;
-margin-bottom: 10px;
-}
-
-.access-form button {
-padding: 10px;
-background-color: #008cba;
-border: none;
-border-radius: 5px;
-color: white;
-cursor: pointer;
-}
-
-.access-form button:hover {
-background-color: #005f6b;
-}
-
-.error-message {
-color: #ff4c4c;
-margin-top: 10px;
-}
-
-/* Styling for the exclusive content box */
-.content-box {
-display: flex;
-flex-direction: column;
-align-items: center;
-}
-
-.content-box h2 {
-margin-bottom: 15px;
-color: #fff;
-}
-
-.content-box p {
-margin-bottom: 20px;
-}
-
-.content-box button {
-padding: 10px;
-background-color: #00c853;
-border: none;
-border-radius: 5px;
-color: white;
-cursor: pointer;
-}
-
-.content-box button:hover {
-background-color: #009624;
+  }
 }
 </style>
