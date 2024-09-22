@@ -52,11 +52,11 @@
                 <div class="custom-select">
                   <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                     <option value="">Select Action</option>
-                    <option value="view">View</option>
+                    <option value="view">Edit / View</option>
                     <option value="delete">Delete</option>
-                    <option value="finished" :disabled="repair.status === 'finished'">Finished</option>
+                    <option value="finished" :disabled="repair.status === 'finished' || repair.status === 'ready-for-pickup'">Finished</option>
                     <option value="ready-for-pickup" :disabled="repair.status === 'ready-for-pickup'">Ready For Pickup</option>
-                    <option value="completed" :disabled="repair.status === 'completed'">Completed</option>
+                    <option value="completed" :disabled="repair.status === 'finished' ">Completed</option>
                   </select>
                   <i class="bx bx-chevron-down"></i>
                 </div>

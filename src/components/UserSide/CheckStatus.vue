@@ -19,8 +19,8 @@
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Device Received</p>
-                <p>Your Device status is: On-going</p>
                 <p v-if="onGoingUpdatedAt">Updated on: {{ formattedOnGoingUpdatedAt }}</p>
+                <p>Your Device status is: On-going</p>
               </div>
             </div>
 
@@ -29,7 +29,7 @@
               <div class="timeline-content">
                 <p class="timeline-location">Repair Finished</p>
                 <!-- <p>Status: Finished</p> -->
-                <p v-if="finishedUpdatedAt">Updated on: {{ formattedFinishedUpdatedAt }}: <br>Your device is Finished</p>
+                <p v-if="finishedUpdatedAt">Updated on: {{ formattedFinishedUpdatedAt }}: <br>Your device has been successfully repaired.</p>
                 <p v-else>Not Yet available</p>
               </div>
             </div>
@@ -39,7 +39,7 @@
               <div class="timeline-content">
                 <p class="timeline-location">Ready for Pickup</p>
                 <!-- <p>Status: Ready for Pickup</p> -->
-                <p v-if="readyForPickupUpdatedAt">Updated on: {{ formattedReadyForPickupUpdatedAt }}: <br>You can pickup your device at our shop anytime now.</p>
+                <p v-if="readyForPickupUpdatedAt">Updated on: {{ formattedReadyForPickupUpdatedAt }}: <br>Our shop is open from 9 AM to 5 PM.<br> You can pick up your device from our shop at any time now.</p>
                 <p v-else>Not Yet available</p>
               </div>
             </div>
@@ -49,7 +49,7 @@
               <div class="timeline-content">
                 <p class="timeline-location">Repair Completed</p>
                 <!-- <p>Status: Completed</p> -->
-                <p v-if="completedUpdatedAt">Updated on: {{ formattedCompletedUpdatedAt }}: <br>The process is Completed, Thank you for choosing Techfix!</p>
+                <p v-if="completedUpdatedAt">Updated on: {{ formattedCompletedUpdatedAt }}: <br>The device has been successfully returned, and the process is now complete.</p>
                 <p v-else>Not Yet available</p>
               </div>
             </div>
@@ -155,7 +155,7 @@ const isActive = (checkStatus) => {
   .timeline-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0px;
     margin-top: 20px;
   }
 

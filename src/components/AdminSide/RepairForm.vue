@@ -39,22 +39,26 @@
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Brand</span>
-          <input v-model="productInfo.brand" type="text" class="form-control" :disabled="isEditing" />
+          <input v-model="productInfo.brand" type="text" class="form-control" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Model</span>
-          <input v-model="productInfo.model" type="text" class="form-control" :disabled="isEditing" />
+          <input v-model="productInfo.model" type="text" class="form-control" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Serial Number</span>
-          <input v-model="productInfo.serial_number" type="text" class="form-control" :disabled="isEditing" />
+          <input v-model="productInfo.serial_number" type="text" class="form-control" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Purchase Date</span>
-          <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isEditing" />
+          <input
+            v-model="productInfo.purchase_date"
+            type="date"
+            class="form-control"
+            :min="minDate"
+          />
         </div>
-
-        <!-- Submit and Cancel Buttons -->
+        
         <div class="buttons">
           <button @click="isEditing ? updateRepair() : saveRepair()" type="button" class="btn btn-primary">
             {{ isEditing ? 'Update' : 'Submit' }}
@@ -63,10 +67,7 @@
         </div>
       </div>
     </div>
-    <SuccessModal
-      v-if="showSuccessModal"
-      @close="showSuccessModal = false"
-    />
+    <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
   </div>
 </template>
 
@@ -81,7 +82,7 @@ export default {
   name: 'RepairForm',
   props: ['id'],
   components: {
-    SuccessModal
+    SuccessModal,
   },
   data() {
     return {
@@ -91,23 +92,24 @@ export default {
         last_name: '',
         phone_number: '',
         email: '',
-        address: ''
+        address: '',
       },
       productInfo: {
         brand: '',
         model: '',
         serial_number: '',
-        purchase_date: ''
+        purchase_date: '',
       },
       isEditing: false,
       showSuccessModal: false,
-      phoneNumber: ''
+      phoneNumber: '',
+      minDate: new Date().toISOString().split('T')[0],
     };
   },
   watch: {
     phoneNumber(value) {
       this.model.phone_number = value;
-    }
+    },
   },
   mounted() {
     if (this.id) {
@@ -119,13 +121,10 @@ export default {
     async getRepairDetails() {
       try {
         const authStore = useAuthStore();
-        const [customerResponse, productResponse] = await Promise.all([
-          axios.get(`${BASE_URL}/customer-details/${this.id}`, getHeaderConfig(authStore.access_token)),
-          axios.get(`${BASE_URL}/product-infos/${this.id}`, getHeaderConfig(authStore.access_token))
-        ]);
-
-        this.model = customerResponse.data.data || {};
-        this.productInfo = productResponse.data || {};
+        const response = await axios.get(`${BASE_URL}/customer-details/${this.id}/with-product-info`, getHeaderConfig(authStore.access_token));
+        const customerDetail = response.data;
+        this.model = customerDetail || {};
+        this.productInfo = customerDetail.product_infos[0] || {};
         this.phoneNumber = this.model.phone_number;
       } catch (error) {
         console.error('Error fetching repair details:', error);
@@ -145,12 +144,9 @@ export default {
     async saveRepair() {
       try {
         const authStore = useAuthStore();
-        
         const repairData = { ...this.model, status: 'on-going' };
-        
         const customerResponse = await axios.post(`${BASE_URL}/customer-details`, repairData, getHeaderConfig(authStore.access_token));
         await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: customerResponse.data.data.id }, getHeaderConfig(authStore.access_token));
-        
         this.showSuccessModal = true;
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
@@ -161,15 +157,18 @@ export default {
       try {
         const authStore = useAuthStore();
         await axios.put(`${BASE_URL}/customer-details/${this.id}`, this.model, getHeaderConfig(authStore.access_token));
-        await axios.put(`${BASE_URL}/product-infos/${this.id}`, this.productInfo, getHeaderConfig(authStore.access_token));
-        
+        if (this.productInfo.id) {
+          await axios.put(`${BASE_URL}/product-infos/${this.productInfo.id}`, this.productInfo, getHeaderConfig(authStore.access_token));
+        } else {
+          await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: this.id }, getHeaderConfig(authStore.access_token));
+        }
         this.showSuccessModal = true;
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
         this.errorList = error.response?.data?.errors || [error.message];
       }
     }
-  }
+  },
 };
 </script>
 
