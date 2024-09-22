@@ -10,10 +10,10 @@
             <span class="text">Home</span>
         </router-link>
         <router-link class="button" active-class="active" to="/services">
-            <span class="text">Our Services</span>
+            <span class="text">Services</span>
         </router-link>
         <router-link class="button" active-class="active" to="/checkstatus">
-            <span class="text">Check Status</span>
+            <span class="text">Track Status</span>
         </router-link>
         <router-link class="button" active-class="active" to="/contact">
             <span class="text">Contact Us</span>
