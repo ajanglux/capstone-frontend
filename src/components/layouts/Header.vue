@@ -5,29 +5,28 @@
             <img class="app-logo" src="/src/assets/techfix-no.png" alt="TechFix Logo">
             <h3>TechFix</h3>
         </div>
-    <div class="button-container">
-        <router-link class="button" active-class="active" to="/">
-            <span class="text">Home</span>
-        </router-link>
-        <router-link class="button" active-class="active" to="/services">
-            <span class="text">Services</span>
-        </router-link>
-        <router-link class="button" active-class="active" to="/checkstatus">
-            <span class="text">Track Status</span>
-        </router-link>
-        <router-link class="button" active-class="active" to="/contact">
-            <span class="text">Contact Us</span>
-        </router-link>
-    </div>
+        <div class="button-container">
+            <router-link class="button" active-class="active" to="/">
+                <span class="text">Home</span>
+            </router-link>
+            <router-link class="button" active-class="active" to="/services">
+                <span class="text">Services</span>
+            </router-link>
+            <router-link class="button" active-class="active" to="/checkstatus">
+                <span class="text">Status</span>
+            </router-link>
+            <router-link class="button" active-class="active" to="/contact">
+                <span class="text">Contact</span>
+            </router-link>
+        </div>
     </header>
-
 </div> 
 </template>
 <script setup>
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 header {
     background-color: var(--header);
     width: 100%;
@@ -39,22 +38,24 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 18px;
     font-size: 1em;
 
     .left-side {
         display: flex;
-    }
 
-    .app-logo {
-        width: 50px;
-        height: 35px;
+        img {
+            width: 50px;
+            height: auto;
+        }
     }
 
     h3 {
+        align-items: center;
         color: azure;
         padding-left: 10px;
-        padding-top: 3px;
+        display: flex;
+        align-items: center;
     }
 }
 
@@ -81,4 +82,58 @@ header {
     background-color: var(--main-hover);
 }
 
+@media (max-width: 500px) {
+    header {
+        padding: 18px;
+        font-size: 0.8em;
+
+        .left-side {
+            img {
+                width: 40px;
+            }
+        }
+
+        h3 {
+            padding-left: 8px;
+        }
+    }
+
+    .button-container { 
+        display: flex;
+        gap: 8px;
+        margin-right: 0;
+    }
+
+    .button { 
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 420px) {
+    header {
+        padding: 15px;
+        font-size: 0.7em;
+
+        .left-side {
+            img {
+                width: 30px;
+            }
+        }
+
+        h3 {
+            padding-left: 5px;
+        }
+    }
+
+    .button-container { 
+        gap: 5px;
+    }
+
+    .button { 
+        border-radius: 7px;
+        padding: 4px 6px;
+        font-size: 12px;
+    }
+}
 </style>

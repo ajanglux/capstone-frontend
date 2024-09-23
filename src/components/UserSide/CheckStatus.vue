@@ -121,12 +121,12 @@ const isActive = (checkStatus) => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .background-container {
   background: var(--header);
   background-size: cover;
   height: 100vh;
-  width: 100%;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -145,11 +145,16 @@ const isActive = (checkStatus) => {
   height: 35pc;
 
   input {
-    width: 100%;
+    width: 50%;
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    outline: none;
+
+    &:focus {
+      border: 1px solid var(--header);
+    }
   }
 
   .timeline-container {
@@ -188,6 +193,25 @@ const isActive = (checkStatus) => {
     .timeline-location {
       font-weight: bold;
       font-size: 18px;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .background-container {
+    height: 100vh;
+    display: flex;
+    align-items: unset;
+  }
+
+  .con-container {
+    margin-top: 110px;
+    width: 80%;
+  }
+
+  .contact-info {
+    input {
+      width: 100%;
     }
   }
 }

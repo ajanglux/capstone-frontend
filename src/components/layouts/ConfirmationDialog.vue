@@ -16,7 +16,7 @@
   });
   </script>
   
-  <style scoped>
+  <style lang="scss" scoped>
   .dialog-overlay {
     position: fixed;
     top: 0;

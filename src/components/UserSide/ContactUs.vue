@@ -139,13 +139,13 @@ const resetForm = () => {
 </script>
 
   
-<style scoped>
+<style lang="scss" scoped>
 .background-container {
   position: relative;
   background: var(--header);
   background-size: cover;
   height: 100vh;
-  width: 100%; 
+  width: 100vw; 
   justify-content: center;
   align-items: center;
   padding: 0;
@@ -154,7 +154,7 @@ const resetForm = () => {
 
 .con-container {
   display: flex;
-  margin-top: 10.5pc;
+  padding-top: 10.5pc;
 
   .contact-info {
     margin: 0 0 1.5pc 17pc;
@@ -248,5 +248,11 @@ const resetForm = () => {
 .error-message {
   color: red;
   font-size: 12px;
+}
+
+@media (max-width: 500px) {
+  
+
+
 }
 </style>

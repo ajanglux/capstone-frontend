@@ -11,7 +11,7 @@
   const emit = defineEmits(['close']);
   </script>
   
-  <style scoped>
+  <style lang="scss" scoped>
   .success-modal-overlay {
     position: fixed;
     top: 0;

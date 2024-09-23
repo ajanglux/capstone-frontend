@@ -138,7 +138,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .custom-select {
   position: relative;
   display: inline-block;

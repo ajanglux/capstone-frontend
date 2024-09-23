@@ -52,7 +52,7 @@ button {
 
 .app {
     display:flex;
-    main {
+    /* main {
         flex: 1 1 0;
         padding: 2rem;
         will-change: transform, opacity;
@@ -63,7 +63,7 @@ button {
           margin: 0;
           flex-direction: column;
         }    
-    }
+    } */
     .headerAndContent {
         display: flex;
         flex-direction: column;

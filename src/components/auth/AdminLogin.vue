@@ -2,8 +2,8 @@
   <div class="container">
     <div class="login-card-wrapper">
       <div class="login-card">
-        <div class="card-header text-center bg-white">
-          <h3 class="mt-2">ADMIN LOGIN</h3>
+        <div class="header">
+          <h3>ADMIN LOGIN</h3>
         </div>
         <div class="card-body">
           <form @submit.prevent="adminAuth">
@@ -27,12 +27,15 @@
             </div>
             <div class="form-group mb-3 text-center">
               <Spinner v-if="data.loading" />
-              <button v-else type="submit" class="btn btn-dark btn-sm rounded-0 w-100">
+              <button v-else type="submit" class="btn">
                 Login
               </button>
             </div>
           </form>
         </div>
+      </div>
+      <div class="logo">
+        <img src="/src/assets/techfix.png" >
       </div>
     </div>
   </div>
@@ -95,7 +98,7 @@
   onUnmounted(() => store.clearErrors())
   </script>
   
-<style scoped>
+<style lang="scss" scoped>
 /* Container */
 .container {
   display: flex;
@@ -108,100 +111,89 @@
 
 /* Login Card Wrapper */
 .login-card-wrapper {
-  background-color: var(--grey);
-  padding: 60px;
+  display: flex;
   border-radius: 12px;
-  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
-  max-width: 800px; /* Widen the overall wrapper */
-  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  width: 60%;
 }
 
 /* Login Card */
 .login-card {
-  border-radius: 10px;
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   background-color: var(--light);
   padding: 60px;
+  align-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-  h3 {
+  .form-control {
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+
+  .header h3 {
+    font-weight: 700;
+    font-size: 50px;
+    letter-spacing: 0.5px;
+    margin-bottom: 30px;
     color: var(--main);
+    text-align: center;
+    font-family: 'Poppins';
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  input::placeholder {
+    color: #999;
+    font-size: 14px;
+  }
+
+  input:focus {
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.25) !important;
+    border-color: #007bff !important;
+  }
+
+  .btn {
+    letter-spacing: 1px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 50px;
+    background-color: var(--main);
+    color: white;
+    width: 50%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+  }
+
+  .btn:hover {
+    background-color: var(--main-hover);
+    transform: translateY(-2px);
   }
 }
 
-.login-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.15);
-}
+.logo {
+  width: 100%;
+  height: auto;
+  background-color: var(--main);
+  align-content: space-evenly;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 
-/* Input Fields */
-input::placeholder {
-  color: #999;
-  font-size: 14px;
-}
-
-input {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-input:focus {
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25) !important;
-  border-color: #007bff !important;
-}
-
-/* Button Styling */
-.btn {
-  letter-spacing: 1px;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  background-color: #333;
-  color: white;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  border: none;
-}
-
-.btn:hover {
-  background-color: #555;
-  transform: translateY(-2px);
-}
-
-.form-control {
-  padding: 12px;
-  font-size: 15px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-}
-
-/* Title Styling */
-.card-header h3 {
-  font-weight: bold;
-  font-size: 3.5rem; /* Double the original size */
-  letter-spacing: 0.5px;
-  margin-bottom: 20px;
-}
-
-/* Center Text */
-.text-center {
-  text-align: center;
-}
-
-/* Animation for the Form */
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
+  img {
+    width: 100%;
   }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.login-card {
-  animation: slideIn 0.6s ease-out;
 }
 </style>

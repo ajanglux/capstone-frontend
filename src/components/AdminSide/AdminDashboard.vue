@@ -75,7 +75,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style lang="scss" scoped>
 .cards {
     display: flex;
     gap: 30px;

@@ -29,7 +29,7 @@
 <script setup>
 </script>
 
-<style>
+<style lang="scss">
 
     aside {
         min-width: 250px;

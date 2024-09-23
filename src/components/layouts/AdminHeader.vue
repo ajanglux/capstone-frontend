@@ -76,7 +76,7 @@
     })
 </script>
 
-<style>
+<style lang="scss">
 .navbar {
     width: 100%;
     height: 70px;

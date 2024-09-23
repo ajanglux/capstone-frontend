@@ -25,6 +25,7 @@
               <option value="finished">Finished</option>
               <option value="ready-for-pickup">Ready</option>
             </select>
+            <i class="bx bx-chevron-down"></i>
           </div>
         </div>
         <div v-if="errors" class="alert alert-danger">
@@ -213,7 +214,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .custom-select {
   position: relative;
   display: inline-block;
@@ -222,7 +223,6 @@ onMounted(() => {
   select {
     width: 100%;
     padding-right: 30px;
-    appearance: none;
     cursor: pointer;
   }
 
