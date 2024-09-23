@@ -84,7 +84,7 @@ header {
 
 @media (max-width: 500px) {
     header {
-        padding: 18px;
+        padding: 20px;
         font-size: 0.8em;
 
         .left-side {
@@ -100,20 +100,20 @@ header {
 
     .button-container { 
         display: flex;
-        gap: 8px;
+        gap: 5px;
         margin-right: 0;
     }
 
     .button { 
         padding: 5px 10px;
-        font-size: 12px;
+        font-size: 14px;
     }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 430px) {
     header {
-        padding: 15px;
-        font-size: 0.7em;
+        padding: 20px 15px;
+        font-size: 0.8em;
 
         .left-side {
             img {
@@ -122,7 +122,7 @@ header {
         }
 
         h3 {
-            padding-left: 5px;
+            padding-left: 4px;
         }
     }
 
@@ -130,10 +130,37 @@ header {
         gap: 5px;
     }
 
-    .button { 
+    .button {
         border-radius: 7px;
-        padding: 4px 6px;
-        font-size: 12px;
+        padding: 3px 5px;
+        font-size: 14px;
     }
 }
+
+// @media (max-width: 400px) {
+//     header {
+//         padding: 20px 15px;
+//         font-size: 0.8em;
+
+//         .left-side {
+//             img {
+//                 width: 30px;
+//             }
+//         }
+
+//         h3 {
+//             padding-left: 4px;
+//         }
+//     }
+
+//     .button-container { 
+//         gap: 5px;
+//     }
+
+//     .button {
+//         border-radius: 7px;
+//         padding: 3px 5px;
+//         font-size: 14px;
+//     }
+// }
 </style>

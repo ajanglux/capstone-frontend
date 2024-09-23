@@ -3,7 +3,7 @@
     <div class="con-container">
       <div class="contact-info">
         <h2>Contact Us</h2>
-        <p> </p>
+        <p> Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample </p>
         <p1></p1>
       </div>
 
@@ -154,24 +154,22 @@ const resetForm = () => {
 
 .con-container {
   display: flex;
+  gap: 20px;
   padding-top: 10.5pc;
+  margin: 0 17pc 1.5pc 17pc;
 
   .contact-info {
-    margin: 0 0 1.5pc 17pc;
     background: var(--light);
     border-radius: 15px;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
     padding: 25px;
     width: 100%;
-
   }
 
   .contact-form-container {
     flex: 1;
-    padding: 20px;
     background: var(--header);
     border-radius: 15px;
-    margin: 0 15pc 0 1pc;
 
     .contact-form {
       display: flex;
@@ -186,8 +184,15 @@ const resetForm = () => {
       input {
         padding: 8px;
         margin-bottom: 20px;
-        border-radius: 15px;
+        border-radius: 10px;
         background-color: var(--light);
+        outline: none;
+        border: 2px solid transparent;
+
+        &:focus {
+          border: 2px solid var(--grey);
+        }
+
       }
 
       button {
@@ -251,8 +256,41 @@ const resetForm = () => {
 }
 
 @media (max-width: 500px) {
-  
+  .background-container {
+    height: auto;
+    padding-bottom: 30px;
+  }
 
+  .con-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 6.5pc;
+    margin: 0 2pc 1.5pc 2pc;
 
+    .contact-form-container {
+      flex: 1;
+      background: var(--header);
+      border-radius: 15px;
+
+      .contact-form {
+        .name {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+        }
+      }
+    }
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px 2pc 0 2pc;
+
+    .card {
+      width: 100%;    
+    }
+  }
 }
 </style>

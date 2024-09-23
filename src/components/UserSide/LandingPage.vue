@@ -106,7 +106,7 @@ export default {
       order: 1;
       width: 100%;
       height: auto;
-      margin-top: 15vh;
+      margin-top: 13vh;
       margin-left: 0;
       margin-right: 0;
 

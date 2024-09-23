@@ -199,8 +199,9 @@ const isActive = (checkStatus) => {
 
 @media (max-width: 500px) {
   .background-container {
-    height: 100vh;
+    height: auto;
     display: flex;
+    padding-bottom: 40px;
     align-items: unset;
   }
 
