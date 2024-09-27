@@ -25,7 +25,6 @@
               <option value="finished">Finished</option>
               <option value="ready-for-pickup">Ready</option>
             </select>
-            <i class="bx bx-chevron-down"></i>
           </div>
         </div>
         <div v-if="errors" class="alert alert-danger">
@@ -59,7 +58,6 @@
                     <option value="ready-for-pickup" :disabled="repair.status === 'ready-for-pickup'">Ready For Pickup</option>
                     <option value="completed" :disabled="repair.status === 'finished' ">Completed</option>
                   </select>
-                  <i class="bx bx-chevron-down"></i>
                 </div>
               </td>
             </tr>
@@ -222,7 +220,7 @@ onMounted(() => {
 
   select {
     width: 100%;
-    padding-right: 30px;
+
     cursor: pointer;
   }
 

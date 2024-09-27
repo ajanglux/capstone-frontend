@@ -20,7 +20,7 @@
               <div class="timeline-content">
                 <p class="timeline-location">Device Received</p>
                 <p v-if="onGoingUpdatedAt">Updated on: {{ formattedOnGoingUpdatedAt }}</p>
-                <p>Your Device status is: On-going</p>
+                <p >Your Device status is: On-going</p>
               </div>
             </div>
 
@@ -197,9 +197,21 @@ const isActive = (checkStatus) => {
   }
 }
 
+@media (max-width: 535px) {
+  .background-container {
+    height: 100vh;
+    display: flex;
+    padding-bottom: 40px;
+    align-items: unset;
+  }
+  .contact-info {
+    height: auto;
+  }
+}
+
 @media (max-width: 500px) {
   .background-container {
-    height: auto;
+    height: 100vh;
     display: flex;
     padding-bottom: 40px;
     align-items: unset;
@@ -211,6 +223,7 @@ const isActive = (checkStatus) => {
   }
 
   .contact-info {
+    height: auto;
     input {
       width: 100%;
     }

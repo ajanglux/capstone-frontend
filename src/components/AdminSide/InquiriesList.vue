@@ -38,7 +38,6 @@
               <td class="actions">
                 <div class="custom-select">
                   <div class="select-icon">
-                    <i class="bx bx-chevron-down"></i>
                     <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                       <option value="">Select</option>
                       <option value="on-going" :disabled="repair.status !== 'pending'">On-going</option>
@@ -150,24 +149,16 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+
+
 .custom-select {
   position: relative;
   display: inline-block;
-  width: 80%;
+  width: 100%;
 
   select {
     width: 100%;
-    padding-right: 30px;
-    appearance: none;
     cursor: pointer;
-  }
-
-  i {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
   }
 }
 </style>

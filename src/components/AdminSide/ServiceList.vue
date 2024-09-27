@@ -30,7 +30,6 @@
               <td class="actions">
                 <div class="custom-select">
                   <div class="select-icon">
-                    <i class="bx bx-chevron-down"></i>
                     <select v-model="selectedActions[service.id]" @change="handleActionChange(service)">
                       <option value="">Select Action</option>
                       <option value="view">View</option>
@@ -146,17 +145,7 @@ onMounted(() => {
 
   select {
     width: 100%;
-    padding-right: 30px;
-    appearance: none;
     cursor: pointer;
-  }
-
-  i {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
   }
 }
 </style>
