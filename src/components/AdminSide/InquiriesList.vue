@@ -28,8 +28,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(repair, index) in filteredRepairs" :key="repair.id">
-              <td>{{ index + 1 }}</td>
+            <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
+              <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
               <td>{{ repair.first_name || 'N/A' }} {{ repair.last_name || 'N/A' }}</td>
               <td>{{ repair.email }}</td>
               <td>{{ repair.phone_number }}</td>
@@ -47,11 +47,19 @@
                 </div>
               </td>
             </tr>
-            <tr v-if="filteredRepairs.length === 0">
+            <tr v-if="paginatedRepairs.length === 0">
               <td colspan="7"><strong>No pending inquiries found.</strong></td>
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div class="pagination-controls">
+        <span class="page-indicator">
+          Page {{ currentPage }} of {{ totalPages }}
+        </span>
+        <button @click="previousPage" :disabled="currentPage === 1" class="prev-btn">Previous</button>
+        <button @click="nextPage" :disabled="currentPage === totalPages" class="next-btn">Next</button>
       </div>
     </div>
 
@@ -82,11 +90,16 @@ const showSuccessModal = ref(false);
 const selectedRepairId = ref(null);
 const selectedActions = ref({});
 const searchQuery = ref('');
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
 
 const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
     repairs.value = response.data.data;
+
+    repairs.value.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
     repairs.value.forEach(repair => {
       selectedActions.value[repair.id] = '';
     });
@@ -105,6 +118,28 @@ const filteredRepairs = computed(() => {
       return fullName.includes(searchText);
     });
 });
+
+const paginatedRepairs = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return filteredRepairs.value.slice(start, end);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredRepairs.value.length / itemsPerPage.value);
+});
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
 
 const handleActionChange = (repairId) => {
   const action = selectedActions.value[repairId];
@@ -148,9 +183,8 @@ onMounted(() => {
 });
 </script>
 
+
 <style lang="scss" scoped>
-
-
 .custom-select {
   position: relative;
   display: inline-block;
@@ -159,6 +193,39 @@ onMounted(() => {
   select {
     width: 100%;
     cursor: pointer;
+  }
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-top: 20px;
+  gap: 8px;
+
+  button:hover {
+    background-color: var(--main-hover);
+  }
+
+  .prev-btn,
+  .next-btn {
+    background-color: var(--main);
+    color: white;
+    border: none;
+    padding: 3px 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .prev-btn[disabled],
+  .next-btn[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .page-indicator {
+    font-size: 16px;
+    color: #333;
   }
 }
 </style>

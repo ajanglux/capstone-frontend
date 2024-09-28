@@ -42,8 +42,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(repair, index) in filteredRepairs" :key="repair.id">
-              <td>{{ index + 1 }}</td>
+            <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
+              <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
               <td>{{ formatDate(repair.created_at) }}</td>
               <td>{{ repair.code }}</td>
               <td>{{ repair.first_name || 'N/A' }} {{ repair.last_name || 'N/A' }}</td>
@@ -56,17 +56,26 @@
                     <option value="delete">Delete</option>
                     <option value="finished" :disabled="repair.status === 'finished' || repair.status === 'ready-for-pickup'">Finished</option>
                     <option value="ready-for-pickup" :disabled="repair.status === 'ready-for-pickup'">Ready For Pickup</option>
-                    <option value="completed" :disabled="repair.status === 'finished' ">Completed</option>
+                    <option value="completed" :disabled="repair.status === 'finished'">Completed</option>
                   </select>
                 </div>
               </td>
             </tr>
-            <tr v-if="filteredRepairs.length === 0">
+            <tr v-if="paginatedRepairs.length === 0">
               <td colspan="6"><strong>No repairs found.</strong></td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <div class="pagination-controls">
+        <span class="page-indicator">
+          Page {{ currentPage }} of {{ totalPages }}
+        </span>
+        <button @click="previousPage" :disabled="currentPage === 1" class="prev-btn">Previous</button>
+        <button @click="nextPage" :disabled="currentPage === totalPages" class="next-btn">Next</button>
+      </div>
+
     </div>
     <ConfirmationDialog
       :show="showDeleteDialog"
@@ -102,11 +111,16 @@ const selectedRepairId = ref(null);
 const selectedActions = ref({});
 const selectedStatus = ref('');
 const searchQuery = ref('');
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
 
 const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
     repairs.value = response.data.data;
+
+    repairs.value.sort((a, b) => new Date(a.status_updated_at) - new Date(b.status_updated_at));
+
     repairs.value.forEach(repair => {
       selectedActions.value[repair.id] = '';
     });
@@ -137,6 +151,27 @@ const filteredRepairs = computed(() => {
     return matchesStatus && matchesSearch;
   });
 });
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredRepairs.value.length / itemsPerPage.value);
+});
+
+const paginatedRepairs = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  return filteredRepairs.value.slice(start, start + itemsPerPage.value);
+});
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
 
 const handleActionChange = (repairId) => {
   const action = selectedActions.value[repairId];
@@ -216,20 +251,42 @@ onMounted(() => {
 .custom-select {
   position: relative;
   display: inline-block;
-  width: 50%;
 
   select {
     width: 100%;
+  }
+}
 
+.pagination-controls {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-top: 20px;
+  gap: 8px;
+
+  button:hover {
+    background-color: var(--main-hover);
+  }
+
+  .prev-btn,
+  .next-btn {
+    background-color: var(--main);
+    color: white;
+    border: none;
+    padding: 3px 10px;
+    font-size: 16px;
     cursor: pointer;
   }
 
-  i {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
+  .prev-btn[disabled],
+  .next-btn[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .page-indicator {
+    font-size: 16px;
+    color: #333;
   }
 }
 </style>

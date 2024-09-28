@@ -125,11 +125,13 @@ const isActive = (checkStatus) => {
 .background-container {
   background: var(--header);
   background-size: cover;
-  height: 100vh;
+  // height: 100%;
   width: 100vw;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 20px;
 }
 
 .con-container {
@@ -199,7 +201,6 @@ const isActive = (checkStatus) => {
 
 @media (max-width: 535px) {
   .background-container {
-    height: 100vh;
     display: flex;
     padding-bottom: 40px;
     align-items: unset;
@@ -211,7 +212,6 @@ const isActive = (checkStatus) => {
 
 @media (max-width: 500px) {
   .background-container {
-    height: 100vh;
     display: flex;
     padding-bottom: 40px;
     align-items: unset;
