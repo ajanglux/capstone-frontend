@@ -4,7 +4,8 @@
 
       <div class="title">
           <h2>Welcome to <br>TechFix</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <p>TechFix: Making Computer Repair Easy with a Streamlined Repair and Management System for Brandcom IT 
+          <br> <br> Your Repair Starts Here!</p>
       </div>
     
         <img class="side-image" src="/src/assets/clipart.png" 
