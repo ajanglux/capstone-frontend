@@ -3,8 +3,11 @@
     <div class="con-container">
       <div class="contact-info">
         <h2>Contact Us</h2>
-        <p> <br>"If you have any questions or need further assistance, feel free to reach out to us 
-          We're here to help!" </p>
+        <p> Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample 
+          Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample 
+          Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample 
+          Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample 
+          Sample Sample Sample Sample Sample Sample Sample Sample </p>
         <p1></p1>
       </div>
 
