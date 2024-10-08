@@ -2,15 +2,9 @@
   <div class="content">
     <div class="container">
       <div class="card-header">
-        <h2>{{ isEditing ? 'Edit Service' : 'Add Service' }}</h2>
+        <h2>{{ isEditing ? 'View Service' : 'Add Service' }}</h2>
       </div>
       <div class="card-body">
-        <ul v-if="errorList.length > 0" class="alert alert-warning">
-          <li v-for="(error, index) in errorList" :key="index" class="mb-0 ms-3">
-            <strong>{{ error }}</strong>
-          </li>
-        </ul>
-
         <div class="input-group mb-3">
           <span class="input-group-text">Service:</span>
           <input v-model="model.service_title" type="text" class="form-control" :disabled="isEditing" />
@@ -36,9 +30,13 @@
           <input type="file" @change="handleFileUpload" class="form-control" />
         </div>
 
-        <div class="buttons">
+        <div class="buttons" v-if="!isEditing">
           <button @click="isEditing ? updateService() : saveService()" type="button" class="btn">Submit</button>
           <router-link to="/service-list" class="btn">Cancel</router-link>
+        </div>
+
+        <div class="buttons">
+          <router-link v-if="isEditing" to="/service-list" class="btn">Back</router-link>
         </div>
       </div>
     </div>
@@ -55,10 +53,12 @@ import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { useRoute, useRouter } from 'vue-router';
 import SuccessModal from '../layouts/SuccessModal.vue';
+import { useToast } from 'vue-toastification'; 
 
 const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
+const toast = useToast();
 
 const isEditing = ref(!!route.params.id);
 const model = ref({
@@ -91,12 +91,18 @@ const handleFileUpload = (event) => {
 };
 
 const saveService = async () => {
+  errorList.value = [];
+  
+  if (!selectedFile.value) {
+    errorList.value.push("Image upload is required.");
+    toast.error("Image upload is required.");
+    return;
+  }
+
   const formData = new FormData();
   formData.append('service_title', model.value.service_title);
   formData.append('description', model.value.description);
-  if (selectedFile.value) {
-    formData.append('image', selectedFile.value);
-  }
+  formData.append('image', selectedFile.value);
 
   try {
     await axios.post(`${BASE_URL}/services`, formData, {
@@ -108,10 +114,19 @@ const saveService = async () => {
     showSuccessModal.value = true;
   } catch (error) {
     errorList.value.push(error.response?.data?.message || 'Error saving service');
+    toast.error(error.response?.data?.message || 'Error saving service');
   }
 };
 
 const updateService = async () => {
+  errorList.value = [];
+
+  if (!selectedFile.value && !model.value.image_url) {
+    errorList.value.push("Image upload is required.");
+    toast.error("Image upload is required.");
+    return;
+  }
+
   const formData = new FormData();
   formData.append('service_title', model.value.service_title);
   formData.append('description', model.value.description);
@@ -129,6 +144,7 @@ const updateService = async () => {
     showSuccessModal.value = true;
   } catch (error) {
     errorList.value.push(error.response?.data?.message || 'Error updating service');
+    toast.error(error.response?.data?.message || 'Error updating service');
   }
 };
 

@@ -2,21 +2,35 @@
   <div class="background-container">
     <div class="con-container">
       <div class="contact-info">
+        <h2>Enter Information For Inquiries</h2> 
+        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+        
+        <br>
         <h2>Contact Us</h2>
-        <p> Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample 
-          Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample 
-          Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample 
-          Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample 
-          Sample Sample Sample Sample Sample Sample Sample Sample </p>
+        <p> Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample </p>
         <p1></p1>
       </div>
 
       <div class="contact-form-container">
         <form class="contact-form" @submit.prevent="saveCustomerDetail">
           <div class="name">
-            <input v-model="customerDetail.first_name" type="text" id="firstName" name="firstName" placeholder="Firstname" required />
+            <input v-model="customerDetail.first_name" 
+              type="text" 
+              id="firstName" 
+              name="firstName" 
+              placeholder="Firstname" 
+              required 
+              style="text-transform: capitalize;"
+            />
 
-            <input v-model="customerDetail.last_name" type="text" id="lastName" name="lastName" placeholder="Lastname" required />
+            <input v-model="customerDetail.last_name" 
+              type="text" 
+              id="lastName" 
+              name="lastName" 
+              placeholder="Lastname" 
+              required 
+              style="text-transform: capitalize;"
+            />
           </div>
 
           <input 
@@ -40,6 +54,7 @@
             placeholder="Barangay / Street or Municipality / City or Province" 
             required 
             @input="validateAddress"
+            style="text-transform: capitalize;"
           />
           <p v-if="addressError" class="error-message">Address must include Barangay, Street, and City separated by comma (,).</p>
 
@@ -89,15 +104,16 @@ const customerDetail = ref({
 });
 
 const showSuccessModal = ref(false);
-const phoneNumberError = ref(false);
 const addressError = ref(false);
 
 const validatePhoneNumber = (event) => {
   const input = event.target;
   const value = input.value.replace(/\D/g, '');
-
-  customerDetail.value.phone_number = value;
-  phoneNumberError.value = value.length !== 11;
+  if (value.length > 11) {
+    input.value = value.slice(0, 11);
+  } else {
+    input.value = value;
+  }
 };
 
 const validateAddress = () => {
@@ -105,14 +121,9 @@ const validateAddress = () => {
   addressError.value = addressParts.length < 3;
 };
 
-const isPhoneNumberValid = computed(() => customerDetail.value.phone_number.length === 11);
 const isAddressValid = computed(() => !addressError.value);
 
 const saveCustomerDetail = async () => {
-  if (!isPhoneNumberValid.value) {
-    alert('Phone number must be exactly 11 digits.');
-    return;
-  }
 
   if (!isAddressValid.value) {
     alert('Address must include Barangay, Street, and City.');
@@ -137,7 +148,6 @@ const resetForm = () => {
     email: '',
     address: ''
   };
-  phoneNumberError.value = false;
   addressError.value = false;
 };
 </script>

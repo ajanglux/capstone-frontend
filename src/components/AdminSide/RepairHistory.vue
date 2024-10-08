@@ -28,7 +28,7 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            <th>Date Created</th>
+                            <th>Date Completed</th>
                             <th>Code</th>
                             <th>Client</th>
                             <th>Status</th>
@@ -37,7 +37,7 @@
                     <tbody>
                         <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
                             <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
-                            <td>{{ formatDate(repair.created_at) }}</td>
+                            <td>{{ repair.status === 'completed' ? formatDate(repair.status_updated_at) : formatDate(repair.created_at) }}</td>
                             <td>{{ repair.code }}</td>
                             <td>{{ repair.first_name || 'N/A' }} {{ repair.last_name || 'N/A' }}</td>
                             <td>{{ repair.status || 'N/A' }}</td>
@@ -140,51 +140,55 @@ const goToPreviousPage = () => {
     }
 };
 
+const formatMonthYear = (monthValue) => {
+    const date = new Date(monthValue + '-01');
+    const options = { month: 'short', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+};
+
 const generateMonthlyReport = async () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Monthly Report');
+    const formattedMonthYear = formatMonthYear(selectedMonth.value); 
 
-    worksheet.addRow(['TECHFIX MONTHLY REPORT']).font = { bold: true, size: 26 };
-    worksheet.addRow(['Date Created', 'Code', 'Client', 'Status']).font = { bold: true };
+    worksheet.addRow([`TECHFIX ${formattedMonthYear} Report`]).font = { bold: true, size: 26 };
+    worksheet.addRow(['Date Completed', 'Client', 'Status']).font = { bold: true };
 
     filteredRepairs.value.forEach(repair => {
         worksheet.addRow([
-            formatDate(repair.created_at),
-            repair.code,
+            formatDate(repair.status_updated_at),
             `${repair.first_name || 'N/A'} ${repair.last_name || 'N/A'}`,
             repair.status || 'N/A'
         ]);
     });
 
-    worksheet.getColumn(1).width = 15; // Date Created
-    worksheet.getColumn(2).width = 20; // Code
-    worksheet.getColumn(3).width = 20; // Client
-    worksheet.getColumn(4).width = 10; // Status
+    worksheet.getColumn(1).width = 17; // Date Created
+    worksheet.getColumn(2).width = 20; // Client
+    worksheet.getColumn(3).width = 10; // Status
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.setAttribute('download', `Monthly-Report-${selectedMonth.value}.xlsx`);
+    link.setAttribute('download', `Monthly-Report-${formattedMonthYear}.xlsx`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 };
+
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    return `${day}-${month}-${year}`;
 };
 
 onMounted(() => {
     fetchRepairs();
 });
 </script>
-
-
   
 <style lang="scss" scoped>
 .table-header {

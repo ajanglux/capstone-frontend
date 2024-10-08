@@ -20,7 +20,7 @@
               <div class="timeline-content">
                 <p class="timeline-location">Device Received</p>
                 <p v-if="onGoingUpdatedAt">Updated on: {{ formattedOnGoingUpdatedAt }}</p>
-                <p >Your Device status is: On-going</p>
+                <p>Your Device status is: On-going</p>
               </div>
             </div>
 
@@ -28,8 +28,7 @@
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Repair Finished</p>
-                <!-- <p>Status: Finished</p> -->
-                <p v-if="finishedUpdatedAt">Updated on: {{ formattedFinishedUpdatedAt }}: <br>Your device has been successfully repaired.</p>
+                <p v-if="finishedUpdatedAt || finishedStatusAvailable">Updated on: {{ formattedFinishedUpdatedAt }}: <br>Your device has been successfully repaired.</p>
                 <p v-else>Not Yet available</p>
               </div>
             </div>
@@ -38,17 +37,15 @@
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Ready for Pickup</p>
-                <!-- <p>Status: Ready for Pickup</p> -->
                 <p v-if="readyForPickupUpdatedAt">Updated on: {{ formattedReadyForPickupUpdatedAt }}: <br>Our shop is open from 9 AM to 5 PM.<br> You can pick up your device from our shop at any time now.</p>
                 <p v-else>Not Yet available</p>
               </div>
             </div>
-            
+
             <div class="timeline-item" :class="{ active: isActive('completed') }">
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Repair Completed</p>
-                <!-- <p>Status: Completed</p> -->
                 <p v-if="completedUpdatedAt">Updated on: {{ formattedCompletedUpdatedAt }}: <br>The device has been successfully returned, and the process is now complete.</p>
                 <p v-else>Not Yet available</p>
               </div>
@@ -73,6 +70,7 @@ const readyForPickupUpdatedAt = ref(null);
 const completedUpdatedAt = ref(null);
 const errorMessage = ref('');
 const isLoading = ref(false);
+const finishedStatusAvailable = ref(false); // New reactive variable
 
 const fetchStatus = async () => {
   status.value = null;
@@ -82,6 +80,7 @@ const fetchStatus = async () => {
   completedUpdatedAt.value = null;
   errorMessage.value = '';
   isLoading.value = true;
+  finishedStatusAvailable.value = false; // Reset on each fetch
 
   try {
     if (code.value) {
@@ -91,6 +90,11 @@ const fetchStatus = async () => {
       finishedUpdatedAt.value = response.data.data.finished_updated_at;
       readyForPickupUpdatedAt.value = response.data.data.ready_for_pickup_updated_at;
       completedUpdatedAt.value = response.data.data.completed_updated_at;
+
+      // Check for the status update condition
+      if (status.value === 'ready-for-pickup' && !finishedUpdatedAt.value) {
+        finishedStatusAvailable.value = true; // Set to available if condition met
+      }
     }
   } catch (error) {
     errorMessage.value = 'Invalid code or no status found.';
@@ -125,7 +129,6 @@ const isActive = (checkStatus) => {
 .background-container {
   background: var(--header);
   background-size: cover;
-  // height: 100%;
   width: 100vw;
   min-height: 100vh;
   display: flex;

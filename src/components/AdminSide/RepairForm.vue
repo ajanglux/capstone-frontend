@@ -14,11 +14,11 @@
         <!-- Customer Details -->
         <div class="input-group mb-3">
           <span class="input-group-text">First Name</span>
-          <input v-model="model.first_name" type="text" class="form-control" :disabled="isEditing" />
+          <input v-model="model.first_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Last Name</span>
-          <input v-model="model.last_name" type="text" class="form-control" :disabled="isEditing" />
+          <input v-model="model.last_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Tel. No.</span>
@@ -30,7 +30,7 @@
         </div>
         <div class="input-group mb-4">
           <span class="input-group-text">Address</span>
-          <input v-model="model.address" type="text" class="form-control" :disabled="isEditing" />
+          <input v-model="model.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
         </div>
 
         <!-- Product Information -->
@@ -39,31 +39,34 @@
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Brand</span>
-          <input v-model="productInfo.brand" type="text" class="form-control" />
+          <input v-model="productInfo.brand" type="text" class="form-control" style="text-transform: capitalize;"/>
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Model</span>
-          <input v-model="productInfo.model" type="text" class="form-control" />
+          <input v-model="productInfo.model" type="text" class="form-control" style="text-transform: capitalize;"/>
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Serial Number</span>
-          <input v-model="productInfo.serial_number" type="text" class="form-control" />
+          <input
+            v-model="productInfo.serial_number"
+            @input="productInfo.serial_number = productInfo.serial_number.toUpperCase()"
+            type="text"
+            class="form-control"
+          />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Purchase Date</span>
-          <input
-            v-model="productInfo.purchase_date"
-            type="date"
-            class="form-control"
-            :min="minDate"
-          />
+          <input v-model="productInfo.purchase_date" type="date" class="form-control"/>
         </div>
-        
+
         <div class="buttons">
           <button @click="isEditing ? updateRepair() : saveRepair()" type="button" class="btn btn-primary">
             {{ isEditing ? 'Update' : 'Submit' }}
           </button>
           <router-link to="/repair-list" class="btn btn-secondary">Cancel</router-link>
+          <button v-if="isEditing" @click="generateInvoice" type="button" class="btn btn-success">
+            Generate Receipt
+          </button>
         </div>
       </div>
     </div>
@@ -77,6 +80,7 @@ import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import SuccessModal from '../layouts/SuccessModal.vue';
+import html2pdf from 'html2pdf.js';
 
 export default {
   name: 'RepairForm',
@@ -144,9 +148,23 @@ export default {
     async saveRepair() {
       try {
         const authStore = useAuthStore();
+
         const repairData = { ...this.model, status: 'on-going' };
-        const customerResponse = await axios.post(`${BASE_URL}/customer-details`, repairData, getHeaderConfig(authStore.access_token));
-        await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: customerResponse.data.data.id }, getHeaderConfig(authStore.access_token));
+        const customerResponse = await axios.post(
+          `${BASE_URL}/customer-details`,
+          repairData,
+          getHeaderConfig(authStore.access_token)
+        );
+
+        const hasProductInfo = Object.values(this.productInfo).some(field => field);
+        if (hasProductInfo) {
+          await axios.post(
+            `${BASE_URL}/product-infos`,
+            { ...this.productInfo, customer_detail_id: customerResponse.data.data.id },
+            getHeaderConfig(authStore.access_token)
+          );
+        }
+
         this.showSuccessModal = true;
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
@@ -167,7 +185,37 @@ export default {
       } catch (error) {
         this.errorList = error.response?.data?.errors || [error.message];
       }
-    }
+    },
+    generateInvoice() {
+      const invoiceContent = `
+        <div style="font-family: 'Poppins'; padding: 20px;">
+          <h1 style="margin-bottom: 20px; margin-top: 30px;">RECEIPT</h1>
+          <h3>Customer Details</h3>
+          <p>Name: ${this.model.first_name} ${this.model.last_name}</p>
+          <p>Phone Number: ${this.model.phone_number}</p>
+          <p>Email: ${this.model.email}</p>
+          <p>Address: ${this.model.address}</p>
+
+          <h3 style="margin-top: 30px;">Product Information</h3>
+          <p>Brand: ${this.productInfo.brand}</p>
+          <p>Model: ${this.productInfo.model}</p>
+          <p>Serial Number: ${this.productInfo.serial_number}</p>
+          <p>Purchase Date: ${this.productInfo.purchase_date}</p>
+
+          <p style="margin-top: 30px;>"Total Cost:</p>
+
+          <p style="margin-top: 30px;">Person Incharge:</p>
+        </div>
+      `;
+
+      const element = document.createElement('div');
+      element.innerHTML = invoiceContent;
+      const fileName = `${this.model.last_name}.pdf`;
+
+      html2pdf()
+      .from(element)
+      .save(fileName); 
+    },
   },
 };
 </script>

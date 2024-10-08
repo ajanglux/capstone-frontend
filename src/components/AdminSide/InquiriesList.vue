@@ -97,7 +97,7 @@ const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
     repairs.value = response.data.data;
-
+    
     repairs.value.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
     repairs.value.forEach(repair => {
