@@ -3,11 +3,13 @@
     <div class="con-container">
       <div class="contact-info">
         <h2>Enter Information For Inquiries</h2> 
-        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+        <div class="input-group mb-4">
+          <textarea class="form-control" placeholder="Device Issues Description"></textarea>
+        </div>
         
         <br>
         <h2>Contact Us</h2>
-        <p> Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample </p>
+        <p> Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample </p>
         <p1></p1>
       </div>
 
@@ -262,6 +264,22 @@ const resetForm = () => {
       }
     }
   }
+}
+
+textarea {
+  font-family: 'Poppins';
+  height: 100px;
+  width: 100%;
+  resize: none;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  padding: 10px;
+  transition: all 0.3s ease-in-out;
+  background-color: var(--light2);
+}
+input:hover, textarea:hover {
+    background-color: var(--light2);
 }
 
 .error-message {
