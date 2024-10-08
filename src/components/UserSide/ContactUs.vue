@@ -4,13 +4,8 @@
       <div class="contact-info">
         <h2>Enter Information For Inquiries</h2> 
         <div class="input-group mb-4">
-          <textarea class="form-control" placeholder="Device Issues Description"></textarea>
+          <textarea class="form-control" placeholder="Device Issue Description"></textarea>
         </div>
-        
-        <br>
-        <h2>Contact Us</h2>
-        <p> Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample </p>
-        <p1></p1>
       </div>
 
       <div class="contact-form-container">
@@ -65,6 +60,11 @@
       </div>
     </div>
     <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
+
+    <div class="con-info">
+          <h2>Contact Us</h2>
+          <p>For any questions, inquiries, or assistance, feel free to reach out to us. Our team is here to help and ensure you have the best experience with TechFix!</p>
+        </div>
 
     <div class="cards">
       <div class="card">
@@ -171,8 +171,8 @@ const resetForm = () => {
 .con-container {
   display: flex;
   gap: 20px;
-  padding-top: 10.5pc;
-  margin: 0 17pc 1.5pc 17pc;
+  padding-top: 8pc;
+  margin: 0 17pc 2pc 17pc;
 
   .contact-info {
     background: var(--light);
@@ -180,6 +180,7 @@ const resetForm = () => {
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
     padding: 25px;
     width: 100%;
+
   }
 
   .contact-form-container {
@@ -228,14 +229,28 @@ const resetForm = () => {
   }
 }
 
+.con-info {
+  background: var(--light);
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  padding: 15px;
+  margin-left: 17pc;
+  margin-right: 17pc;
+  text-align: justify;
+
+  h2 {
+    // text-align: center;
+  }
+}
+
 .cards {
   display: flex;
-  margin-top: 3pc;
+  margin-top: 1pc;
   gap: 30px;
   width: 100%;
   align-items: stretch;
   transition: all 0.5s ease;
-  padding: 20px 0 0 17pc;
+  padding: 20px 1.2pc 0 17pc;
 
   .card {
     width: 25%;    
@@ -268,7 +283,7 @@ const resetForm = () => {
 
 textarea {
   font-family: 'Poppins';
-  height: 100px;
+  height: 155px;
   width: 100%;
   resize: none;
   border-radius: 10px;
@@ -277,6 +292,7 @@ textarea {
   padding: 10px;
   transition: all 0.3s ease-in-out;
   background-color: var(--light2);
+  margin-top: 1pc;
 }
 input:hover, textarea:hover {
     background-color: var(--light2);
