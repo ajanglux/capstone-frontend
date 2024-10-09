@@ -18,7 +18,6 @@
       </div>
     </div>
   </div>
-  
 </template>
 
 <script setup>
@@ -44,7 +43,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-
 .content-container {
   display: flex;
   flex-direction: column;
@@ -77,70 +75,91 @@ onMounted(() => {
   align-items: stretch;
   transition: all 0.5s ease;
 
-    .card {
-        flex: 1;
-        padding: 20px;
-        color: var(--light2);
-        transition: all 0.3s ease-in-out;
-        display: flex;
-        flex-direction: column;
+  .card {
+    flex: 1;
+    padding: 20px;
+    color: var(--light2);
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
 
-        &:hover {
-          background-color: var(--main-hover);
-          border-radius: 20px;
-        }
-
-        .img {
-          width: 100%;
-          margin-bottom: 10px;
-
-          img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            object-position: center;
-            align-content: center;
-            border-radius: 10px;
-          }
-        }
-
-        .info {
-          h2 {
-            font-size: 35px;
-          }
-        }
+    &:hover {
+      background-color: var(--main-hover);
+      border-radius: 20px;
     }
+
+    .img {
+      width: 100%;
+      margin-bottom: 10px;
+
+      img {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+        object-position: center;
+        align-content: center;
+        border-radius: 10px;
+      }
+    }
+
+    .info {
+      h2 {
+        font-size: 35px;
+      }
+    }
+  }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1265px) {
   .cards {
-    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 
     .card {
       .img {
-        width: 100%;
-        margin-bottom: 10px;
-
         img {
-          width: 100%;
-          height: 250px;
-          border-radius: 10px;
+          height: 300px;
         }
       }
     }
   }
 }
 
+@media (max-width: 1024px) {
+  .cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+}
+
 @media (max-width: 768px) {
   .cards {
     grid-template-columns: 1fr;
+
+    .card {
+      .img {
+        img {
+          height: 400px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 570px) {
+  .content-container {
+    h1 {
+      font-size: 3em;
+    }
+  }
+
+  .cards {
+    padding: 0 50px;
   }
 }
 
 @media (max-width: 500px) {
   .content-container {
     h1 {
-      font-family: 'Poppins';
       font-size: 2.5em;
       margin: 90px 0 18px 40px;
       color: var(--light);
@@ -150,14 +169,19 @@ onMounted(() => {
     padding: 0 30px;
 
     .card {
-      .info {
-          h2 {
-            font-size: 26px;
-            padding-bottom: 5px;
-          }
+      .img {
+        img {
+          height: 300px;
         }
+      }
+
+      .info {
+        h2 {
+          font-size: 26px;
+          padding-bottom: 5px;
+        }
+      }
     }
   }
 }
-
 </style>

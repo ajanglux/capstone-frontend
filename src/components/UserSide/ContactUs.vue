@@ -62,9 +62,9 @@
     <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
 
     <div class="con-info">
-          <h2>Contact Us</h2>
-          <p>For any questions, inquiries, or assistance, feel free to reach out to us. Our team is here to help and ensure you have the best experience with TechFix!</p>
-        </div>
+      <h2>Contact Us</h2>
+      <p>For any questions, inquiries, or assistance, feel free to reach out to us. Our team is here to help and ensure you have the best experience with TechFix!</p>
+    </div>
 
     <div class="cards">
       <div class="card">
@@ -180,7 +180,6 @@ const resetForm = () => {
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
     padding: 25px;
     width: 100%;
-
   }
 
   .contact-form-container {
@@ -237,10 +236,6 @@ const resetForm = () => {
   margin-left: 17pc;
   margin-right: 17pc;
   text-align: justify;
-
-  h2 {
-    // text-align: center;
-  }
 }
 
 .cards {
@@ -250,10 +245,10 @@ const resetForm = () => {
   width: 100%;
   align-items: stretch;
   transition: all 0.5s ease;
-  padding: 20px 1.2pc 0 17pc;
+  padding: 20px 17pc 0 17pc;
 
   .card {
-    width: 25%;    
+    width: 100%;    
     padding: 20px;
     border-radius: 5px;
     background-color: var(--light);
@@ -328,6 +323,11 @@ input:hover, textarea:hover {
         }
       }
     }
+  }
+
+  .con-info {
+    padding: 15px;
+    margin: 2pc 2pc 0 2pc;
   }
 
   .cards {

@@ -19,9 +19,9 @@
     data() {
       return {
         chartData: {
-          labels: [ 'January', 'February', 'March', 'April' ],
+          labels: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
           datasets: [{ 
-            data: [40, 20, 12, 30],
+            data: [40, 20, 12, 30, 100, 30, 50],
             backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#E57373'],
           }]
         },

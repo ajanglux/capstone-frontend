@@ -83,8 +83,8 @@
     background-color: var(--header);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.200);
     align-content: space-evenly;
-    padding: 10px 20px;
     color: var(--light);
+    padding-right: 20px;
 }
 
 /* .navbar-nav {
@@ -102,6 +102,14 @@
         letter-spacing: 0.5px;
         font-size: 20px;
         color: var(--light);
+        background-color: var(--main-hover);
+        padding: 3px 10px;
+        border-radius: 5px;
+        transition: all 0.3s ease-out;
+
+        &:hover {
+            background-color: var(--main);
+        }
 
         span {
             font-family: 'Poppins';
@@ -109,12 +117,15 @@
     }
 
     .dropdown-content {
-        display: none;
+        opacity: 0;
+        visibility: hidden;
         position: absolute;
         background-color: white;
         width: 150px;
         right: 0;
         border-radius: 8px;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
 
         .nav-link {
             padding: 10px;
@@ -135,7 +146,9 @@
 }
 
 .dropdown:hover .dropdown-content {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 .container-fluid {

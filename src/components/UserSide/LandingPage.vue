@@ -25,7 +25,10 @@ export default {
   font-family: 'Poppins';
   color: #fff;
   background-color: var(--header);
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
+  width: 100vw;
+  padding-bottom: 30px;
 }
 
 .top-section {
@@ -37,56 +40,62 @@ export default {
     color: var(--light);
     margin-left: 70px;
 
+    h2 { 
+      line-height: 1.2em;
+      width: 400px;
+      transition: all 0.3s ease-out;
+    }
+
     p {
       font-size: 18px;
       padding-top: 20px;
+      transition: all 0.3s ease-out;
     }
   }
 
   .side-image {
     width: 800px;
-    height: 450;
+    height: 100%;
     margin-top: 32vh;
     margin-left: 15px;
     margin-right: 10px;
+    transition: all 0.3s ease-out;
+  }
+}
 
+@media (max-width: 1265px) {
+  .top-section {
+    .side-image {
+      width: 700px;
+    }
+  }
+}
+
+@media (max-width: 1165px) {
+  .top-section {
+    .title {
+      font-size: 2em;
+    }
+
+    .side-image {
+      width: 50%;
+    }
   }
 }
 
 @media (max-width: 1024px) {
-  .landing-page {
-    height: auto;
-  }
-
   .top-section {
     .title {
       margin-top: 8pc;
-      font-size: 2.5em;
-      color: var(--light);
-      margin-left: 70px;
 
       p {
-        font-size: 18px;
-        padding-top: 20px;
+        font-size: 16px;
       }
-    }
-
-    .side-image {
-      width: 100%;
-      height: auto;
-      margin-top: 32vh;
-      margin-left: 15px;
-      margin-right: 10px;
-
     }
   }
 }
 
 @media (max-width: 500px) {
-  .landing-page {
-    height: auto;
-  }
-
   .top-section {
     display: flex;
     flex-direction: column;
@@ -97,8 +106,12 @@ export default {
       margin: 30px;
       margin-top: 2pc;
 
+      h2 { 
+        width: 300px;
+      }
+
       p {
-        font-size: 16px;
+        font-size: 15px;
         padding-top: 20px;
       }
     }
@@ -110,7 +123,6 @@ export default {
       margin-top: 13vh;
       margin-left: 0;
       margin-right: 0;
-
     }
   }
 }

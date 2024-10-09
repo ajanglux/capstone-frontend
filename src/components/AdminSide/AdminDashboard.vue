@@ -10,14 +10,14 @@
         </div>
 
         <div class="charts">
-            <div class="pie-chart">
+            <!-- <div class="pie-chart">
                 <h1> Total Repairs </h1>
                 <div class="pie">
                     <PieChart />
                 </div>
-            </div>
+            </div> -->
             <div class="bar-chart">
-                <h1> Total Repairs </h1>
+                <h1> Monthly Repairs </h1>
                 <div class="bar">
                     <BarChart />
                 </div>
@@ -130,7 +130,7 @@ export default {
 
     .bar-chart {
         background-color: var(--light2);
-        padding: 30px;
+        padding: 30px 100px;
         width: 100%;
         border-radius: 10px;
         box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
