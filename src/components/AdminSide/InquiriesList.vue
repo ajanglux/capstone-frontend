@@ -41,7 +41,7 @@
                     <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                       <option value="">Select</option>
                       <option value="view">View</option>
-                      <option value="on-going" :disabled="repair.status !== 'pending'">On-going</option>
+                      <option value="on-going" :disabled="repair.status !== 'pending'">Approve</option>
                       <option value="delete">Delete</option>
                     </select>
                   </div>

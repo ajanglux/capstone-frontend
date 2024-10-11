@@ -141,7 +141,7 @@ export default {
         serial_number: '',
         purchase_date: '',
         documentation: '',
-        warranty_status: 'warranty',
+        warranty_status: '',
       },
       isEditing: false,
       showSuccessModal: false,
