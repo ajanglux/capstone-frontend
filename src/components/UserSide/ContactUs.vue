@@ -4,7 +4,11 @@
       <div class="contact-info">
         <h2>Enter Information For Inquiries</h2> 
         <div class="input-group mb-4">
-          <textarea class="form-control" placeholder="Device Issue Description"></textarea>
+          <textarea v-model="customerDetail.description" 
+                    class="form-control" 
+                    placeholder="Short Device Issue Description" 
+                    required></textarea>
+          <p v-if="descriptionError" class="error-message">Description is required.</p>
         </div>
       </div>
 
@@ -102,11 +106,13 @@ const customerDetail = ref({
   last_name: '',
   phone_number: '',
   email: '',
-  address: ''
+  address: '',
+  description: '',
 });
 
 const showSuccessModal = ref(false);
 const addressError = ref(false);
+const descriptionError = ref(false);
 
 const validatePhoneNumber = (event) => {
   const input = event.target;
@@ -126,9 +132,15 @@ const validateAddress = () => {
 const isAddressValid = computed(() => !addressError.value);
 
 const saveCustomerDetail = async () => {
+  descriptionError.value = !customerDetail.value.description.trim();
 
   if (!isAddressValid.value) {
     alert('Address must include Barangay, Street, and City.');
+    return;
+  }
+
+  if (descriptionError.value) {
+    alert('Description is required.');
     return;
   }
 
@@ -148,9 +160,11 @@ const resetForm = () => {
     last_name: '',
     phone_number: '',
     email: '',
-    address: ''
+    address: '',
+    description: ''
   };
   addressError.value = false;
+  descriptionError.value = false;
 };
 </script>
 

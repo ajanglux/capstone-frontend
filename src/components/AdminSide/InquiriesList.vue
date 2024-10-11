@@ -40,6 +40,7 @@
                   <div class="select-icon">
                     <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                       <option value="">Select</option>
+                      <option value="view">View</option>
                       <option value="on-going" :disabled="repair.status !== 'pending'">On-going</option>
                       <option value="delete">Delete</option>
                     </select>
@@ -76,6 +77,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
@@ -83,6 +85,7 @@ import ConfirmationDialog from '../layouts/ConfirmationDialog.vue';
 import SuccessModal from '../layouts/SuccessModal.vue';
 
 const authStore = useAuthStore();
+const router = useRouter();
 const repairs = ref([]);
 const errors = ref(null);
 const showDeleteDialog = ref(false);
@@ -147,6 +150,8 @@ const handleActionChange = (repairId) => {
     setOngoing(repairId);
   } else if (action === 'delete') {
     confirmDelete(repairId);
+  } else if (action === 'view') {
+    viewRepair(repairId);
   }
 };
 
@@ -159,6 +164,10 @@ const setOngoing = async (id) => {
     console.error('Error updating repair status:', error);
     errors.value = error.response?.data?.message || 'Error updating repair status';
   }
+};
+
+const viewRepair = (id) => {
+  router.push({ name: 'inquiries-view', params: { id } });
 };
 
 const deleteRepair = async () => {

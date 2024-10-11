@@ -2,7 +2,7 @@
   <div class="content">
     <div class="container">
       <div class="card-header">
-        <h2>{{ isEditing ? 'Edit Repair' : 'Add Repair' }}</h2>
+        <h2>{{ isEditing ? 'EDIT' : 'Add Repair' }}</h2>
       </div>
       <div class="card-body">
         <ul v-if="errorList.length > 0" class="alert alert-warning">
@@ -14,11 +14,11 @@
         <!-- Customer Details -->
         <div class="input-group mb-3">
           <span class="input-group-text">First Name</span>
-          <input v-model="model.first_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
+          <input v-model="model.first_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Last Name</span>
-          <input v-model="model.last_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
+          <input v-model="model.last_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Tel. No.</span>
@@ -30,20 +30,20 @@
         </div>
         <div class="input-group mb-4">
           <span class="input-group-text">Address</span>
-          <input v-model="model.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
+          <input v-model="model.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;" />
         </div>
 
         <!-- Product Information -->
         <div class="buttons">
-          <h2>Product Information</h2>
+          <h2>PRODUCT INFORMATION</h2>
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Brand</span>
-          <input v-model="productInfo.brand" type="text" class="form-control" style="text-transform: capitalize;"/>
+          <input v-model="productInfo.brand" type="text" class="form-control" style="text-transform: capitalize;" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Model</span>
-          <input v-model="productInfo.model" type="text" class="form-control" style="text-transform: capitalize;"/>
+          <input v-model="productInfo.model" type="text" class="form-control" style="text-transform: capitalize;" />
         </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Serial Number</span>
@@ -54,9 +54,47 @@
             class="form-control"
           />
         </div>
+
+        <div class="buttons">
+          <h2>WARRANTY STATUS</h2>
+        </div>
+        <div class="custom-checkboxes">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="warranty" value="warranty" v-model="productInfo.warranty_status" />
+            <label class="form-check-label" for="warranty">Warranty</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="outOfWarranty" value="out_of_warranty" v-model="productInfo.warranty_status" />
+            <label class="form-check-label" for="outOfWarranty">Out Of Warranty</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" />
+            <label class="form-check-label" for="chargeable">Chargeable</label>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <h2></h2>
+        </div>
         <div class="input-group mb-3">
           <span class="input-group-text">Purchase Date</span>
           <input v-model="productInfo.purchase_date" type="date" class="form-control"/>
+        </div>
+
+        <div class="buttons">
+          <h2>Device Issue Description</h2>
+        </div>
+        <div class="input-group mb-4">
+          <span class="input-group-text"></span>
+          <textarea v-model="model.description" class="form-control" :disabled="isEditing"></textarea>
+        </div>
+
+        <div class="buttons">
+          <h2>NOTE FROM THE ADMIN</h2>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">Step by Step Repair Documentation</span>
+          <textarea v-model="productInfo.documentation" class="form-control"></textarea>
         </div>
 
         <div class="buttons">
@@ -64,9 +102,7 @@
             {{ isEditing ? 'Update' : 'Submit' }}
           </button>
           <router-link to="/repair-list" class="btn btn-secondary">Cancel</router-link>
-          <button v-if="isEditing" @click="generateInvoice" type="button" class="btn btn-success">
-            Generate Receipt
-          </button>
+          <button v-if="isEditing" @click="generateInvoice" type="button" class="btn btn-success">Generate Receipt</button>
         </div>
       </div>
     </div>
@@ -97,12 +133,15 @@ export default {
         phone_number: '',
         email: '',
         address: '',
+        description: '',
       },
       productInfo: {
         brand: '',
         model: '',
         serial_number: '',
         purchase_date: '',
+        documentation: '',
+        warranty_status: 'warranty',
       },
       isEditing: false,
       showSuccessModal: false,
@@ -202,6 +241,8 @@ export default {
           <p>Serial Number: ${this.productInfo.serial_number}</p>
           <p>Purchase Date: ${this.productInfo.purchase_date}</p>
 
+          <p>Detailed Customer Problem/Error: ${this.model.description}</p>
+
           <p style="margin-top: 30px;>"Total Cost:</p>
 
           <p style="margin-top: 30px;">Person Incharge:</p>
@@ -221,4 +262,8 @@ export default {
 </script>
 
 <style lang="scss">
+.form-check-input {
+  width: 15px;
+  height: 15px;
+}
 </style>

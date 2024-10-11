@@ -54,6 +54,13 @@ const routes = [
     beforeEnter: [checkIfLogged, checkIfAdmin],
   },
   {
+    path: "/inquiries-view/:id?",
+    name: "inquiries-view",
+    component: () => import('../components/AdminSide/InquiriesView.vue'),
+    props: route => ({ id: Number(route.params.id) }),
+    beforeEnter: [checkIfLogged, checkIfAdmin],
+  },
+  {
     path: "/service-list",
     name: "service-list",
     component: () => import('../components/AdminSide/ServiceList.vue'),
