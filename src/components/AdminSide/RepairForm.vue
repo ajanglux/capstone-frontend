@@ -226,28 +226,48 @@ export default {
       }
     },
     generateInvoice() {
-      const invoiceContent = `
-        <div style="font-family: 'Poppins'; padding: 20px;">
-          <h1 style="margin-bottom: 20px; margin-top: 30px;">RECEIPT</h1>
-          <h3>Customer Details</h3>
-          <p>Name: ${this.model.first_name} ${this.model.last_name}</p>
-          <p>Phone Number: ${this.model.phone_number}</p>
-          <p>Email: ${this.model.email}</p>
-          <p>Address: ${this.model.address}</p>
+    const warrantyStatusCheckboxes = {
+        'warranty': this.productInfo.warranty_status === 'warranty' ? '☑ Warranty' : '☐ Warranty',
+        'out_of_warranty': this.productInfo.warranty_status === 'out_of_warranty' ? '☑ Out Of Warranty' : '☐ Out Of Warranty',
+        'chargeable': this.productInfo.warranty_status === 'chargeable' ? '☑ Chargeable' : '☐ Chargeable'
+    };
 
-          <h3 style="margin-top: 30px;">Product Information</h3>
-          <p>Brand: ${this.productInfo.brand}</p>
-          <p>Model: ${this.productInfo.model}</p>
-          <p>Serial Number: ${this.productInfo.serial_number}</p>
-          <p>Purchase Date: ${this.productInfo.purchase_date}</p>
+    const invoiceContent = `
+      <div style="font-family: 'Poppins'; padding: 20px;">
+        <h1 style="margin-bottom: 20px; margin-top: 30px;">RECEIPT</h1>
+        
+        <div style="display: flex; justify-content: space-between; width: 100%; max-width: 600px; margin: auto;">
+          <div style="flex: 1; margin-right: 10px; margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px;">Customer Details</h3>
+            <p style="margin: 5px 0;"><strong>Name:</strong> ${this.model.first_name} ${this.model.last_name}</p>
+            <p style="margin: 5px 0;"><strong>Phone Number:</strong> ${this.model.phone_number}</p>
+            <p style="margin: 5px 0;"><strong>Email:</strong> ${this.model.email}</p>
+            <p style="margin: 5px 0;"><strong>Address:</strong> ${this.model.address}</p>
+          </div>
 
-          <p>Detailed Customer Problem/Error: ${this.model.description}</p>
-
-          <p style="margin-top: 30px;>"Total Cost:</p>
-
-          <p style="margin-top: 30px;">Person Incharge:</p>
+          <div style="flex: 1; margin-bottom: 20px;">
+            <h3 style="margin-bottom: 10px;">Product Information</h3>
+            <p style="margin: 5px 0;"><strong>Brand:</strong> ${this.productInfo.brand}</p>
+            <p style="margin: 5px 0;"><strong>Model:</strong> ${this.productInfo.model}</p>
+            <p style="margin: 5px 0;"><strong>Serial Number:</strong> ${this.productInfo.serial_number}</p>
+            <p style="margin: 5px 0;"><strong>Purchase Date:</strong> ${this.productInfo.purchase_date}</p>
+          </div>
         </div>
-      `;
+
+        <h3 style="margin-top: 30px; margin-bottom: 10px;">Warranty Status</h3>
+        <p style="margin: 5px 0;">${warrantyStatusCheckboxes.warranty}</p>
+        <p style="margin: 5px 0;">${warrantyStatusCheckboxes.out_of_warranty}</p>
+        <p style="margin: 5px 0;">${warrantyStatusCheckboxes.chargeable}</p>
+
+        <h3 style="margin-top: 30px; margin-bottom: 10px;">CHECKLIST</h3>
+        <p style="margin: 5px 0;">☐ Warranty</p>
+        <p style="margin: 5px 0;">☐ Warranty</p>
+        <p style="margin: 5px 0;">☐ Warranty</p>
+        <p style="margin: 5px 0;">☐ Warranty</p>
+
+        <p style="margin-top: 30px;"><strong>Detailed Customer Problem/Error:</strong> ${this.model.description}</p>
+      </div>
+    `;
 
       const element = document.createElement('div');
       element.innerHTML = invoiceContent;

@@ -1,29 +1,23 @@
 <template>
-    <div class="content">
-        <div class="cards">
-            <div class="card" v-for="(card, index) in stats" :key="index">
-                <div class="info">
-                    <p> {{ card.label }} </p>
-                    <h1> {{ card.value }} </h1>
-                </div>
-            </div>
-        </div>
+  <div class="content">
+      <div class="cards">
+          <div class="card" v-for="(card, index) in stats" :key="index">
+              <div class="info">
+                  <p> {{ card.label }} </p>
+                  <h1> {{ card.value }} </h1>
+              </div>
+          </div>
+      </div>
 
-        <div class="charts">
-            <!-- <div class="pie-chart">
-                <h1> Total Repairs </h1>
-                <div class="pie">
-                    <PieChart />
-                </div>
-            </div> -->
-            <div class="bar-chart">
-                <h1> Monthly Repairs </h1>
-                <div class="bar">
-                    <BarChart />
-                </div>
-            </div>
-        </div>
-    </div>
+      <div class="charts">
+          <div class="bar-chart">
+              <h1> Monthly Completed Repairs </h1>
+              <div class="bar">
+                  <BarChart :completedRepairsData="completedRepairsData" />
+              </div>
+          </div>
+      </div>
+  </div>
 </template>
 
 <script>
@@ -32,18 +26,19 @@ import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import BarChart from '../layouts/BarChart.vue';
-import PieChart from '../layouts/PieChart.vue';
 
 export default {
   name: 'AdminDashboard',
-  components: { BarChart, PieChart },
+  components: { BarChart },
   data() {
     return {
-      stats: []
+      stats: [],
+      completedRepairsData: Array(12).fill(0)
     };
   },
   mounted() {
     this.fetchDashboardStats();
+    this.fetchMonthlyCompletedRepairs();
   },
   methods: {
     async fetchDashboardStats() {
@@ -56,9 +51,7 @@ export default {
       }
 
       try {
-        const headers = getHeaderConfig(token); 
-        console.log('Fetching stats with headers:', headers);
-
+        const headers = getHeaderConfig(token);
         const response = await axios.get(`${BASE_URL}/admin-dashboard-stats`, headers);
         this.stats = [
           { label: 'Total Number of Inquiries', value: response.data.pendingRepairs },
@@ -68,6 +61,26 @@ export default {
         ];
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
+      }
+    },
+    async fetchMonthlyCompletedRepairs() {
+      const authStore = useAuthStore();
+      const token = authStore.access_token;
+
+      if (!token) {
+        console.error('No token found. Please log in.');
+        return;
+      }
+
+      try {
+        const headers = getHeaderConfig(token);
+        const response = await axios.get(`${BASE_URL}/admin-dashboard-stats/completed-repairs`, headers);
+        this.completedRepairsData = response.data;
+      } catch (error) {
+        console.error('Error fetching monthly completed repairs data:', error);
+        
+        // Fallback data for testing
+        this.completedRepairsData = [0, 5, 2, 7, 0, 4, 3, 6, 1, 8, 0, 0]; // Example data
       }
     }
   }
