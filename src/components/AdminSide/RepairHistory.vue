@@ -37,7 +37,7 @@
                     <tbody>
                         <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
                             <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
-                            <td>{{ repair.status === 'completed' ? formatDate(repair.status_updated_at) : formatDate(repair.created_at) }}</td>
+                            <td>{{ repair.status === 'completed' || repair.status === 'cancelled' ? formatDate(repair.status_updated_at) : formatDate(repair.created_at) }}</td>
                             <td>{{ repair.code }}</td>
                             <td>{{ repair.first_name || 'N/A' }} {{ repair.last_name || 'N/A' }}</td>
                             <td>{{ repair.status || 'N/A' }}</td>
@@ -103,7 +103,7 @@ const filteredRepairs = computed(() => {
                 const repairMonth = new Date(repair.created_at).toISOString().slice(0, 7);
                 return repairMonth === selectedMonth.value && repair.status === 'completed';
             }
-            return repair.status === 'completed';
+            return repair.status === 'completed' || repair.status === 'cancelled';
         })
         .filter((repair) => {
             const searchText = searchQuery.value.toLowerCase();

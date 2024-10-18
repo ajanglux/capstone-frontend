@@ -26,9 +26,10 @@ export default {
   color: #fff;
   background-color: var(--header);
   height: auto;
+  width: auto;
   min-height: 100vh;
-  width: 100vw;
-  padding-bottom: 30px;
+  min-width: 100vw; 
+  padding: 0;
 }
 
 .top-section {

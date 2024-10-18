@@ -12,81 +12,92 @@
         </ul>
 
         <!-- Customer Details -->
-        <div class="input-group mb-3">
-          <span class="input-group-text">First Name</span>
-          <input v-model="model.first_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;" />
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Last Name</span>
-          <input v-model="model.last_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;" />
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Tel. No.</span>
-          <input v-model="phoneNumber" @input="validatePhoneNumber" type="text" class="form-control" :disabled="isEditing" />
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Email</span>
-          <input v-model="model.email" type="email" class="form-control" :disabled="isEditing" />
-        </div>
-        <div class="input-group mb-4">
-          <span class="input-group-text">Address</span>
-          <input v-model="model.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;" />
-        </div>
-
-        <!-- Product Information -->
-        <div class="buttons">
-          <h2>PRODUCT INFORMATION</h2>
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Brand</span>
-          <input v-model="productInfo.brand" type="text" class="form-control" style="text-transform: capitalize;" />
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Model</span>
-          <input v-model="productInfo.model" type="text" class="form-control" style="text-transform: capitalize;" />
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Serial Number</span>
-          <input
-            v-model="productInfo.serial_number"
-            @input="productInfo.serial_number = productInfo.serial_number.toUpperCase()"
-            type="text"
-            class="form-control"
-          />
-        </div>
-
-        <div class="buttons">
-          <h2>WARRANTY STATUS</h2>
-        </div>
-        <div class="custom-checkboxes">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" id="warranty" value="warranty" v-model="productInfo.warranty_status" />
-            <label class="form-check-label" for="warranty">Warranty</label>
+        <div class="whole">
+          <div class="left">
+          <div class="buttons">
+            <h2>Customer Details</h2>
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" id="outOfWarranty" value="out_of_warranty" v-model="productInfo.warranty_status" />
-            <label class="form-check-label" for="outOfWarranty">Out Of Warranty</label>
+          <div class="input-group mb-3">
+            <span class="input-group-text">First Name</span>
+            <input v-model="model.first_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;" />
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" />
-            <label class="form-check-label" for="chargeable">Chargeable</label>
+          <div class="input-group mb-3">
+            <span class="input-group-text">Last Name</span>
+            <input v-model="model.last_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;" />
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">Tel. No.</span>
+            <input v-model="phoneNumber" @input="validatePhoneNumber" type="text" class="form-control" :disabled="isEditing" />
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">Email</span>
+            <input v-model="model.email" type="email" class="form-control" :disabled="isEditing" />
+          </div>
+          <div class="input-group mb-4">
+            <span class="input-group-text">Address</span>
+            <input v-model="model.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;" />
+          </div>
+          </div>
+
+          <!-- Product Information -->
+          <div class="right">
+          <div class="buttons">
+            <h2>PRODUCT INFORMATION</h2>
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">Brand</span>
+            <input v-model="productInfo.brand" type="text" class="form-control" style="text-transform: capitalize;" />
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">Model</span>
+            <input v-model="productInfo.model" type="text" class="form-control" style="text-transform: capitalize;" />
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text">Serial Number</span>
+            <input
+              v-model="productInfo.serial_number"
+              @input="productInfo.serial_number = productInfo.serial_number.toUpperCase()"
+              type="text"
+              class="form-control"
+            />
+          </div>
           </div>
         </div>
 
-        <div class="buttons">
-          <h2></h2>
-        </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text">Purchase Date</span>
-          <input v-model="productInfo.purchase_date" type="date" class="form-control"/>
-        </div>
+        <div class="whole">
+          <div class="left">
+            <div class="buttons">
+              <h2>WARRANTY STATUS</h2>
+            </div>
+            <div class="custom-checkboxes">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="warranty" value="warranty" v-model="productInfo.warranty_status" />
+                <label class="form-check-label" for="warranty">Warranty</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="outOfWarranty" value="out_of_warranty" v-model="productInfo.warranty_status" />
+                <label class="form-check-label" for="outOfWarranty">Out Of Warranty</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" />
+                <label class="form-check-label" for="chargeable">Chargeable</label>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">Purchase Date</span>
+              <input v-model="productInfo.purchase_date" type="date" class="form-control"/>
+            </div>
+          </div>
 
-        <div class="buttons">
-          <h2>Device Issue Description</h2>
-        </div>
-        <div class="input-group mb-4">
-          <span class="input-group-text"></span>
-          <textarea v-model="model.description" class="form-control" :disabled="isEditing"></textarea>
+          <div class="right">
+            <div class="buttons">
+              <h2>Device Issue Description</h2>
+            </div>
+            <div class="input-group mb-4">
+              <span class="input-group-text"></span>
+              <textarea v-model="model.description" class="form-control" :disabled="isEditing"></textarea>
+            </div>
+          </div>
         </div>
 
         <div class="buttons">
@@ -282,8 +293,48 @@ export default {
 </script>
 
 <style lang="scss">
+h2 {
+  text-transform: uppercase;
+}
+  
 .form-check-input {
   width: 15px;
   height: 15px;
+}
+
+.card-body {
+  .whole {
+    display: flex;
+    gap: 20px;
+
+    .left {
+      width: 100%;
+    }
+
+    .right {
+      width: 100%;
+    }
+  }
+
+  .custom-checkboxes {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    
+    .form-check {
+      display: inline-flex;
+      gap: 10px;
+
+      .form-check-label {
+        width: auto;
+        left: 0;
+      }
+      .form-check-input {
+        height: 20px;
+        width: 20px;
+      }
+    }
+  }
 }
 </style>

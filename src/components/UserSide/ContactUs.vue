@@ -174,8 +174,10 @@ const resetForm = () => {
   position: relative;
   background: var(--header);
   background-size: cover;
-  height: 100vh;
-  width: 100vw; 
+  height: auto;
+  width: auto;
+  min-height: 100vh;
+  min-width: 100vw; 
   justify-content: center;
   align-items: center;
   padding: 0;
@@ -312,6 +314,52 @@ input:hover, textarea:hover {
   font-size: 12px;
 }
 
+@media (max-width: 1250px) {
+  .con-container {
+    margin: 0 15pc 2pc 15pc;
+  }
+
+  .con-info {
+    margin-left: 15pc;
+    margin-right: 15pc;
+  }
+
+  .cards {
+    padding: 20px 15pc 0 15pc;
+  }
+}
+
+@media (max-width: 1150px) {
+  .con-container {
+    margin: 0 10pc 2pc 10pc;
+  }
+
+  .con-info {
+    margin-left: 10pc;
+    margin-right: 10pc;
+  }
+
+  .cards {
+    padding: 20px 10pc 0 10pc;
+  }
+}
+
+@media (max-width: 990px) {
+  .con-container {
+    .contact-info {
+      h2 { font-size: 20px; }
+    }
+  }
+
+  .con-info {
+    h2 { font-size: 20px; }
+  }
+
+  .cards {
+    padding: 20px 10pc 0 10pc;
+  }
+}
+
 @media (max-width: 500px) {
   .background-container {
     height: auto;
@@ -323,6 +371,10 @@ input:hover, textarea:hover {
     flex-direction: column;
     padding-top: 6.5pc;
     margin: 0 2pc 1.5pc 2pc;
+
+    .contact-info {
+      h2 { font-size: 18px; }
+    }
 
     .contact-form-container {
       flex: 1;
@@ -342,6 +394,8 @@ input:hover, textarea:hover {
   .con-info {
     padding: 15px;
     margin: 2pc 2pc 0 2pc;
+    h2 { font-size: 18px; }
+    p { font-size: 14px; }
   }
 
   .cards {

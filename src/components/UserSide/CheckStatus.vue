@@ -139,19 +139,22 @@ const isActive = (checkStatus) => {
 
 .con-container {
   margin-top: 8pc;
-  width: 70%;
+  width: auto;
+  transition: all 0.3s ease-out;
 }
 
 .contact-info {
   background: var(--light);
+  padding: 30px;
   border-radius: 15px;
-  padding: 25px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 13px;
   // height: 35pc;
 
   input {
-    width: 50%;
+    font-family: 'Poppins';
+    width: 400px;
     padding: 10px;
+    margin-top: 5px;
     margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -202,12 +205,23 @@ const isActive = (checkStatus) => {
   }
 }
 
+@media (max-width: 780px) {
+  .con-container {
+   margin: 8pc 3pc 3pc 3pc;
+  }
+}
+
 @media (max-width: 535px) {
   .background-container {
     display: flex;
     padding-bottom: 40px;
     align-items: unset;
   }
+
+  .con-container {
+   margin: 8pc 2pc 3pc 2pc;
+  }
+
   .contact-info {
     height: auto;
   }
@@ -222,13 +236,23 @@ const isActive = (checkStatus) => {
 
   .con-container {
     margin-top: 110px;
-    width: 80%;
+    width: 90%;
   }
 
   .contact-info {
     height: auto;
+    padding: 25px;
+    h2 { font-size: 20px; }
+    p { font-size: 14px; }
+
     input {
       width: 100%;
+    }
+
+    .timeline-content {
+      .timeline-location {
+        font-size: 16px;
+      }
     }
   }
 }

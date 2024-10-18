@@ -53,7 +53,7 @@
                   <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                     <option value="">Select Action</option>
                     <option value="view">Edit / View</option>
-                    <option value="delete">Delete</option>
+                    <option value="cancelled" :disabled="repair.status === 'cancelled'">Cancel</option>
                     <option value="finished" :disabled="repair.status === 'finished' || repair.status === 'ready-for-pickup'">Finished</option>
                     <option value="ready-for-pickup" :disabled="repair.status === 'ready-for-pickup'">Ready For Pickup</option>
                     <option value="completed" :disabled="repair.status === 'finished'">Completed</option>
@@ -177,8 +177,8 @@ const handleActionChange = (repairId) => {
   const action = selectedActions.value[repairId];
   if (action === 'view') {
     viewRepair(repairId);
-  } else if (action === 'delete') {
-    confirmDelete(repairId);
+  } else if (action === 'cancelled') {
+    confirmStatus(repairId);
   } else if (action === 'finished') {
     markAsFinished(repairId);
   } else if (action === 'ready-for-pickup') {
@@ -192,34 +192,40 @@ const viewRepair = (id) => {
   router.push({ name: 'repair-form', params: { id } });
 };
 
-const deleteRepair = async () => {
-  try {
-    await axios.delete(`${BASE_URL}/customer-details/${selectedRepairId.value}`, getHeaderConfig(authStore.access_token));
-    fetchRepairs();
-    showDeleteDialog.value = false;
-    successMessage.value = 'Repair deleted successfully.';
-    showSuccessModal.value = true;
-  } catch (error) {
-    console.error('Error deleting repair:', error);
-    errors.value = error.response?.data?.message || 'Error deleting repair';
-  }
-};
+// const deleteRepair = async () => {
+//   try {
+//     await axios.delete(`${BASE_URL}/customer-details/${selectedRepairId.value}`, getHeaderConfig(authStore.access_token));
+//     fetchRepairs();
+//     showDeleteDialog.value = false;
+//     successMessage.value = 'Repair deleted successfully.';
+//     showSuccessModal.value = true;
+//   } catch (error) {
+//     console.error('Error deleting repair:', error);
+//     errors.value = error.response?.data?.message || 'Error deleting repair';
+//   }
+// };
 
-const confirmDelete = (id) => {
-  selectedRepairId.value = id;
-  showDeleteDialog.value = true;
-};
+// const confirmDelete = (id) => {
+//   selectedRepairId.value = id;
+//   showDeleteDialog.value = true;
+// };
 
 const updateStatus = async (id, status) => {
   try {
     await axios.patch(`${BASE_URL}/customer-details/${id}/status`, { status }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
+    showDeleteDialog.value = true;
     successMessage.value = `Repair marked as ${status} successfully.`;
     showSuccessModal.value = true;
   } catch (error) {
     console.error(`Error updating repair status to ${status}:`, error);
     errors.value = error.response?.data?.message || `Error updating repair status to ${status}`;
   }
+};
+
+const confirmStatus = (id) => {
+  selectedRepairId.value = id;
+  showDeleteDialog.value = true;
 };
 
 const markAsFinished = (id) => {
@@ -232,6 +238,10 @@ const markAsReady = (id) => {
 
 const markAsCompleted = (id) => {
   updateStatus(id, 'completed');
+};
+
+const markAsCancelled = (id) => {
+  updateStatus(id, 'cancelled');
 };
 
 const formatDate = (dateString) => {
