@@ -133,12 +133,12 @@ const isActive = (checkStatus) => {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  // align-items: center;
   padding-bottom: 20px;
 }
 
 .con-container {
-  margin-top: 5pc;
+  margin-top: 8pc;
   width: 70%;
 }
 
@@ -147,7 +147,7 @@ const isActive = (checkStatus) => {
   border-radius: 15px;
   padding: 25px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 13px;
-  height: 35pc;
+  // height: 35pc;
 
   input {
     width: 50%;
