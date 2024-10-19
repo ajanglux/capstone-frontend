@@ -41,7 +41,7 @@
                     <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                       <option value="">Select</option>
                       <option value="view">View</option>
-                      <option value="on-going" :disabled="repair.status !== 'pending'">Approve</option>
+                      <option value="approved" :disabled="repair.status !== 'pending'">Approve</option>
                       <option value="delete">Delete</option>
                     </select>
                   </div>
@@ -146,8 +146,8 @@ const previousPage = () => {
 
 const handleActionChange = (repairId) => {
   const action = selectedActions.value[repairId];
-  if (action === 'on-going') {
-    setOngoing(repairId);
+  if (action === 'approved') {
+    setApproved(repairId);
   } else if (action === 'delete') {
     confirmDelete(repairId);
   } else if (action === 'view') {
@@ -155,9 +155,9 @@ const handleActionChange = (repairId) => {
   }
 };
 
-const setOngoing = async (id) => {
+const setApproved = async (id) => {
   try {
-    await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'on-going' }, getHeaderConfig(authStore.access_token));
+    await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'approved' }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
     showSuccessModal.value = true;
   } catch (error) {
