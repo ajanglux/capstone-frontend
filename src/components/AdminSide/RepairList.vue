@@ -52,7 +52,7 @@
                 <div class="custom-select">
                   <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                     <option value="">Select Action</option>
-                    <option value="view">Edit / View</option>
+                    <option value="view">Edit</option>
                     <option value="cancelled" :disabled="repair.status === 'cancelled'">Cancel</option>
                     <option value="finished" :disabled="repair.status === 'finished' || repair.status === 'ready-for-pickup'">Finished</option>
                     <option value="ready-for-pickup" :disabled="repair.status === 'ready-for-pickup'">Ready For Pickup</option>
@@ -78,9 +78,10 @@
 
     </div>
     <ConfirmationDialog
-      :show="showDeleteDialog"
-      @close="showDeleteDialog = false"
-      @confirm="deleteRepair"
+      :show="showConfirmationDialog"
+      @close="showConfirmationDialog = false"
+      @confirm="confirmStatusChange"
+      :message="confirmationMessage"
     />
     <SuccessModal
       v-if="showSuccessModal"
@@ -104,12 +105,14 @@ const authStore = useAuthStore();
 const router = useRouter();
 const repairs = ref([]);
 const errors = ref(null);
-const showDeleteDialog = ref(false);
+const showConfirmationDialog = ref(false);
 const showSuccessModal = ref(false);
 const successMessage = ref('');
+const confirmationMessage = ref('');
 const selectedRepairId = ref(null);
 const selectedActions = ref({});
 const selectedStatus = ref('');
+const selectedStatusAction = ref('');
 const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
@@ -177,15 +180,25 @@ const handleActionChange = (repairId) => {
   const action = selectedActions.value[repairId];
   if (action === 'view') {
     viewRepair(repairId);
-  } else if (action === 'cancelled') {
-    confirmStatus(repairId);
-  } else if (action === 'finished') {
-    markAsFinished(repairId);
-  } else if (action === 'ready-for-pickup') {
-    markAsReady(repairId);
-  } else if (action === 'completed') {
-    markAsCompleted(repairId);
+  } else {
+    selectedRepairId.value = repairId;
+    selectedStatusAction.value = action;
+    confirmationMessage.value = `Are you sure you want to mark this repair as ${action}?`;
+    showConfirmationDialog.value = true;
   }
+};
+
+const confirmStatusChange = () => {
+  if (selectedStatusAction.value === 'cancelled') {
+    markAsCancelled(selectedRepairId.value);
+  } else if (selectedStatusAction.value === 'finished') {
+    markAsFinished(selectedRepairId.value);
+  } else if (selectedStatusAction.value === 'ready-for-pickup') {
+    markAsReady(selectedRepairId.value);
+  } else if (selectedStatusAction.value === 'completed') {
+    markAsCompleted(selectedRepairId.value);
+  }
+  showConfirmationDialog.value = false;
 };
 
 const viewRepair = (id) => {
@@ -214,7 +227,6 @@ const updateStatus = async (id, status) => {
   try {
     await axios.patch(`${BASE_URL}/customer-details/${id}/status`, { status }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
-    showDeleteDialog.value = true;
     successMessage.value = `Repair marked as ${status} successfully.`;
     showSuccessModal.value = true;
   } catch (error) {
@@ -223,10 +235,10 @@ const updateStatus = async (id, status) => {
   }
 };
 
-const confirmStatus = (id) => {
-  selectedRepairId.value = id;
-  showDeleteDialog.value = true;
-};
+// const confirmStatus = (id) => {
+//   selectedRepairId.value = id;
+//   showDeleteDialog.value = true;
+// };
 
 const markAsFinished = (id) => {
   updateStatus(id, 'finished');

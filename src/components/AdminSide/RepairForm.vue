@@ -5,11 +5,6 @@
         <h2>{{ isEditing ? 'EDIT' : 'Add Repair' }}</h2>
       </div>
       <div class="card-body">
-        <ul v-if="errorList.length > 0" class="alert alert-warning">
-          <li v-for="(error, index) in errorList" :key="index" class="mb-0 ms-3">
-            <strong>{{ error }}</strong>
-          </li>
-        </ul>
 
         <!-- Customer Details -->
         <div class="whole">
@@ -127,6 +122,7 @@ import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import SuccessModal from '../layouts/SuccessModal.vue';
+import { useToast } from 'vue-toastification';
 import html2pdf from 'html2pdf.js';
 
 export default {
@@ -165,6 +161,18 @@ export default {
       this.model.phone_number = value;
     },
   },
+  // computed: {
+  //   isFormValid() {
+  //     return (
+  //       this.model.first_name &&
+  //       this.model.last_name &&
+  //       this.phoneNumber &&
+  //       this.productInfo.brand &&
+  //       this.productInfo.model &&
+  //       this.productInfo.serial_number
+  //     );
+  //   },
+  // },
   mounted() {
     if (this.id) {
       this.isEditing = true;
@@ -172,6 +180,11 @@ export default {
     }
   },
   methods: {
+
+    toast() {
+      return useToast();
+    },
+
     async getRepairDetails() {
       try {
         const authStore = useAuthStore();
@@ -181,8 +194,8 @@ export default {
         this.productInfo = customerDetail.product_infos[0] || {};
         this.phoneNumber = this.model.phone_number;
       } catch (error) {
-        console.error('Error fetching repair details:', error);
-        this.errorList = [error.response?.data?.message || error.message];
+        const toast = this.toast();
+        toast.error('Failed to load repair details. Please try again.');
       }
     },
     validatePhoneNumber(event) {
@@ -218,7 +231,8 @@ export default {
         this.showSuccessModal = true;
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
-        this.errorList = error.response?.data?.errors || [error.message];
+        const toast = this.toast();
+        toast.error('Failed to save. There are Missing Details.');
       }
     },
     async updateRepair() {
@@ -233,7 +247,8 @@ export default {
         this.showSuccessModal = true;
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
-        this.errorList = error.response?.data?.errors || [error.message];
+        const toast = this.toast();
+        toast.error('Failed to update. There are Missing Details.');
       }
     },
     generateInvoice() {

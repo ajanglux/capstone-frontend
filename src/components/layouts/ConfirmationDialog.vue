@@ -2,7 +2,7 @@
     <div v-if="show" class="dialog-overlay">
       <div class="dialog-content">
         <h3>Confirmation</h3>
-        <p>Are you sure you want continue this action?</p>
+        <p>Are you sure you want to continue this action?</p>
         
         <button @click="$emit('confirm')">Yes</button>
         <button @click="$emit('close')">No</button>
