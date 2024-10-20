@@ -1,23 +1,23 @@
 <template>
-<div class="content">
-  <div class="cards">
-    <div class="card" v-for="(card, index) in stats" :key="index">
-      <div class="info">
-        <p>{{ card.label }}</p>
-        <h1>{{ card.value }}</h1>
+  <div class="content">
+    <div class="cards">
+      <div class="card" v-for="(card, index) in stats" :key="index">
+        <div class="info">
+          <p>{{ card.label }}</p>
+          <h1>{{ card.value }}</h1>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="charts">
-    <div class="bar-chart">
-      <h1>Monthly Completed Repairs</h1>
-      <div class="bar">
-        <BarChart :completedRepairsData="completedRepairsData" />
+    <div class="charts">
+      <div class="bar-chart">
+        <h1>Monthly Completed Repairs</h1>
+        <div class="bar">
+          <BarChart v-if="completedRepairsData.length" :completedRepairsData="completedRepairsData" />
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       stats: [],
-      completedRepairsData: Array(12).fill(0),
+      completedRepairsData: [],
     };
   },
   mounted() {
@@ -75,10 +75,10 @@ export default {
       try {
         const headers = getHeaderConfig(token);
         const response = await axios.get(`${BASE_URL}/admin-dashboard-stats/completed-repairs`, headers);
-        this.completedRepairsData = response.data; // Populate data for the BarChart
+        this.completedRepairsData = response.data;
       } catch (error) {
         console.error('Error fetching monthly completed repairs data:', error);
-        this.completedRepairsData = [0, 5, 2, 7, 0, 4, 3, 6, 1, 8, 0, 0]; // Fallback data for testing
+        this.completedRepairsData = [0, 5, 2, 7, 0, 4, 3, 6, 1, 8, 0, 0];
       }
     },
   },

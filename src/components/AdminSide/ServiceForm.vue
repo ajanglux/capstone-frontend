@@ -95,7 +95,7 @@ const saveService = async () => {
   
   if (!selectedFile.value) {
     errorList.value.push("Image upload is required.");
-    toast.error("Image upload is required.");
+    toast.error("Failed to save. There are missing details.");
     return;
   }
 
@@ -123,7 +123,7 @@ const updateService = async () => {
 
   if (!selectedFile.value && !model.value.image_url) {
     errorList.value.push("Image upload is required.");
-    toast.error("Image upload is required.");
+    toast.error("Failed to save. There are missing details.");
     return;
   }
 

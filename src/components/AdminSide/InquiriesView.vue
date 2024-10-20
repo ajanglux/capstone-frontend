@@ -39,7 +39,7 @@
 
         <div class="buttons">
           <button v-if="isEditing" @click="goBack" class="btn">Back</button>
-          <button v-if="isEditing" @click="setOngoing" class="btn">Approve</button>
+          <button v-if="isEditing" @click="setApprove" class="btn">Approve</button>
         </div>
       </div>
     </div>
@@ -103,10 +103,10 @@ export default {
         this.errorList = [error.response?.data?.message || error.message];
       }
     },
-    async setOngoing() {
+    async setApprove() {
       try {
         const authStore = useAuthStore();
-        await axios.put(`${BASE_URL}/customer-details/${this.id}`, { status: 'on-going' }, getHeaderConfig(authStore.access_token));
+        await axios.put(`${BASE_URL}/customer-details/${this.id}`, { status: 'approved' }, getHeaderConfig(authStore.access_token));
         this.showSuccessModal = true;
         setTimeout(() => this.$router.push({ name: 'inquiries' }), 1500);
       } catch (error) {

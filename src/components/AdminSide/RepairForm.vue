@@ -161,18 +161,6 @@ export default {
       this.model.phone_number = value;
     },
   },
-  // computed: {
-  //   isFormValid() {
-  //     return (
-  //       this.model.first_name &&
-  //       this.model.last_name &&
-  //       this.phoneNumber &&
-  //       this.productInfo.brand &&
-  //       this.productInfo.model &&
-  //       this.productInfo.serial_number
-  //     );
-  //   },
-  // },
   mounted() {
     if (this.id) {
       this.isEditing = true;
@@ -180,7 +168,6 @@ export default {
     }
   },
   methods: {
-
     toast() {
       return useToast();
     },
@@ -212,15 +199,23 @@ export default {
       try {
         const authStore = useAuthStore();
 
+        const isProductInfoComplete = this.productInfo.brand && this.productInfo.model && this.productInfo.serial_number && this.productInfo.purchase_date;
+
+        if (!isProductInfoComplete) {
+          const toast = this.toast();
+          toast.error('Failed to save. Incomplete details.');
+          return;
+        }
+
         const repairData = { ...this.model, status: 'on-going' };
+
         const customerResponse = await axios.post(
           `${BASE_URL}/customer-details`,
           repairData,
           getHeaderConfig(authStore.access_token)
         );
 
-        const hasProductInfo = Object.values(this.productInfo).some(field => field);
-        if (hasProductInfo) {
+        if (Object.values(this.productInfo).some(field => field)) {
           await axios.post(
             `${BASE_URL}/product-infos`,
             { ...this.productInfo, customer_detail_id: customerResponse.data.data.id },
@@ -232,7 +227,7 @@ export default {
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
         const toast = this.toast();
-        toast.error('Failed to save. There are Missing Details.');
+        toast.error('Failed to save. There are missing details or an error occurred.');
       }
     },
     async updateRepair() {
@@ -248,7 +243,7 @@ export default {
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
         const toast = this.toast();
-        toast.error('Failed to update. There are Missing Details.');
+        toast.error('Failed to update. There are missing details.');
       }
     },
     generateInvoice() {
@@ -297,7 +292,7 @@ export default {
 
       const element = document.createElement('div');
       element.innerHTML = invoiceContent;
-      const fileName = `${this.model.last_name}.pdf`;
+      const fileName = `${this.model.last_name}_${this.model.first_name}.pdf`;
 
       html2pdf()
       .from(element)
