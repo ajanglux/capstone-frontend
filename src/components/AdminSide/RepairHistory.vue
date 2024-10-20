@@ -29,18 +29,22 @@
                         <tr>
                             <th>No.</th>
                             <th>Date Completed</th>
-                            <th>Code</th>
                             <th>Client</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
                             <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
                             <td>{{ repair.status === 'completed' || repair.status === 'cancelled' ? formatDate(repair.status_updated_at) : formatDate(repair.created_at) }}</td>
-                            <td>{{ repair.code }}</td>
                             <td>{{ repair.first_name || 'N/A' }} {{ repair.last_name || 'N/A' }}</td>
                             <td>{{ repair.status || 'N/A' }}</td>
+                            <td>
+                                <router-link :to="{ name: 'repair-form', params: { id: repair.id, view: 'view' } }" class="btn">
+                                    View Details
+                                </router-link>
+                            </td>
                         </tr>
                         <tr v-if="paginatedRepairs.length === 0">
                             <td colspan="5"><strong>No completed repairs found.</strong></td>
@@ -176,7 +180,6 @@ const generateMonthlyReport = async () => {
     document.body.removeChild(link);
 };
 
-
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -223,6 +226,14 @@ onMounted(() => {
         }
 
     }
+}
+
+.btn {
+    color: white;
+    padding: 7px;
+    background-color: var(--main);
+    border-radius: 5px;
+
 }
 
 .pagination-controls {

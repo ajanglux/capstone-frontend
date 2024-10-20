@@ -35,12 +35,15 @@ const routes = [
     beforeEnter: [checkIfLogged, checkIfAdmin],
   },
   {
-    path: "/repair-form/:id?",
+    path: "/repair-form/:id?/:view?",
     name: "repair-form",
     component: () => import('../components/AdminSide/RepairForm.vue'),
-    props: route => ({ id: Number(route.params.id) }),
+    props: route => ({
+      id: Number(route.params.id),
+      view: route.params.view === 'view'
+    }),
     beforeEnter: [checkIfLogged, checkIfAdmin],
-  },
+  },  
   {
     path: "/repair-history",
     name: "repair-history",
