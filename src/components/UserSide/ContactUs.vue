@@ -1,67 +1,28 @@
 <template>
   <div class="background-container">
     <div class="con-container">
-      <div class="contact-info">
-        <h2>Enter Information For Inquiries</h2> 
-        <div class="input-group mb-4">
-          <textarea v-model="customerDetail.description" 
-                    class="form-control" 
-                    placeholder="Short Device Issue Description" 
-                    required></textarea>
-          <p v-if="descriptionError" class="error-message">Description is required.</p>
-        </div>
-      </div>
-
-      <div class="contact-form-container">
-        <form class="contact-form" @submit.prevent="saveCustomerDetail">
-          <div class="name">
-            <input v-model="customerDetail.first_name" 
-              type="text" 
-              id="firstName" 
-              name="firstName" 
-              placeholder="Firstname" 
-              required 
-              style="text-transform: capitalize;"
-            />
-
-            <input v-model="customerDetail.last_name" 
-              type="text" 
-              id="lastName" 
-              name="lastName" 
-              placeholder="Lastname" 
-              required 
-              style="text-transform: capitalize;"
-            />
+      <form class="contact-form" @submit.prevent="saveCustomerDetail">
+        <div class="contact-info">
+          <h2>Enter Information For Inquiries</h2> 
+          <div class="input-group mb-4">
+            <textarea v-model="customerDetail.description" class="form-control" placeholder="Short Device Issue Description" required></textarea>
+            <p v-if="descriptionError" class="error-message">Description is required.</p>
           </div>
+        </div>
 
-          <input 
-            v-model="customerDetail.phone_number" 
-            type="text" 
-            id="phone" 
-            name="phone" 
-            required 
-            @input="validatePhoneNumber"
-            placeholder="Phone Number"
-          />
+        <div class="contact-form-container">
+          <div class="name">
+            <input v-model="customerDetail.first_name" type="text" id="firstName" name="firstName" placeholder="Firstname" required style="text-transform: capitalize;"/>
+            <input v-model="customerDetail.last_name" type="text" id="lastName" name="lastName" placeholder="Lastname" required style="text-transform: capitalize;"/>
+          </div>
+          <input v-model="customerDetail.phone_number" type="text" id="phone" name="phone" required @input="validatePhoneNumber"placeholder="Phone Number"/>
           <p v-if="phoneNumberError" class="error-message">Phone number must be exactly 11 digits and numeric.</p>
-
           <input v-model="customerDetail.email" type="email" id="email" name="email" placeholder="Email" />
-
-          <input 
-            v-model="customerDetail.address" 
-            type="text" 
-            id="address" 
-            name="address" 
-            placeholder="Barangay / Street or Municipality / City or Province" 
-            required 
-            @input="validateAddress"
-            style="text-transform: capitalize;"
-          />
+          <input v-model="customerDetail.address" type="text" id="address" name="address" placeholder="Barangay / Street or Municipality / City or Province" required @input="validateAddress" style="text-transform: capitalize;"/>
           <p v-if="addressError" class="error-message">Address must include Barangay, Street, and City separated by comma (,).</p>
-
           <button type="submit">Submit</button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
     <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
 
@@ -190,58 +151,64 @@ const resetForm = () => {
   padding-top: 8pc;
   margin: 0 17pc 2pc 17pc;
 
-  .contact-info {
-    background: var(--light);
-    border-radius: 15px;
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-    padding: 25px;
-    width: 100%;
-  }
-
-  .contact-form-container {
-    flex: 1;
-    background: var(--header);
-    border-radius: 15px;
-
-    .contact-form {
+  .contact-form {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      gap: 20px;
       width: 100%;
 
-      .name {
-        display: flex;
-        gap: 1pc;
+      .contact-info {
+        background: var(--light);
+        border-radius: 15px;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+        padding: 25px;
+        width: 100%;
       }
 
-      input {
-        padding: 8px;
-        margin-bottom: 20px;
-        border-radius: 10px;
-        background-color: var(--light);
-        outline: none;
-        border: 2px solid transparent;
+      .contact-form-container {
+        flex: 1;
+        background: var(--header);
+        border-radius: 15px;
 
-        &:focus {
-          border: 2px solid var(--grey);
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .name {
+          display: flex;
+          gap: 1pc;
         }
 
-      }
+        input {
+          font-family: 'Poppins';
+          padding: 8px;
+          margin-bottom: 20px;
+          border-radius: 10px;
+          background-color: var(--light);
+          outline: none;
+          border: 2px solid transparent;
 
-      button {
-        background-color: var(--main);
-        color: white;
-        padding: 10px;
-        margin-left: 100px;
-        margin-right: 100px;
-        border-radius: 13px;
-      }
+          &:focus {
+            border: 2px solid var(--grey);
+          }
 
-      button:hover {
-        background-color: var(--main-hover);
+        }
 
+        button {
+          background-color: var(--main);
+          color: white;
+          padding: 10px;
+          margin-left: 100px;
+          margin-right: 100px;
+          border-radius: 13px;
+        }
+
+        button:hover {
+          background-color: var(--main-hover);
+
+        }
       }
     }
-  }
 }
 
 .con-info {

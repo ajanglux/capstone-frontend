@@ -5,11 +5,6 @@
         <h2>{{ isEditing ? 'Client Details' : 'Add Repair' }}</h2>
       </div>
       <div class="card-body">
-        <ul v-if="errorList.length > 0" class="alert alert-warning">
-          <li v-for="(error, index) in errorList" :key="index" class="mb-0 ms-3">
-            <strong>{{ error }}</strong>
-          </li>
-        </ul>
 
         <!-- Customer Details -->
         <div class="input-group mb-3">
@@ -43,7 +38,6 @@
         </div>
       </div>
     </div>
-    <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
   </div>
 </template>
 
@@ -52,14 +46,11 @@ import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
-import SuccessModal from '../layouts/SuccessModal.vue';
+import { useToast } from 'vue-toastification';
 
 export default {
   name: 'RepairForm',
   props: ['id'],
-  components: {
-    SuccessModal,
-  },
   data() {
     return {
       errorList: [],
@@ -78,7 +69,6 @@ export default {
         purchase_date: '',
       },
       isEditing: false,
-      showSuccessModal: false,
       phoneNumber: '',
       minDate: new Date().toISOString().split('T')[0],
     };
@@ -90,6 +80,9 @@ export default {
     }
   },
   methods: {
+    toast() {
+      return useToast();
+    },
     async getRepairDetails() {
       try {
         const authStore = useAuthStore();
@@ -107,7 +100,8 @@ export default {
       try {
         const authStore = useAuthStore();
         await axios.put(`${BASE_URL}/customer-details/${this.id}`, { status: 'approved' }, getHeaderConfig(authStore.access_token));
-        this.showSuccessModal = true;
+        const toast = this.toast();
+        toast.success("Status update successful", { timeout: 3000 })
         setTimeout(() => this.$router.push({ name: 'inquiries' }), 1500);
       } catch (error) {
         this.errorList = error.response?.data?.errors || [error.message];

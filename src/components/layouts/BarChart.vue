@@ -36,7 +36,7 @@ const chartData = ref({
   datasets: [
     {
       label: 'Completed Repairs',
-      backgroundColor: '#42A5F5',
+      backgroundColor: ['#0F4C7BFF','#D77B28',],
       data: props.completedRepairsData,
     },
   ],
@@ -51,3 +51,9 @@ const chartOptions = ref({
   maintainAspectRatio: false,
 });
 </script>
+
+<style lang="scss" scoped>
+canvas {
+  height: 480px;
+}
+</style>

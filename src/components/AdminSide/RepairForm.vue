@@ -112,7 +112,6 @@
         </div>
       </div>
     </div>
-    <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
   </div>
 </template>
 
@@ -121,16 +120,12 @@ import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
-import SuccessModal from '../layouts/SuccessModal.vue';
 import { useToast } from 'vue-toastification';
 import html2pdf from 'html2pdf.js';
 
 export default {
   name: 'RepairForm',
   props: ['id', 'view'],
-  components: {
-    SuccessModal,
-  },
   data() {
     return {
       errorList: [],
@@ -152,7 +147,6 @@ export default {
       },
       isEditing: false,
       isViewing: this.view,
-      showSuccessModal: false,
       phoneNumber: '',
       minDate: new Date().toISOString().split('T')[0],
     };
@@ -183,7 +177,7 @@ export default {
         this.phoneNumber = this.model.phone_number;
       } catch (error) {
         const toast = this.toast();
-        toast.error('Failed to load repair details. Please try again.');
+        toast.error('Failed to load repair details. Please try again.', { timeout: 3000 });
       }
     },
     validatePhoneNumber(event) {
@@ -204,7 +198,7 @@ export default {
 
         if (!isProductInfoComplete) {
           const toast = this.toast();
-          toast.error('Failed to save. Incomplete details.');
+          toast.error('Failed to save. Incomplete details.', { timeout: 3000 });
           return;
         }
 
@@ -223,12 +217,12 @@ export default {
             getHeaderConfig(authStore.access_token)
           );
         }
-
-        this.showSuccessModal = true;
+        const toast = this.toast();
+        toast.success("Details save successful", { timeout: 3000 })
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
         const toast = this.toast();
-        toast.error('Failed to save. There are missing details or an error occurred.');
+        toast.error('Failed to save. There are missing details or an error occurred.', { timeout: 3000 });
       }
     },
     async updateRepair() {
@@ -240,11 +234,12 @@ export default {
         } else {
           await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: this.id }, getHeaderConfig(authStore.access_token));
         }
-        this.showSuccessModal = true;
+        const toast = this.toast();
+        toast.success("Details update successful", { timeout: 3000 })
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
         const toast = this.toast();
-        toast.error('Failed to update. There are missing details.');
+        toast.error('Failed to update. There are missing details.', { timeout: 3000 });
       }
     },
     generateInvoice() {

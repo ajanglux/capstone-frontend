@@ -4,8 +4,7 @@
 
       <div class="title">
           <h2>Welcome to <br>TechFix</h2>
-          <p>Your trusted partner for all your device repair needs. 
-          <br>Providing a comprehensive system where you can explore a wide range of shop offers, And ensuring you get the best service options available. Once you've submitted your device for repair, you'll receive a unique code that allows you to conveniently track the progress of your repair in real-time. Additionally, our platform makes it easy for you to send inquiries directly through the app, giving you a smooth and hassle-free experience from start to finish. We're here to make repairs easier and more accessible for you!</p>
+          <p>Your trusted partner for all your device repair needs. Providing a comprehensive system where you can explore a wide range of shop offers, And ensuring you get the best service options available. Once you've submitted your device for repair, you'll receive a unique code that allows you to conveniently track the progress of your repair in real-time. Additionally, our platform makes it easy for you to send inquiries directly through the app, giving you a smooth and hassle-free experience from start to finish. We're here to make repairs easier and more accessible for you!</p>
       </div>
     
         <img class="side-image" src="/src/assets/clipart.png" 

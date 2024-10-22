@@ -79,12 +79,6 @@ const routes = [
 
   // LANDING PAGE
   {
-    path: '/profile',
-    name: 'profile',
-    component: () => import('../components/UserSide/Profile.vue'),
-    beforeEnter: [checkIfLogged], 
-  },
-  {
     path: '/services',
     name: 'services',
     component: () => import('../components/UserSide/Services.vue'),

@@ -40,8 +40,6 @@
         </div>
       </div>
     </div>
-
-    <SuccessModal v-if="showSuccessModal" @close="handleSuccessClose" />
   </div>
 </template>
 
@@ -52,7 +50,6 @@ import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { useRoute, useRouter } from 'vue-router';
-import SuccessModal from '../layouts/SuccessModal.vue';
 import { useToast } from 'vue-toastification'; 
 
 const authStore = useAuthStore();
@@ -67,7 +64,6 @@ const model = ref({
   image_url: '',
 });
 const errorList = ref([]);
-const showSuccessModal = ref(false);
 const selectedFile = ref(null);
 const imagePreview = ref('');
 
@@ -111,7 +107,8 @@ const saveService = async () => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    showSuccessModal.value = true;
+    toast.success("Service save successful", { timeout: 3000 })
+    setTimeout(() => router.push({ name: 'service-list' }), 1000);
   } catch (error) {
     errorList.value.push(error.response?.data?.message || 'Error saving service');
     toast.error(error.response?.data?.message || 'Error saving service');
@@ -141,16 +138,12 @@ const updateService = async () => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    showSuccessModal.value = true;
+    toast.success("Service update successful", { timeout: 3000 })
+    setTimeout(() => router.push({ name: 'service-list' }), 1000);
   } catch (error) {
     errorList.value.push(error.response?.data?.message || 'Error updating service');
     toast.error(error.response?.data?.message || 'Error updating service');
   }
-};
-
-const handleSuccessClose = () => {
-  showSuccessModal.value = false;
-  router.push('/service-list');
 };
 
 onMounted(() => {

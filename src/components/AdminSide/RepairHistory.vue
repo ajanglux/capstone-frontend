@@ -60,12 +60,6 @@
                 <button @click="goToPreviousPage" :disabled="currentPage === 1" class="prev-btn">Previous</button>
                 <button @click="goToNextPage" :disabled="currentPage === totalPages" class="next-btn">Next</button>
             </div>
-  
-            <ConfirmationDialog
-                :show="showDeleteDialog"
-                @close="showDeleteDialog = false"
-                @confirm="deleteRepair"
-            />
         </div>
     </div>
 </v-app>

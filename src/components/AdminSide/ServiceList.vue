@@ -8,9 +8,6 @@
         </router-link>
       </div>
       <div class="table-body">
-        <div v-if="errors" class="alert alert-danger">
-          <strong>{{ errors }}</strong>
-        </div>
         <table class="table table-bordered">
           <thead>
             <tr>
@@ -51,11 +48,6 @@
       @close="showDeleteDialog = false"
       @confirm="deleteService(selectedServiceId)"
     />
-    <SuccessModal
-      v-if="showSuccessModal"
-      :message="successMessage"
-      @close="showSuccessModal = false"
-    />
   </div>
 </template>
 
@@ -67,7 +59,7 @@ import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import ConfirmationDialog from '../layouts/ConfirmationDialog.vue';
-import SuccessModal from '../layouts/SuccessModal.vue';
+import { useToast } from 'vue-toastification'
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -76,8 +68,7 @@ const errors = ref(null);
 const showDeleteDialog = ref(false);
 const selectedServiceId = ref(null);
 const selectedActions = ref({}); 
-
-const showSuccessModal = ref(false);
+const toast = useToast()
 const successMessage = ref('');
 
 const fetchServices = async () => {
@@ -103,10 +94,10 @@ const deleteService = async (id) => {
     showDeleteDialog.value = false;
 
     successMessage.value = 'Service successfully deleted.';
-    showSuccessModal.value = true;
+    toast.success("Status deleted successful", { timeout: 3000 })
   } catch (error) {
-    console.error('Error deleting service:', error);
-    errors.value = error.response?.data?.message || 'Error deleting service';
+    const toast = this.toast();
+    toast.error('Failed to Delete Service. Please try again.', { timeout: 3000 });
   }
 };
 

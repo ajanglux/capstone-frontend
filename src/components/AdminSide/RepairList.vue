@@ -85,11 +85,6 @@
       @confirm="confirmStatusChange"
       :message="confirmationMessage"
     />
-    <SuccessModal
-      v-if="showSuccessModal"
-      :message="successMessage"
-      @close="showSuccessModal = false"
-    />
   </div>
 </template>
 
@@ -101,15 +96,13 @@ import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import ConfirmationDialog from '../layouts/ConfirmationDialog.vue';
-import SuccessModal from '../layouts/SuccessModal.vue';
+import { useToast } from 'vue-toastification'
 
 const authStore = useAuthStore();
 const router = useRouter();
 const repairs = ref([]);
 const errors = ref(null);
 const showConfirmationDialog = ref(false);
-const showSuccessModal = ref(false);
-const successMessage = ref('');
 const confirmationMessage = ref('');
 const selectedRepairId = ref(null);
 const selectedActions = ref({});
@@ -118,6 +111,7 @@ const selectedStatusAction = ref('');
 const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
+const toast = useToast()
 
 const fetchRepairs = async () => {
   try {
@@ -205,16 +199,11 @@ const confirmStatusChange = () => {
   showConfirmationDialog.value = false;
 };
 
-// const viewRepair = (id) => {
-//   router.push({ name: 'repair-form', params: { id } });
-// };
-
 const updateStatus = async (id, status) => {
   try {
     await axios.patch(`${BASE_URL}/customer-details/${id}/status`, { status }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
-    successMessage.value = `Repair marked as ${status} successfully.`;
-    showSuccessModal.value = true;
+    toast.success("Status update successful", { timeout: 3000 })
   } catch (error) {
     console.error(`Error updating repair status to ${status}:`, error);
     errors.value = error.response?.data?.message || `Error updating repair status to ${status}`;

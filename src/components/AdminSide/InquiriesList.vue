@@ -64,13 +64,7 @@
       </div>
     </div>
 
-    <ConfirmationDialog
-      :show="showDeleteDialog"
-      @close="showDeleteDialog = false"
-      @confirm="deleteRepair"
-    />
-
-    <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
+    <ConfirmationDialog :show="showDeleteDialog" @close="showDeleteDialog = false" @confirm="deleteRepair"/>
   </div>
 </template>
 
@@ -82,19 +76,19 @@ import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import ConfirmationDialog from '../layouts/ConfirmationDialog.vue';
-import SuccessModal from '../layouts/SuccessModal.vue';
+import { useToast } from 'vue-toastification'
 
 const authStore = useAuthStore();
 const router = useRouter();
 const repairs = ref([]);
 const errors = ref(null);
 const showDeleteDialog = ref(false);
-const showSuccessModal = ref(false);
 const selectedRepairId = ref(null);
 const selectedActions = ref({});
 const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
+const toast = useToast()
 
 const fetchRepairs = async () => {
   try {
@@ -107,8 +101,8 @@ const fetchRepairs = async () => {
       selectedActions.value[repair.id] = '';
     });
   } catch (error) {
-    console.error('Error fetching repairs:', error);
-    errors.value = error.response?.data?.message || 'Error fetching repairs';
+    const toast = this.toast();
+    toast.error('Failed to load Inquiries details. Please try again.', { timeout: 3000 });
   }
 };
 
@@ -159,10 +153,10 @@ const setApproved = async (id) => {
   try {
     await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'approved' }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
-    showSuccessModal.value = true;
+    toast.success("Status update successful", { timeout: 3000 })
   } catch (error) {
-    console.error('Error updating repair status:', error);
-    errors.value = error.response?.data?.message || 'Error updating repair status';
+    const toast = this.toast();
+    toast.error('Error updating status. Please try again.', { timeout: 3000 });
   }
 };
 
@@ -175,10 +169,10 @@ const deleteRepair = async () => {
     await axios.delete(`${BASE_URL}/customer-details/${selectedRepairId.value}`, getHeaderConfig(authStore.access_token));
     fetchRepairs();
     showDeleteDialog.value = false;
-    showSuccessModal.value = true;
+    toast.success("Deleted successful", { timeout: 3000 })
   } catch (error) {
-    console.error('Error deleting repair:', error);
-    errors.value = error.response?.data?.message || 'Error deleting repair';
+    const toast = this.toast();
+    toast.error('Error deleting details. Please try again.', { timeout: 3000 });
   }
 };
 
