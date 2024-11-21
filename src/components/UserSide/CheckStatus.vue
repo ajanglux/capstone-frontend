@@ -19,8 +19,8 @@
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Device Received</p>
-                <p v-if="onGoingUpdatedAt">Updated on: {{ formattedOnGoingUpdatedAt }}</p>
-                <p>Your Device status is: On-going</p>
+                <p v-if="onGoingUpdatedAt">Updated on: {{ formattedOnGoingUpdatedAt }} <br>Your Device status is: On-going</p>
+                <p v-else>Not Yet available</p>
               </div>
             </div>
 

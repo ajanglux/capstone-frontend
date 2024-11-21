@@ -70,17 +70,17 @@
       data.loading = false
   
       if (response.data.error) {
-        toast.error(response.data.error, { timeout: 3000 })
+        toast.error(response.data.error, { timeout: 2500 })
       } else {
         // Check if the user is an admin
         if (response.data.user.role === 1) {
           store.setToken(response.data.currentToken)
           store.setUser(response.data.user)
-          toast.success(response.data.message, { timeout: 3000 })
+          toast.success(response.data.message, { timeout: 2500 })
           router.push('/admin-dashboard')
         } else {
           // Display message for non-admin users
-          toast.error("You are not an admin", { timeout: 3000 })
+          toast.error("You are not an admin", { timeout: 2500 })
           store.clearToken()
           store.clearUser()
         }
@@ -90,7 +90,7 @@
       if (error.response && error.response.status === 422) {
         store.setErrors(error.response.data.errors)
       } else {
-        toast.error('An unexpected error occurred. Please try again.', { timeout: 3000 })
+        toast.error('An unexpected error occurred. Please try again.', { timeout: 2500 })
       }
     }
   }
