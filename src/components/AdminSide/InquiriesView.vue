@@ -28,13 +28,13 @@
           <input v-model="model.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
         </div>
         <div class="input-group mb-4">
-          <span class="input-group-text">Device Issue Description</span>
+          <span class="input-group-text">Inquiry:</span>
           <textarea v-model="model.description" class="form-control" :disabled="isEditing"></textarea>
         </div>
 
         <div class="buttons">
           <button v-if="isEditing" @click="goBack" class="btn">Back</button>
-          <button v-if="isEditing" @click="setApprove" class="btn">Approve</button>
+          <button v-if="isEditing" @click="setApprove" class="btn">Add to Repair</button>
         </div>
       </div>
     </div>
@@ -99,7 +99,7 @@ export default {
     async setApprove() {
       try {
         const authStore = useAuthStore();
-        await axios.put(`${BASE_URL}/customer-details/${this.id}`, { status: 'approved' }, getHeaderConfig(authStore.access_token));
+        await axios.put(`${BASE_URL}/customer-details/${this.id}`, { status: 'Incomplete' }, getHeaderConfig(authStore.access_token));
         const toast = this.toast();
         toast.success("Status update successful", { timeout: 3000 })
         setTimeout(() => this.$router.push({ name: 'inquiries' }), 1500);

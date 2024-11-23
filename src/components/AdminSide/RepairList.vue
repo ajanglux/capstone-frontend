@@ -21,10 +21,10 @@
           <div class="filters">
             <select v-model="selectedStatus">
               <option value="">All</option>
-              <option value="approved">Approved</option>
-              <option value="on-going">On-going</option>
-              <option value="finished">Finished</option>
-              <option value="ready-for-pickup">Ready</option>
+              <option value="Incomplete">Incomplete</option>
+              <option value="On-Going">On-going</option>
+              <option value="Finished">Finished</option>
+              <option value="Ready-for-Pickup">Ready</option>
             </select>
           </div>
         </div>
@@ -54,11 +54,11 @@
                   <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                     <option value="">Select Action</option>
                     <option value="edit">Edit</option>
-                    <option value="cancelled" :disabled="repair.status === 'cancelled' || repair.status === 'finished' || repair.status === 'on-going' || repair.status === 'ready-for-pickup' || repair.status === 'completed'">Cancel</option>
-                    <option value="on-going" :disabled="repair.status === 'on-going' || repair.status === 'cancelled' || repair.status === 'finished' || repair.status === 'ready-for-pickup' || repair.status === 'completed'">On-Going</option>
-                    <option value="finished" :disabled="repair.status === 'finished' || repair.status === 'ready-for-pickup' || repair.status === 'cancelled' || repair.status === 'approved'">Finished</option>
-                    <option value="ready-for-pickup" :disabled="repair.status === 'ready-for-pickup' || repair.status === 'cancelled' || repair.status === 'approved'">Ready For Pickup</option>
-                    <option value="completed" :disabled="repair.status === 'approved'">Completed</option>
+                    <option value="Cancelled" :disabled="repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'On-Going' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Cancel</option>
+                    <option value="On-Going" :disabled="repair.status === 'On-Going' || repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">On-Going</option>
+                    <option value="Finished" :disabled="repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Cancelled' || repair.status === 'Incomplete'">Finished</option>
+                    <option value="Ready-for-Pickup" :disabled="repair.status === 'ready-for-pickup' || repair.status === 'cancelled' || repair.status === 'Incomplete'">Ready For Pickup</option>
+                    <option value="Completed" :disabled="repair.status === 'Incomplete'">Completed</option>
                   </select>
                 </div>
               </td>
@@ -134,7 +134,7 @@ const filteredRepairs = computed(() => {
     let matchesStatus = true;
 
     if (selectedStatus.value === '') {
-      matchesStatus = repair.status === 'on-going' || repair.status === 'finished' || repair.status === 'ready-for-pickup' || repair.status === 'approved';
+      matchesStatus = repair.status === 'On-Going' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Incomplete';
     } else {
       matchesStatus = repair.status === selectedStatus.value;
     }
@@ -185,15 +185,15 @@ const handleActionChange = (repairId) => {
 };
 
 const confirmStatusChange = () => {
-  if (selectedStatusAction.value === 'cancelled') {
+  if (selectedStatusAction.value === 'Cancelled') {
     markAsCancelled(selectedRepairId.value);
-  } else if (selectedStatusAction.value === 'on-going') {
+  } else if (selectedStatusAction.value === 'On-Going') {
     markAsOngoing(selectedRepairId.value);
-  } else if (selectedStatusAction.value === 'finished') {
+  } else if (selectedStatusAction.value === 'Finished') {
     markAsFinished(selectedRepairId.value);
-  } else if (selectedStatusAction.value === 'ready-for-pickup') {
+  } else if (selectedStatusAction.value === 'Ready-for-Pickup') {
     markAsReady(selectedRepairId.value);
-  } else if (selectedStatusAction.value === 'completed') {
+  } else if (selectedStatusAction.value === 'Completed') {
     markAsCompleted(selectedRepairId.value);
   }
   showConfirmationDialog.value = false;
@@ -211,23 +211,23 @@ const updateStatus = async (id, status) => {
 };
 
 const markAsFinished = (id) => {
-  updateStatus(id, 'finished');
+  updateStatus(id, 'Finished');
 };
 
 const markAsReady = (id) => {
-  updateStatus(id, 'ready-for-pickup');
+  updateStatus(id, 'Ready-for-Pickup');
 };
 
 const markAsCompleted = (id) => {
-  updateStatus(id, 'completed');
+  updateStatus(id, 'Completed');
 };
 
 const markAsCancelled = (id) => {
-  updateStatus(id, 'cancelled');
+  updateStatus(id, 'Cancelled');
 };
 
 const markAsOngoing = (id) => {
-  updateStatus(id, 'on-going');
+  updateStatus(id, 'On-Going');
 };
 
 const formatDate = (dateString) => {

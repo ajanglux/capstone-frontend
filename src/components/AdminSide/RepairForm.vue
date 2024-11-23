@@ -202,7 +202,7 @@ export default {
           return;
         }
 
-        const repairData = { ...this.model, status: 'on-going' };
+        const repairData = { ...this.model, status: 'On-Going' };
 
         const customerResponse = await axios.post(
           `${BASE_URL}/customer-details`,

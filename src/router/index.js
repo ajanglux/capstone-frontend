@@ -64,6 +64,12 @@ const routes = [
     beforeEnter: [checkIfLogged, checkIfAdmin],
   },
   {
+    path: "/responded-list",
+    name: "responded-list",
+    component: () => import('../components/AdminSide/RespondedList.vue'),
+    beforeEnter: [checkIfLogged, checkIfAdmin],
+  },
+  {
     path: "/service-list",
     name: "service-list",
     component: () => import('../components/AdminSide/ServiceList.vue'),

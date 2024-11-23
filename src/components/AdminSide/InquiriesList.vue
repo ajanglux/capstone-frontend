@@ -3,6 +3,11 @@
     <div class="container">
       <div class="card-header">
         <h2>LIST OF INQUIRIES</h2>
+        <div class="left-card">
+          <router-link class="button" to="/responded-list">
+            <span class="text"><i class='bx bx-history'></i>Responded</span>
+          </router-link>
+        </div>
       </div>
       <div class="table-body">
         <div class="table-header">
@@ -41,7 +46,8 @@
                     <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                       <option value="">Select</option>
                       <option value="view">View</option>
-                      <option value="approved" :disabled="repair.status !== 'pending'">Approve</option>
+                      <option value="Incomplete">Add to Repair</option>
+                      <option value="Responded">Responded</option>
                       <option value="delete">Delete</option>
                     </select>
                   </div>
@@ -108,7 +114,7 @@ const fetchRepairs = async () => {
 
 const filteredRepairs = computed(() => {
   return repairs.value
-    .filter(repair => repair.status === 'pending')
+    .filter(repair => repair.status === 'Pending')
     .filter(repair => {
       const searchText = searchQuery.value.toLowerCase();
       const fullName = `${repair.first_name || ''} ${repair.last_name || ''}`.toLowerCase();
@@ -140,8 +146,10 @@ const previousPage = () => {
 
 const handleActionChange = (repairId) => {
   const action = selectedActions.value[repairId];
-  if (action === 'approved') {
+  if (action === 'Incomplete') {
     setApproved(repairId);
+  } else if (action === 'Responded') {
+    setResponded(repairId);
   } else if (action === 'delete') {
     confirmDelete(repairId);
   } else if (action === 'view') {
@@ -151,7 +159,18 @@ const handleActionChange = (repairId) => {
 
 const setApproved = async (id) => {
   try {
-    await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'approved' }, getHeaderConfig(authStore.access_token));
+    await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'Incomplete' }, getHeaderConfig(authStore.access_token));
+    fetchRepairs();
+    toast.success("Status update successful", { timeout: 3000 })
+  } catch (error) {
+    const toast = this.toast();
+    toast.error('Error updating status. Please try again.', { timeout: 3000 });
+  }
+};
+
+const setResponded = async (id) => {
+  try {
+    await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'Responded' }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
     toast.success("Status update successful", { timeout: 3000 })
   } catch (error) {

@@ -3,7 +3,8 @@
     <div class="con-container">
       <div class="contact-info">
         <h2>Enter Code: </h2>
-        <input type="text" v-model="code" placeholder="Code" @input="fetchStatus" />
+        <input type="text" v-model="code" placeholder="Code" />
+        <button @click="fetchStatus">Show Status</button>
 
         <div v-if="isLoading">
           <p>Loading status...</p>
@@ -15,7 +16,7 @@
 
         <div v-if="status">
           <div class="timeline-container">
-            <div class="timeline-item" :class="{ active: isActive('on-going') }">
+            <div class="timeline-item" :class="{ active: isActive('On-Going') }">
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Device Received</p>
@@ -24,7 +25,7 @@
               </div>
             </div>
 
-            <div class="timeline-item" :class="{ active: isActive('finished') }">
+            <div class="timeline-item" :class="{ active: isActive('Finished') }">
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Repair Finished</p>
@@ -33,7 +34,7 @@
               </div>
             </div>
 
-            <div class="timeline-item" :class="{ active: isActive('ready-for-pickup') }">
+            <div class="timeline-item" :class="{ active: isActive('Ready-for-Pickup') }">
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Ready for Pickup</p>
@@ -42,7 +43,7 @@
               </div>
             </div>
 
-            <div class="timeline-item" :class="{ active: isActive('completed') }">
+            <div class="timeline-item" :class="{ active: isActive('Completed') }">
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Repair Completed</p>
@@ -91,8 +92,7 @@ const fetchStatus = async () => {
       readyForPickupUpdatedAt.value = response.data.data.ready_for_pickup_updated_at;
       completedUpdatedAt.value = response.data.data.completed_updated_at;
 
-      // Check for the status update condition
-      if (status.value === 'ready-for-pickup' && !finishedUpdatedAt.value) {
+      if (status.value === 'Ready-for-Pickup' && !finishedUpdatedAt.value) {
         finishedStatusAvailable.value = true; // Set to available if condition met
       }
     }
@@ -118,7 +118,7 @@ const formatDate = (dateString) => {
 };
 
 const isActive = (checkStatus) => {
-  const order = ['on-going', 'finished', 'ready-for-pickup', 'completed'];
+  const order = ['On-Going', 'Finished', 'Ready-for-Pickup', 'Completed'];
   const currentIndex = order.indexOf(status.value);
   const checkIndex = order.indexOf(checkStatus);
   return checkIndex <= currentIndex;
@@ -149,6 +149,17 @@ const isActive = (checkStatus) => {
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 13px;
   // height: 35pc;
+
+  button {
+    background-color: var(--main);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    margin-left: 10px;
+    padding: 1px 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
 
   input {
     font-family: 'Poppins';
