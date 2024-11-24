@@ -28,7 +28,7 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            <th>Date Completed</th>
+                            <th>Date</th>
                             <th>Client</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -101,7 +101,7 @@ const filteredRepairs = computed(() => {
                 const repairMonth = new Date(repair.created_at).toISOString().slice(0, 7);
                 return repairMonth === selectedMonth.value && repair.status === 'completed';
             }
-            return repair.status === 'Completed' || repair.status === 'cancelled';
+            return repair.status === 'Completed' || repair.status === 'Cancelled';
         })
         .filter((repair) => {
             const searchText = searchQuery.value.toLowerCase();

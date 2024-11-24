@@ -28,9 +28,6 @@
             </select>
           </div>
         </div>
-        <div v-if="errors" class="alert alert-danger">
-          <strong>{{ errors }}</strong>
-        </div>
         <table class="table table-bordered">
           <thead>
             <tr>
@@ -57,7 +54,7 @@
                     <option value="Cancelled" :disabled="repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'On-Going' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Cancel</option>
                     <option value="On-Going" :disabled="repair.status === 'On-Going' || repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">On-Going</option>
                     <option value="Finished" :disabled="repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Cancelled' || repair.status === 'Incomplete'">Finished</option>
-                    <option value="Ready-for-Pickup" :disabled="repair.status === 'ready-for-pickup' || repair.status === 'cancelled' || repair.status === 'Incomplete'">Ready For Pickup</option>
+                    <option value="Ready-for-Pickup" :disabled="repair.status === 'Ready-for-Pickup' || repair.status === 'cancelled' || repair.status === 'Incomplete'">Ready For Pickup</option>
                     <option value="Completed" :disabled="repair.status === 'Incomplete'">Completed</option>
                   </select>
                 </div>
@@ -203,10 +200,11 @@ const updateStatus = async (id, status) => {
   try {
     await axios.patch(`${BASE_URL}/customer-details/${id}/status`, { status }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
-    toast.success("Status update successful", { timeout: 3000 })
+    toast.success("Status updated successfully", { timeout: 3000 });
   } catch (error) {
     console.error(`Error updating repair status to ${status}:`, error);
-    errors.value = error.response?.data?.message || `Error updating repair status to ${status}`;
+    const errorMessage = error.response?.data?.message || `Error updating repair status to ${status}`;
+    toast.error(errorMessage, { timeout: 4700 });
   }
 };
 

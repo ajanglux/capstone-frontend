@@ -218,7 +218,7 @@ export default {
           );
         }
         const toast = this.toast();
-        toast.success("Details save successful", { timeout: 3000 })
+        toast.success("Details saved successful", { timeout: 3000 })
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
         const toast = this.toast();
@@ -235,7 +235,7 @@ export default {
           await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: this.id }, getHeaderConfig(authStore.access_token));
         }
         const toast = this.toast();
-        toast.success("Details update successful", { timeout: 3000 })
+        toast.success("Details updated successful", { timeout: 3000 })
         setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
       } catch (error) {
         const toast = this.toast();
