@@ -99,7 +99,7 @@ const filteredRepairs = computed(() => {
         .filter((repair) => {
             if (selectedMonth.value) {
                 const repairMonth = new Date(repair.created_at).toISOString().slice(0, 7);
-                return repairMonth === selectedMonth.value && repair.status === 'completed';
+                return repairMonth === selectedMonth.value && repair.status === 'Completed' || repair.status === 'Cancelled';
             }
             return repair.status === 'Completed' || repair.status === 'Cancelled';
         })
