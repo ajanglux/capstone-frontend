@@ -157,6 +157,7 @@ export default {
     },
   },
   mounted() {
+    this.handleQueryParams();
     if (this.id) {
       this.isEditing = !this.isViewing;
       this.getRepairDetails();
@@ -166,7 +167,14 @@ export default {
     toast() {
       return useToast();
     },
-
+    handleQueryParams() {
+      const queryParams = this.$route.query;
+      if (queryParams.first_name) this.model.first_name = queryParams.first_name;
+      if (queryParams.last_name) this.model.last_name = queryParams.last_name;
+      if (queryParams.phone_number) this.phoneNumber = queryParams.phone_number;
+      if (queryParams.email) this.model.email = queryParams.email;
+      if (queryParams.address) this.model.address = queryParams.address;
+    },
     async getRepairDetails() {
       try {
         const authStore = useAuthStore();

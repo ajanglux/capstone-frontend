@@ -101,7 +101,7 @@ export default {
         const authStore = useAuthStore();
         await axios.put(`${BASE_URL}/customer-details/${this.id}`, { status: 'Incomplete' }, getHeaderConfig(authStore.access_token));
         const toast = this.toast();
-        toast.success("Status update successful", { timeout: 3000 })
+        toast.success("Status updated successful", { timeout: 3000 })
         setTimeout(() => this.$router.push({ name: 'inquiries' }), 1500);
       } catch (error) {
         this.errorList = error.response?.data?.errors || [error.message];

@@ -39,10 +39,10 @@ const routes = [
     name: "repair-form",
     component: () => import('../components/AdminSide/RepairForm.vue'),
     props: route => ({
-      id: Number(route.params.id),
-      view: route.params.view === 'view'
+      id: route.params.id ? Number(route.params.id) : null, // Convert `id` to a number if it exists, otherwise null
+      view: route.query.view === 'view' // Use `view` from the query to determine if it's a view-only mode
     }),
-    beforeEnter: [checkIfLogged, checkIfAdmin],
+    beforeEnter: [checkIfLogged, checkIfAdmin], // Add guards to ensure proper authentication and role
   },  
   {
     path: "/repair-history",

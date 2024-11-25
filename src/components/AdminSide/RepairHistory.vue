@@ -44,6 +44,12 @@
                                 <router-link :to="{ name: 'repair-form', params: { id: repair.id, view: 'view' } }" class="btn">
                                     View Details
                                 </router-link>
+                                <button 
+                                    class="btn"
+                                    @click="redirectToNewRepair(repair)"
+                                    v-if="repair.status === 'Completed' || repair.status === 'Cancelled'">
+                                    Create New Repair
+                                </button>
                             </td>
                         </tr>
                         <tr v-if="paginatedRepairs.length === 0">
@@ -72,7 +78,9 @@ import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import ExcelJS from 'exceljs';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const authStore = useAuthStore();
 const repairs = ref([]);
 const errors = ref(null);
@@ -115,6 +123,21 @@ const filteredRepairs = computed(() => {
         })
         .sort((a, b) => new Date(b.status_updated_at) - new Date(a.status_updated_at));
 });
+
+const redirectToNewRepair = (repair) => {
+    const preFilledDetails = {
+        first_name: repair.first_name,
+        last_name: repair.last_name,
+        phone_number: repair.phone_number,
+        email: repair.email,
+        address: repair.address,
+    };
+
+    router.push({
+        name: 'repair-form',
+        query: preFilledDetails,
+    });
+};
 
 const paginatedRepairs = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage;
@@ -227,6 +250,7 @@ onMounted(() => {
     padding: 7px;
     background-color: var(--main);
     border-radius: 5px;
+    margin-left: 5px;
 
 }
 
