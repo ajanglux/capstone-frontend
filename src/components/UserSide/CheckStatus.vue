@@ -260,6 +260,10 @@ const isActive = (checkStatus) => {
       width: 100%;
     }
 
+    button {
+      margin-left: 0px;
+    }
+
     .timeline-content {
       .timeline-location {
         font-size: 16px;

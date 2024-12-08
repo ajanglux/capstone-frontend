@@ -313,8 +313,10 @@ input:hover, textarea:hover {
 
 @media (max-width: 990px) {
   .con-container {
-    .contact-info {
-      h2 { font-size: 20px; }
+    .contact-form {
+      .contact-info {
+        h2 { font-size: 20px; }
+      }
     }
   }
 
@@ -334,29 +336,28 @@ input:hover, textarea:hover {
   }
 
   .con-container {
-    display: flex;
-    flex-direction: column;
-    padding-top: 6.5pc;
-    margin: 0 2pc 1.5pc 2pc;
+    padding-top: 5pc;
+    margin: 2pc 2pc 2pc 2pc;
 
-    .contact-info {
-      h2 { font-size: 18px; }
-    }
+    .contact-form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
 
-    .contact-form-container {
-      flex: 1;
-      background: var(--header);
-      border-radius: 15px;
+        .contact-info {
+          width: 100%;
+          h2 { font-size: 18px; }
+        }
 
-      .contact-form {
-        .name {
-          display: flex;
-          flex-direction: column;
-          gap: 0;
+        .contact-form-container {
+          .name {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+          }
         }
       }
     }
-  }
 
   .con-info {
     padding: 15px;
