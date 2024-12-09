@@ -35,21 +35,21 @@
       <div class="card">
         <div class="info">
           <p>Email:</p>
-          <h1>intelvision@yahoo.com</h1>
+          <h1><a href="mailto:raymart.williams@brandcomph.com">raymart.williams@brandcomph.com</a></h1>
         </div>
       </div>
 
       <div class="card">
         <div class="info">
           <p>Contact Number:</p>
-          <h1>123-456-7890</h1>
+          <h1><a href="tel:+639661908734">+639661908734</a></h1>
         </div>
       </div>
 
       <div class="card">
         <div class="info">
           <p>Address:</p>
-          <h1>1234 Elm Street, City, Country</h1>
+          <h1>Robtess Tower 1 Unit A #9 Hansen 12 street East Tapinac Olongapo City, Zambales (store)</h1>
         </div>
       </div>
     </div>
@@ -61,6 +61,7 @@ import { ref, computed } from 'vue';
 import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import SuccessModal from '../layouts/SuccessModal.vue';
+import { useToast } from 'vue-toastification'; 
 
 const customerDetail = ref({
   first_name: '',
@@ -74,10 +75,12 @@ const customerDetail = ref({
 const showSuccessModal = ref(false);
 const addressError = ref(false);
 const descriptionError = ref(false);
+const toast = useToast();
 
 const validatePhoneNumber = (event) => {
   const input = event.target;
-  const value = input.value.replace(/\D/g, '');
+  let value = input.value.replace(/\D/g, '').trim(); 
+
   if (value.length > 11) {
     input.value = value.slice(0, 11);
   } else {
@@ -95,23 +98,30 @@ const isAddressValid = computed(() => !addressError.value);
 const saveCustomerDetail = async () => {
   descriptionError.value = !customerDetail.value.description.trim();
 
+  const phoneNumber = customerDetail.value.phone_number ? customerDetail.value.phone_number.replace(/\D/g, '') : '';
+
+  if (phoneNumber.length !== 11) {
+    toast.error('Phone number must contain exactly 11 digits.');
+    return;
+  }
+
   if (!isAddressValid.value) {
-    alert('Address must include Barangay, Street, and City.');
+    toast.error('Address must include Barangay, Street, and City.');
     return;
   }
 
   if (descriptionError.value) {
-    alert('Description is required.');
+    toast.error('Description is required.');
     return;
   }
 
   try {
     await axios.post(`${BASE_URL}/customer-details`, customerDetail.value);
-    showSuccessModal.value = true;
+    toast.success("Details saved successfully", { timeout: 3000 })
     resetForm();
   } catch (error) {
     console.error('Error saving customer details:', error);
-    alert('An error occurred while saving customer details.');
+    toast.error('An error occurred while saving customer details.');
   }
 };
 
@@ -247,13 +257,22 @@ const resetForm = () => {
       align-items: center;
       justify-content: center;
       gap: 10px;
+
+      a {
+        text-decoration: none;
+        color: var(--header);
+      }
+      a:hover {
+        color: var(--main);
+}
+
       
       p {
         font-size: 16px;
       }
 
       h1 {
-        font-size: 16px;
+        font-size: 11px;
       }
     }
   }
