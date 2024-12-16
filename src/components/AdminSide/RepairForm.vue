@@ -58,6 +58,49 @@
               />
             </div>
 
+            <div class="buttons">
+              <h2>WARRANTY STATUS</h2>
+            </div>
+            <div class="custom-checkboxes">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="warranty" value="warranty" v-model="productInfo.warranty_status" :disabled="isViewing" />
+                <label class="form-check-label" for="warranty">Warranty</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="outOfWarranty" value="out_of_warranty" v-model="productInfo.warranty_status" :disabled="isViewing" />
+                <label class="form-check-label" for="outOfWarranty">Out Of Warranty</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" :disabled="isViewing" />
+                <label class="form-check-label" for="chargeable">Chargeable</label>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">Purchase Date</span>
+              <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isViewing"/>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="whole">
+          <div class="left">
+          </div>
+        </div>
+
+        <div class="buttons">
+              <h2>Device Issue Description</h2>
+            </div>
+            <div class="input-group mb-4">
+              <span class="input-group-text"></span>
+              <textarea v-model="model.description" class="form-control" :disabled="isViewing"></textarea>
+            </div>
+
+        <div class="whole-checklist">
+          <div class="checklist">
+            <div class="buttons">
+              <h2>Checklist</h2>
+            </div>
             <div class="input-group mb-3">
               <span class="input-group-text">Original Box</span>
               <input v-model="productInfo.orig_box" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
@@ -102,6 +145,9 @@
               <span class="input-group-text">Backplate/Metal Plate</span>
               <input v-model="productInfo.backplate_metal_plate" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
+          </div>
+
+          <div class="checklist">
 
             <div class="input-group mb-3">
               <span class="input-group-text">AC Adapter</span>
@@ -147,6 +193,9 @@
               <span class="input-group-text">HDD</span>
               <input v-model="productInfo.hdd" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
+          </div>
+
+          <div class="checklist">
 
             <div class="input-group mb-3">
               <span class="input-group-text">RAM Brand</span>
@@ -187,46 +236,9 @@
               <span class="input-group-text">Jack Cable Quantity</span>
               <input v-model="productInfo.jack_cable_qty" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
-
           </div>
         </div>
-
-        <div class="whole">
-          <div class="left">
-            <div class="buttons">
-              <h2>WARRANTY STATUS</h2>
-            </div>
-            <div class="custom-checkboxes">
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="warranty" value="warranty" v-model="productInfo.warranty_status" :disabled="isViewing" />
-                <label class="form-check-label" for="warranty">Warranty</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="outOfWarranty" value="out_of_warranty" v-model="productInfo.warranty_status" :disabled="isViewing" />
-                <label class="form-check-label" for="outOfWarranty">Out Of Warranty</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" :disabled="isViewing" />
-                <label class="form-check-label" for="chargeable">Chargeable</label>
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">Purchase Date</span>
-              <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isViewing"/>
-            </div>
-          </div>
-
-          <div class="right">
-            <div class="buttons">
-              <h2>Device Issue Description</h2>
-            </div>
-            <div class="input-group mb-4">
-              <span class="input-group-text"></span>
-              <textarea v-model="model.description" class="form-control" :disabled="isViewing"></textarea>
-            </div>
-          </div>
-        </div>
-
+        
         <div class="buttons">
           <h2>NOTE FROM THE ADMIN</h2>
         </div>
@@ -436,62 +448,71 @@ export default {
       };
 
       const invoiceContent = `
-        <div style="font-family: 'Poppins'; padding: 20px;">
-          <h1 style="margin-bottom: 20px; margin-top: 30px;">RECEIPT</h1>
+       <div style="font-family: 'Poppins', sans-serif; padding: 0; width: 100%; margin: 10px; max-width: 210mm;">
+        <h1 style="margin-bottom: 10px; text-align: center; font-size: 18px;">RECEIPT</h1>
 
-          <div style="display: flex; justify-content: space-between; width: 100%; max-width: 600px; margin: auto;">
-            <div style="flex: 1; margin-right: 10px; margin-bottom: 20px;">
-              <h3 style="margin-bottom: 10px;">Customer Details</h3>
-              <p style="margin: 5px 0;"><strong>Name:</strong> ${displayValue(this.model.first_name)} ${displayValue(this.model.last_name)}</p>
-              <p style="margin: 5px 0;"><strong>Phone Number:</strong> ${displayValue(this.model.phone_number)}</p>
-              <p style="margin: 5px 0;"><strong>Email:</strong> ${displayValue(this.model.email)}</p>
-              <p style="margin: 5px 0;"><strong>Address:</strong> ${displayValue(this.model.address)}</p>
-            </div>
-
-            <div style="flex: 1; margin-bottom: 20px;">
-              <h3 style="margin-bottom: 10px;">Product Information</h3>
-              <p style="margin: 5px 0;"><strong>Brand:</strong> ${displayValue(this.productInfo.brand)}</p>
-              <p style="margin: 5px 0;"><strong>Model:</strong> ${displayValue(this.productInfo.model)}</p>
-              <p style="margin: 5px 0;"><strong>Serial Number:</strong> ${displayValue(this.productInfo.serial_number)}</p>
-              <p style="margin: 5px 0;"><strong>Purchase Date:</strong> ${displayValue(this.productInfo.purchase_date)}</p>
-            </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+          <div style="width: 48%;">
+            <h3 style="font-size: 14px; margin-bottom: 5px;">Customer Details</h3>
+            <p style="margin: 2px 0; font-size: 12px;"><strong>Name:</strong> ${displayValue(this.model.first_name)} ${displayValue(this.model.last_name)}</p>
+            <p style="margin: 2px 0; font-size: 12px;"><strong>Phone:</strong> ${displayValue(this.model.phone_number)}</p>
+            <p style="margin: 2px 0; font-size: 12px;"><strong>Email:</strong> ${displayValue(this.model.email)}</p>
+            <p style="margin: 2px 0; font-size: 12px;"><strong>Address:</strong> ${displayValue(this.model.address)}</p>
           </div>
-
-          <h3 style="margin-top: 30px; margin-bottom: 10px;">Warranty Status</h3>
-          <p style="margin: 5px 0;">${warrantyStatusCheckboxes.warranty}</p>
-          <p style="margin: 5px 0;">${warrantyStatusCheckboxes.out_of_warranty}</p>
-          <p style="margin: 5px 0;">${warrantyStatusCheckboxes.chargeable}</p>
-
-          <h3 style="margin-top: 30px; margin-bottom: 10px;">CHECKLIST</h3>
-          <p style="margin: 5px 0;"><strong>Original Box:</strong> ${displayValue(this.productInfo.orig_box)}</p>
-          <p style="margin: 5px 0;"><strong>General Box:</strong> ${displayValue(this.productInfo.gen_box)}</p>
-          <p style="margin: 5px 0;"><strong>Manual:</strong> ${displayValue(this.productInfo.manual)}</p>
-          <p style="margin: 5px 0;"><strong>Driver CD:</strong> ${displayValue(this.productInfo.driver_cd)}</p>
-          <p style="margin: 5px 0;"><strong>SATA Cable:</strong> ${displayValue(this.productInfo.sata_cable)}</p>
-          <p style="margin: 5px 0;"><strong>SIM Card/Memory Card (GB):</strong> ${displayValue(this.productInfo.simcard_memorycard_gb)}</p>
-          <p style="margin: 5px 0;"><strong>Remote Control:</strong> ${displayValue(this.productInfo.remote_control)}</p>
-          <p style="margin: 5px 0;"><strong>Receiver:</strong> ${displayValue(this.productInfo.receiver)}</p>
-          <p style="margin: 5px 0;"><strong>Backplate/Metal Plate:</strong> ${displayValue(this.productInfo.backplate_metal_plate)}</p>
-          <p style="margin: 5px 0;"><strong>AC Adapter:</strong> ${displayValue(this.productInfo.ac_adapter)}</p>
-          <p style="margin: 5px 0;"><strong>Battery Pack:</strong> ${displayValue(this.productInfo.battery_pack)}</p>
-          <p style="margin: 5px 0;"><strong>Lithium Battery:</strong> ${displayValue(this.productInfo.lithium_battery)}</p>
-          <p style="margin: 5px 0;"><strong>VGA Cable:</strong> ${displayValue(this.productInfo.vga_cable)}</p>
-          <p style="margin: 5px 0;"><strong>DVI Cable:</strong> ${displayValue(this.productInfo.dvi_cable)}</p>
-          <p style="margin: 5px 0;"><strong>Display Cable:</strong> ${displayValue(this.productInfo.display_cable)}</p>
-          <p style="margin: 5px 0;"><strong>Bag (PN):</strong> ${displayValue(this.productInfo.bag_pn)}</p>
-          <p style="margin: 5px 0;"><strong>Swivel Base:</strong> ${displayValue(this.productInfo.swivel_base)}</p>
-          <p style="margin: 5px 0;"><strong>HDD:</strong> ${displayValue(this.productInfo.hdd)}</p>
-          <p style="margin: 5px 0;"><strong>RAM Brand:</strong> ${displayValue(this.productInfo.ram_brand)}</p>
-          <p style="margin: 5px 0;"><strong>RAM Size (GB):</strong> ${displayValue(this.productInfo.ram_size_gb)}</p>
-          <p style="margin: 5px 0;"><strong>Power Cord Quantity:</strong> ${displayValue(this.productInfo.power_cord_qty)}</p>
-          <p style="margin: 5px 0;"><strong>Printer Cable Quantity:</strong> ${displayValue(this.productInfo.printer_cable_qty)}</p>
-          <p style="margin: 5px 0;"><strong>USB Cable Quantity:</strong> ${displayValue(this.productInfo.usb_cable_qty)}</p>
-          <p style="margin: 5px 0;"><strong>Paper Tray Quantity:</strong> ${displayValue(this.productInfo.paper_tray_qty)}</p>
-          <p style="margin: 5px 0;"><strong>Screw Quantity:</strong> ${displayValue(this.productInfo.screw_qty)}</p>
-          <p style="margin: 5px 0;"><strong>Jack Cable Quantity:</strong> ${displayValue(this.productInfo.jack_cable_qty)}</p>
-
-          <p style="margin-top: 30px;"><strong>Detailed Customer Problem/Error:</strong> ${displayValue(this.model.description)}</p>
+          <div style="width: 48%;">
+            <h3 style="font-size: 14px; margin-bottom: 5px;">Product Information</h3>
+            <p style="margin: 2px 0; font-size: 12px;"><strong>Brand:</strong> ${displayValue(this.productInfo.brand)}</p>
+            <p style="margin: 2px 0; font-size: 12px;"><strong>Model:</strong> ${displayValue(this.productInfo.model)}</p>
+            <p style="margin: 2px 0; font-size: 12px;"><strong>Serial:</strong> ${displayValue(this.productInfo.serial_number)}</p>
+            <p style="margin: 2px 0; font-size: 12px;"><strong>Date:</strong> ${displayValue(this.productInfo.purchase_date)}</p>
+          </div>
         </div>
+
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+          <div style="width: 48%;">
+            <h3 style="font-size: 14px; margin-bottom: 5px;">Warranty Status</h3>
+            <p style="margin: 2px 0; font-size: 12px;">${warrantyStatusCheckboxes.warranty}</p>
+            <p style="margin: 2px 0; font-size: 12px;">${warrantyStatusCheckboxes.out_of_warranty}</p>
+            <p style="margin: 2px 0; font-size: 12px;">${warrantyStatusCheckboxes.chargeable}</p>
+          </div>
+          <div style="width: 48%;">
+            <h3 style="font-size: 14px; margin-bottom: 5px;">Customer Problem/Error</h3>
+            <p style="margin: 2px 0; font-size: 12px;">${displayValue(this.model.description)}</p>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 5px;">
+          <h3 style="font-size: 14px; margin-bottom: 5px;">Checklist</h3>
+          <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; font-size: 12px;">
+            <p style="margin: 2px 0;"><strong>Original Box:</strong> ${displayValue(this.productInfo.orig_box)}</p>
+            <p style="margin: 2px 0;"><strong>General Box:</strong> ${displayValue(this.productInfo.gen_box)}</p>
+            <p style="margin: 2px 0;"><strong>Manual:</strong> ${displayValue(this.productInfo.manual)}</p>
+            <p style="margin: 2px 0;"><strong>Driver CD:</strong> ${displayValue(this.productInfo.driver_cd)}</p>
+            <p style="margin: 2px 0;"><strong>SATA Cable:</strong> ${displayValue(this.productInfo.sata_cable)}</p>
+            <p style="margin: 2px 0;"><strong>SIM Card/Memory Card (GB):</strong> ${displayValue(this.productInfo.simcard_memorycard_gb)}</p>
+            <p style="margin: 2px 0;"><strong>Remote Control:</strong> ${displayValue(this.productInfo.remote_control)}</p>
+            <p style="margin: 2px 0;"><strong>Receiver:</strong> ${displayValue(this.productInfo.receiver)}</p>
+            <p style="margin: 2px 0;"><strong>Backplate/Metal Plate:</strong> ${displayValue(this.productInfo.backplate_metal_plate)}</p>
+            <p style="margin: 2px 0;"><strong>AC Adapter:</strong> ${displayValue(this.productInfo.ac_adapter)}</p>
+            <p style="margin: 2px 0;"><strong>Battery Pack:</strong> ${displayValue(this.productInfo.battery_pack)}</p>
+            <p style="margin: 2px 0;"><strong>Lithium Battery:</strong> ${displayValue(this.productInfo.lithium_battery)}</p>
+            <p style="margin: 2px 0;"><strong>VGA Cable:</strong> ${displayValue(this.productInfo.vga_cable)}</p>
+            <p style="margin: 2px 0;"><strong>DVI Cable:</strong> ${displayValue(this.productInfo.dvi_cable)}</p>
+            <p style="margin: 2px 0;"><strong>Display Cable:</strong> ${displayValue(this.productInfo.display_cable)}</p>
+            <p style="margin: 2px 0;"><strong>Bag (PN):</strong> ${displayValue(this.productInfo.bag_pn)}</p>
+            <p style="margin: 2px 0;"><strong>Swivel Base:</strong> ${displayValue(this.productInfo.swivel_base)}</p>
+            <p style="margin: 2px 0;"><strong>HDD:</strong> ${displayValue(this.productInfo.hdd)}</p>
+            <p style="margin: 2px 0;"><strong>RAM Brand:</strong> ${displayValue(this.productInfo.ram_brand)}</p>
+            <p style="margin: 2px 0;"><strong>RAM Size (GB):</strong> ${displayValue(this.productInfo.ram_size_gb)}</p>
+            <p style="margin: 2px 0;"><strong>Power Cord Quantity:</strong> ${displayValue(this.productInfo.power_cord_qty)}</p>
+            <p style="margin: 2px 0;"><strong>Printer Cable Quantity:</strong> ${displayValue(this.productInfo.printer_cable_qty)}</p>
+            <p style="margin: 2px 0;"><strong>USB Cable Quantity:</strong> ${displayValue(this.productInfo.usb_cable_qty)}</p>
+            <p style="margin: 2px 0;"><strong>Paper Tray Quantity:</strong> ${displayValue(this.productInfo.paper_tray_qty)}</p>
+            <p style="margin: 2px 0;"><strong>Screw Quantity:</strong> ${displayValue(this.productInfo.screw_qty)}</p>
+            <p style="margin: 2px 0;"><strong>Jack Cable Quantity:</strong> ${displayValue(this.productInfo.jack_cable_qty)}</p>
+          </div>
+        </div>
+      </div>
       `;
 
       const element = document.createElement('div');
@@ -530,11 +551,25 @@ h2 {
     }
   }
 
+  .whole-checklist {
+    display: flex;
+    gap: 30px; 
+
+    .checklist {
+      width: 100%;
+    }
+
+    .checklist:nth-child(2),
+    .checklist:nth-child(3) {
+      padding-top: 57px;
+    }
+  }
+
   .custom-checkboxes {
     display: flex;
     gap: 20px;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    margin-top: 6px;
+    margin-bottom: 7px;
     
     .form-check {
       display: inline-flex;

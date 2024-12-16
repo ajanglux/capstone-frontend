@@ -18,10 +18,10 @@
                 <i class='bx bx-list-ul'></i>
                 <span class="text">Inquiries</span>
             </router-link>
-            <router-link class="button" active-class="active" to="/service-list">
+            <!-- <router-link class="button" active-class="active" to="/service-list">
                 <i class='bx bx-cog' ></i>
                 <span class="text">Services</span>
-            </router-link>
+            </router-link> -->
         </div>
     </aside>
 </template>

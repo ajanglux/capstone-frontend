@@ -8,43 +8,48 @@
             </div>
 
             <!-- Menu Icon for small screens -->
-            <div class="menu-icon" @click="toggleDropdown">
+            <div v-if="!isViewTerms" class="menu-icon" @click="toggleDropdown">
                 <i :class="isDropdownOpen ? 'bx bx-x' : 'bx bx-menu'"></i>
             </div>
         </div>
 
-        <div class="button-container" :class="{ open: isDropdownOpen }">
+        <div v-if="!isViewTerms" class="button-container" :class="{ open: isDropdownOpen }">
             <router-link class="button" active-class="active" to="/" @click="closeDropdown">
-                <span class="text">Home</span>
+            <span class="text">Home</span>
             </router-link>
             <router-link class="button" active-class="active" to="/services" @click="closeDropdown">
-                <span class="text">Services</span>
+            <span class="text">Services</span>
             </router-link>
             <router-link class="button" active-class="active" to="/checkstatus" @click="closeDropdown">
-                <span class="text">Status</span>
+            <span class="text">Status</span>
             </router-link>
             <router-link class="button" active-class="active" to="/contact" @click="closeDropdown">
-                <span class="text">Contact</span>
+            <span class="text">Contact</span>
             </router-link>
         </div>
+
     </header>
 
     <!-- Overlay for dark effect -->
-    <div class="overlay" v-if="isDropdownOpen" @click.stop="closeDropdown"></div>
+    <div v-if="isDropdownOpen && !isViewTerms" class="overlay" @click.stop="closeDropdown"></div>
 </div> 
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
 
 const isDropdownOpen = ref(false);
+const route = useRoute();
 
 const toggleDropdown = () => {
-    isDropdownOpen.value = !isDropdownOpen.value;
+  isDropdownOpen.value = !isDropdownOpen.value;
 };
 
 const closeDropdown = () => {
-    isDropdownOpen.value = false;
+  isDropdownOpen.value = false;
 };
+
+const isViewTerms = computed(() => route.path === '/terms-and-conditions');
 </script>
 
 <style lang="scss" scoped>

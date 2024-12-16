@@ -102,6 +102,12 @@ const routes = [
     component: () => import('../components/UserSide/ContactUs.vue'),
     beforeEnter: [checkIfNotLogged],
   },
+  {
+    path: '/terms-and-conditions',
+    name: 'terms-and-conditions',
+    component: () => import('../components/UserSide/TermsAndConditions.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
 ];
 
 function checkIfLogged(to, from, next) {

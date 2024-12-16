@@ -16,11 +16,22 @@
             <input v-model="customerDetail.last_name" type="text" id="lastName" name="lastName" placeholder="Lastname" required style="text-transform: capitalize;"/>
           </div>
           <input v-model="customerDetail.phone_number" type="text" id="phone" name="phone" required @input="validatePhoneNumber"placeholder="Phone Number"/>
-          <p v-if="phoneNumberError" class="error-message">Phone number must be exactly 11 digits and numeric.</p>
           <input v-model="customerDetail.email" type="email" id="email" name="email" placeholder="Email" />
           <input v-model="customerDetail.address" type="text" id="address" name="address" placeholder="Barangay / Street or Municipality / City or Province" required @input="validateAddress" style="text-transform: capitalize;"/>
-          <p v-if="addressError" class="error-message">Address must include Barangay, Street, and City separated by comma (,).</p>
+          <p v-if="addressError" class="error-message">Address must include Barangay, Street, and City separated by comma (,)</p>
+
+          <div class="terms-checkbox">
+            <input type="checkbox" v-model="isTermsChecked" id="termsCheckbox" @input="validateTerms" />
+              <a 
+                class="button" 
+                href="/terms-and-conditions" 
+                target="_blank" 
+                rel="noopener noreferrer">
+                Terms and Conditions
+              </a>
+          </div>
           <button type="submit">Submit</button>
+          
         </div>
       </form>
     </div>
@@ -35,7 +46,11 @@
       <div class="card">
         <div class="info">
           <p>Email:</p>
-          <h1><a href="mailto:raymart.williams@brandcomph.com">raymart.williams@brandcomph.com</a></h1>
+          <h1>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=raymart.williams@brandcomph.com" target="_blank">
+              raymart.williams@brandcomph.com
+            </a>
+          </h1>
         </div>
       </div>
 
@@ -49,7 +64,7 @@
       <div class="card">
         <div class="info">
           <p>Address:</p>
-          <h1>Robtess Tower 1 Unit A #9 Hansen 12 street East Tapinac Olongapo City, Zambales (store)</h1>
+          <h1 class="address">Robtess Tower 1 Unit A #9 Hansen 12 street East Tapinac Olongapo City, Zambales (store)</h1>
         </div>
       </div>
     </div>
@@ -57,11 +72,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
-import SuccessModal from '../layouts/SuccessModal.vue';
 import { useToast } from 'vue-toastification'; 
+import { useRoute } from 'vue-router';
 
 const customerDetail = ref({
   first_name: '',
@@ -72,10 +87,16 @@ const customerDetail = ref({
   description: '',
 });
 
-const showSuccessModal = ref(false);
+const route = useRoute();
 const addressError = ref(false);
 const descriptionError = ref(false);
 const toast = useToast();
+const isTermsChecked = ref(false);
+const termsError = ref(false);
+
+const validateTerms = () => {
+  termsError.value = !isTermsChecked.value;
+};
 
 const validatePhoneNumber = (event) => {
   const input = event.target;
@@ -115,6 +136,12 @@ const saveCustomerDetail = async () => {
     return;
   }
 
+  validateTerms();
+  if (termsError.value) {
+    toast.error('You must agree to the terms and conditions.');
+    return;
+  }
+
   try {
     await axios.post(`${BASE_URL}/customer-details`, customerDetail.value);
     toast.success("Details saved successfully", { timeout: 3000 })
@@ -137,6 +164,12 @@ const resetForm = () => {
   addressError.value = false;
   descriptionError.value = false;
 };
+
+onMounted(() => {
+  if (route.query.service) {
+    customerDetail.value.description = route.query.service;
+  }
+});
 </script>
 
   
@@ -152,6 +185,7 @@ const resetForm = () => {
   justify-content: center;
   align-items: center;
   padding: 0;
+  padding-bottom: 50px;
   z-index: 1;
 }
 
@@ -204,6 +238,26 @@ const resetForm = () => {
 
         }
 
+        .terms-checkbox {
+          display: flex;
+
+          input[type="checkbox"]:checked {
+            accent-color: var(--header);
+            padding-bottom: -30px;
+          }
+
+          a {
+            font-size: 14px;
+            padding-left: 5px;
+            padding-bottom: 18px;
+            color: var(--light);
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+
         button {
           background-color: var(--main);
           color: white;
@@ -241,7 +295,7 @@ const resetForm = () => {
   padding: 20px 17pc 0 17pc;
 
   .card {
-    width: 100%;    
+    width: 90%;    
     padding: 20px;
     border-radius: 5px;
     background-color: var(--light);
@@ -264,7 +318,7 @@ const resetForm = () => {
       }
       a:hover {
         color: var(--main);
-}
+      }
 
       
       p {
@@ -272,10 +326,20 @@ const resetForm = () => {
       }
 
       h1 {
-        font-size: 11px;
+        font-size: 13px;
+      }
+
+      .address {
+        font-size: 12px;
       }
     }
   }
+
+  .card:nth-child(3) {
+    flex-basis: 100%;
+  }
+
+  
 }
 
 textarea {
@@ -331,7 +395,12 @@ input:hover, textarea:hover {
 }
 
 @media (max-width: 990px) {
+  .background-container {
+    height: auto;
+    width: 100%;
+  }
   .con-container {
+    margin: 0 5pc 2pc 5pc;
     .contact-form {
       .contact-info {
         h2 { font-size: 20px; }
@@ -340,15 +409,17 @@ input:hover, textarea:hover {
   }
 
   .con-info {
+    margin-left: 5pc;
+    margin-right: 5pc;
     h2 { font-size: 20px; }
   }
 
   .cards {
-    padding: 20px 10pc 0 10pc;
+    padding: 20px 5pc 0 5pc;
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 700px) {
   .background-container {
     height: auto;
     padding-bottom: 30px;

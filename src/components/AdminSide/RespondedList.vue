@@ -23,8 +23,8 @@
                 <th>Email</th>
                 <th>Contact No.</th>
                 <th>Address</th>
+                <th>Description</th>
                 <th>Status</th>
-                <!-- <th>Actions</th> -->
               </tr>
             </thead>
             <tbody>
@@ -34,20 +34,8 @@
                 <td>{{ repair.email }}</td>
                 <td>{{ repair.phone_number }}</td>
                 <td>{{ repair.address }}</td>
+                <td>{{ repair.description }}</td>
                 <td>{{ repair.status || 'PENDING' }}</td>
-                <!-- <td class="actions">
-                  <div class="custom-select">
-                    <div class="select-icon">
-                      <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
-                        <option value="">Select</option>
-                        <option value="view">View</option>
-                        <option value="Incomplete" :disabled="repair.status !== 'pending'">Add to Repair</option>
-                        <option value="Responded">Responded</option>
-                        <option value="delete">Delete</option>
-                      </select>
-                    </div>
-                  </div>
-                </td> -->
               </tr>
               <tr v-if="paginatedRepairs.length === 0">
                 <td colspan="7"><strong>No Responded found.</strong></td>

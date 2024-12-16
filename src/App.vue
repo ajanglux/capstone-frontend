@@ -59,6 +59,9 @@ export default {
       const store = useAuthStore();
       return store.isAdmin;
     },
+    isViewTerms() {
+      return this.$route.path === '/terms-and-condtions';
+    },
   },
 };
 </script>
