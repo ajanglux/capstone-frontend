@@ -2,8 +2,8 @@
   <div class="container">
     <div class="signup-card-wrapper">
       <div class="signup-card">
-        <div class="card-header text-center bg-white">
-          <h3 class="mt-2">Register</h3>
+        <div class="header">
+          <h3>Register</h3>
         </div>
         <div class="card-body">
           <form @submit.prevent="registerUser">
@@ -31,14 +31,37 @@
                 class="form-control rounded-0"
                 required>
             </div>
+
+            <div class="terms-checkbox">
+              <input type="checkbox" v-model="isTermsChecked" id="termsCheckbox" @input="validateTerms" />
+                <a  
+                  href="/terms-and-conditions" 
+                  target="_blank" 
+                  rel="noopener noreferrer">
+                  Terms and Conditions
+                </a>
+                <a>&</a>
+                <a  
+                  href="/terms-and-conditions" 
+                  target="_blank" 
+                  rel="noopener noreferrer">
+                  Privacy Policy
+                </a>
+            </div>
+
             <div class="form-group mb-3 text-center">
               <Spinner v-if="data.loading" />
               <button v-else type="submit" class="btn btn-dark btn-sm rounded-0 w-100">
                 Submit
-              </button>
+              </button> <br>
+              <router-link to="/login">Login</router-link> <br>
+              <router-link to="/">Go Back</router-link>
             </div>
           </form>
         </div>
+      </div>
+      <div class="logo">
+        <img src="/src/assets/techfix.png" >
       </div>
     </div>
   </div>
@@ -46,19 +69,23 @@
 
 
 <script setup>
-  import { onUnmounted, reactive } from "vue"
+  import { ref, onUnmounted, reactive } from "vue"
   import router from '../../router'
   import { useAuthStore } from '../../stores/useAuthStore.js'
   import axios from 'axios'
   import { useToast } from "vue-toastification"
   import { BASE_URL } from '../../helpers/baseUrl'
-  import ValidationErrors from '../layouts/ValidationErrors.vue'
   import Spinner from '../layouts/Spinner.vue'
 
   const toast = useToast()
-  
   const store = useAuthStore()
+  const isTermsChecked = ref(false);
+  const termsError = ref(false);
   
+  const validateTerms = () => {
+    termsError.value = !isTermsChecked.value;
+  };
+
   const data = reactive({
     loading: false,
     user: {
@@ -71,16 +98,24 @@
   const registerUser = async () => {
     store.clearErrors()
     data.loading = true
+
+    validateTerms();
+    if (termsError.value) {
+      toast.error('You must agree to the terms and conditions.');
+      data.loading = false;
+      return;
+    }
+
     try {
       const response = await axios.post(`${BASE_URL}/user/register`, data.user);
-      data.loading = false
+      data.loading = false;
       toast.success(response.data.message, {
         timeout: 3000
       })
-      router.push('/admin-login')
+      router.push('/login')
     } catch (error) {
-      data.loading = false
-      if(error.response.status === 422) {
+      data.loading = false; 
+      if (error.response?.status === 422) {
         store.setErrors(error.response.data.errors)
       }
       console.log(error);
@@ -92,100 +127,128 @@
 </script>
 
 <style lang="scss" scoped>
+/* Container */
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: rgb(12, 68, 110); /* Blue background */
+  background-color: rgb(12, 68, 110);
   padding: 30px;
 }
 
+/* Login Card Wrapper */
 .signup-card-wrapper {
-  background-color: #f0f4f8; /* Light blue-gray background behind the card */
-  padding: 60px;
+  display: flex;
   border-radius: 12px;
-  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
-  max-width: 800px; /* Widen the overall wrapper */
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  width: 60%;
+}
+
+/* Login Card */
+.signup-card {
   width: 100%;
-}
-
-.signup-card {
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  background-color: white;
+  background-color: var(--light);
   padding: 60px;
+  align-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
 
-.signup-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.15);
-}
-
-input::placeholder {
-  color: #999;
-  font-size: 14px;
-}
-
-input {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-input:focus {
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25) !important;
-  border-color: #007bff !important;
-}
-
-.btn {
-  letter-spacing: 1px;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  background-color: #333;
-  color: white;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  border: none;
-}
-
-.btn:hover {
-  background-color: #555;
-  transform: translateY(-2px);
-}
-
-.form-control {
-  padding: 12px;
-  font-size: 15px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-}
-
-.card-header h3 {
-  font-weight: bold;
-  font-size: 3.5rem; /* Double the original size */
-  letter-spacing: 0.5px;
-  margin-bottom: 20px;
-}
-
-.text-center {
-  text-align: center;
-}
-
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
+  .form-control {
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
   }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
+
+  .header h3 {
+    font-weight: 700;
+    font-size: 50px;
+    letter-spacing: 0.5px;
+    margin-bottom: 30px;
+    color: var(--main);
+    text-align: center;
+    font-family: 'Poppins';
+  }
+
+  .text-center {
+    text-align: center;
+
+  }
+
+  input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  input::placeholder {
+    color: #999;
+    font-size: 14px;
+  }
+
+  input:focus {
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.25) !important;
+    border-color: #007bff !important;
+  }
+
+  .btn {
+    letter-spacing: 1px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 50px;
+    background-color: var(--main);
+    color: white;
+    width: 50%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+  }
+
+  .btn:hover {
+    background-color: var(--main-hover);
+    transform: translateY(-2px);
+  }
+
+  .terms-checkbox {
+    display: flex;
+    height: 50%;
+    width: 20%;
+
+    input[type="checkbox"]:checked {
+      accent-color: var(--header);
+      padding-bottom: -10px;
+    }
+
+    a {
+      font-size: 10px;
+      padding-left: 5px;
+      padding-top: 9px;
+      padding-bottom: 18px;
+      color: var(--header);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+  background-color: var(--main);
+  align-content: space-evenly;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  img {
+    width: 100%;
   }
 }
 
-.signup-card {
-  animation: slideIn 0.6s ease-out;
-}
+
 </style>

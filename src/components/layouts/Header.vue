@@ -23,9 +23,9 @@
             <router-link class="button" active-class="active" to="/checkstatus" @click="closeDropdown">
             <span class="text">Status</span>
             </router-link>
-            <router-link class="button" active-class="active" to="/contact" @click="closeDropdown">
+            <!-- <router-link class="button" active-class="active" to="/contact" @click="closeDropdown">
             <span class="text">Contact</span>
-            </router-link>
+            </router-link> -->
         </div>
 
     </header>

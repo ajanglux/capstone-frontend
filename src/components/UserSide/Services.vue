@@ -114,34 +114,27 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { BASE_URL } from '../../helpers/baseUrl';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '../../stores/useAuthStore';
+import { useToast } from 'vue-toastification'; 
 
 const router = useRouter();
-const services = ref([]);
-const errors = ref(null);
+const authStore = useAuthStore();
+const toast = useToast();
 
-const fetchServices = async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/services`);
-    services.value = response.data.data;
-  } catch (error) {
-    errors.value = error.response?.data?.message || 'Error fetching services';
+const goToContactUs = (serviceTitle) => {
+  if (!authStore.isAuthenticated) {
+    // Show popup and redirect to login page if not logged in
+    toast.error('Please log in before proceeding', { timeout: 3000 });
+    router.push('/login'); // Redirect to login or registration page
+  } else {
+    router.push({
+      name: 'contact',
+      query: { service: serviceTitle },
+    });
   }
 };
 
-const goToContactUs = (serviceTitle) => {
-  router.push({
-    name: 'contact', // Ensure the route name matches your router configuration
-    query: { service: serviceTitle }, // Pass the service title as a query parameter
-  });
-};
-
-onMounted(() => {
-  fetchServices();
-});
 </script>
 
 <style lang="scss" scoped>

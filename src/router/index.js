@@ -8,12 +8,25 @@ const routes = [
     component: () => import('../components/UserSide/LandingPage.vue'),
     beforeEnter: [checkIfNotLogged],
   },
-  // {
-  //   path: "/register",
-  //   name: "register",
-  //   component: () => import('../components/auth/Register.vue'),
-  //   beforeEnter: [checkIfNotLogged],
-  // },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import('../components/auth/Register.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../components/auth/Login.vue'),
+    beforeEnter: (to, from, next) => {
+      const store = useAuthStore();
+      if (store.access_token) {
+        next('/home');
+      } else {
+        next();
+      }
+    },
+  },
   {
     path: "/admin-login",
     name: "admin-login",
@@ -108,6 +121,22 @@ const routes = [
     component: () => import('../components/UserSide/TermsAndConditions.vue'),
     beforeEnter: [checkIfNotLogged],
   },
+
+  //AUTH
+
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('../components/UserSide/Home.vue'),
+    beforeEnter: (to, from, next) => {
+      const store = useAuthStore();
+      if (!store.access_token || store.user?.role !== 0) {
+        next('/login'); // Redirect if not logged in or not a regular user
+      } else {
+        next(); // Allow navigation
+      }
+    },
+  },
 ];
 
 function checkIfLogged(to, from, next) {
@@ -134,6 +163,15 @@ function checkIfAdmin(to, from, next) {
     next(); 
   } else {
     next('/admin-login'); 
+  }
+}
+
+function checkIfUser(to, from, next) {
+  const store = useAuthStore();
+  if (store.user?.role === 0) {
+    next(); 
+  } else {
+    next('/login'); 
   }
 }
 

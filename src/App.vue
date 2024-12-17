@@ -1,11 +1,21 @@
 <template>
   <v-app>
     <div class="app">
-      <template v-if="!isRegisterPage && !isAdminLoginPage">
+      <template v-if="!isRegisterPage && !isAdminLoginPage && !isLoginPage">
         <template v-if="isAdmin">
           <AdminSidebar />
           <div class="headerAndContent">
             <AdminHeader />
+            <router-view v-slot="{ Component }">
+              <transition name="fade" mode="out-in">
+                <Component :is="Component" />
+              </transition>
+            </router-view>
+          </div>
+        </template>
+        <template v-else-if="isHomePage">
+          <div class="headerAndContent">
+            <UserHeader />
             <router-view v-slot="{ Component }">
               <transition name="fade" mode="out-in">
                 <Component :is="Component" />
@@ -36,6 +46,7 @@
 import Header from './components/layouts/Header.vue';
 import AdminHeader from './components/layouts/AdminHeader.vue';
 import AdminSidebar from './components/layouts/AdminSideBar.vue';
+import UserHeader from './components/layouts/UserHeader.vue';
 import { useAuthStore } from './stores/useAuthStore.js';
 
 export default {
@@ -44,11 +55,23 @@ export default {
     Header,
     AdminHeader,
     AdminSidebar,
+    UserHeader,
   },
   computed: {
     isRegisterPage() {
       return this.$route.path === '/register';
     },
+    isLoginPage() {
+      return this.$route.path === '/login';
+    },
+    isHomePage() {
+      return this.$route.path === '/home';
+    },
+    isViewTerms() {
+      return this.$route.path === '/terms-and-condtions';
+    },
+
+    // ADMIN
     isLandingPage() {
       return this.$route.path === '/';
     },
@@ -58,9 +81,6 @@ export default {
     isAdmin() {
       const store = useAuthStore();
       return store.isAdmin;
-    },
-    isViewTerms() {
-      return this.$route.path === '/terms-and-condtions';
     },
   },
 };

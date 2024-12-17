@@ -47,7 +47,6 @@
   import { useToast } from 'vue-toastification'
   import axios from 'axios'
   import router from '../../router'
-  import ValidationErrors from '../layouts/ValidationErrors.vue'
   import Spinner from '../layouts/Spinner.vue'
   import { BASE_URL } from '../../helpers/baseUrl'
   
