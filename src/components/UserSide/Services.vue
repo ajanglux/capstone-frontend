@@ -2,18 +2,6 @@
   <div class="content-container">
     <h1>WE OFFER</h1>
 
-    <!-- <div v-else class="cards">
-      <div v-for="service in services" :key="service.id" class="card">
-        <div class="img">
-          <img :src="service.image_url" alt="Service Image" class="img-thumbnail" />
-        </div>
-        <div class="info">
-          <h2>{{ service.service_title }}</h2>
-          <p>{{ service.description }}</p>
-        </div>
-      </div>
-    </div> -->
-
     <div class="cards">
       <div class="side-card">
         <div
@@ -124,9 +112,8 @@ const toast = useToast();
 
 const goToContactUs = (serviceTitle) => {
   if (!authStore.isAuthenticated) {
-    // Show popup and redirect to login page if not logged in
     toast.error('Please log in before proceeding', { timeout: 3000 });
-    router.push('/login'); // Redirect to login or registration page
+    router.push('/login');
   } else {
     router.push({
       name: 'contact',
