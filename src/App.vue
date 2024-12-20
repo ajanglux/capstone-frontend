@@ -13,7 +13,7 @@
             </router-view>
           </div>
         </template>
-        <template v-else-if="isHomePage">
+        <template v-else-if="isUser">
           <div class="headerAndContent">
             <UserHeader />
             <router-view v-slot="{ Component }">
@@ -58,30 +58,30 @@ export default {
     UserHeader,
   },
   computed: {
+    isUser() {
+      const store = useAuthStore();
+      return store.isUser; // correctly checks if user is a regular user
+    },
     isRegisterPage() {
       return this.$route.path === '/register';
     },
     isLoginPage() {
       return this.$route.path === '/login';
     },
-    isHomePage() {
-      return this.$route.path === '/home';
-    },
     isViewTerms() {
       return this.$route.path === '/terms-and-condtions';
     },
-
     // ADMIN
+    isAdmin() {
+      const store = useAuthStore();
+      return store.isAdmin; // correctly checks if user is admin
+    },
     isLandingPage() {
       return this.$route.path === '/';
     },
     isAdminLoginPage() {
       return this.$route.path === '/admin-login';
-    },
-    isAdmin() {
-      const store = useAuthStore();
-      return store.isAdmin;
-    },
+    }
   },
 };
 </script>

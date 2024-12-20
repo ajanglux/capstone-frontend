@@ -104,15 +104,9 @@ const routes = [
     beforeEnter: [checkIfNotLogged],
   },
   {
-    path: '/checkstatus',
-    name: 'checkstatus',
+    path: '/status',
+    name: 'status',
     component: () => import('../components/UserSide/CheckStatus.vue'),
-    beforeEnter: [checkIfNotLogged],
-  },
-  {
-    path: '/contact',
-    name: 'contact',
-    component: () => import('../components/UserSide/ContactUs.vue'),
     beforeEnter: [checkIfNotLogged],
   },
   {
@@ -128,14 +122,13 @@ const routes = [
     path: '/home',
     name: 'home',
     component: () => import('../components/UserSide/Home.vue'),
-    beforeEnter: (to, from, next) => {
-      const store = useAuthStore();
-      if (!store.access_token || store.user?.role !== 0) {
-        next('/login'); // Redirect if not logged in or not a regular user
-      } else {
-        next(); // Allow navigation
-      }
-    },
+    beforeEnter: [checkIfLogged, checkIfUser],
+  },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: () => import('../components/UserSide/ContactUs.vue'),
+    beforeEnter: [checkIfLogged, checkIfUser],
   },
 ];
 
