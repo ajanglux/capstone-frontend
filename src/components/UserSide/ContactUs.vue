@@ -39,7 +39,7 @@
 
     <div class="con-info">
       <h2>Contact Us</h2>
-      <p>For any questions, inquiries, or assistance, feel free to reach out to us. Our team is here to help and ensure you have the best experience with TechFix!</p>
+      <p>For further questions, inquiries, or assistance, feel free to reach out to us. Our team is here to help and ensure you have the best experience with TechFix!</p>
     </div>
 
     <div class="cards">

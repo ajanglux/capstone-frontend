@@ -111,7 +111,7 @@ const toast = useToast();
 
 const goToContactUs = (serviceTitle) => {
   if (!authStore.isAuthenticated) {
-    toast.error('Please log in before proceeding', { timeout: 3000 });
+    toast.error('Please log in to proceed', { timeout: 3000 });
     router.push('/login');
   } else {
     router.push({

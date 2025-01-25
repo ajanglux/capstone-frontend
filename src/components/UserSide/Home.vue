@@ -57,7 +57,7 @@
                     </div>
                     </div>
 
-            <div class="card1">
+            <div class="card2">
                 <div class="content-container">
                     <h1>WE OFFER</h1>
 
@@ -188,6 +188,7 @@ const goToContactUs = (serviceTitle) => {
 .cards {
     display: flex;
     margin-top: 6pc;
+    margin-bottom: 2pc;
     gap: 30px;
     width: 100%;
     align-items: stretch;
@@ -288,46 +289,56 @@ const goToContactUs = (serviceTitle) => {
         }
 
     }
-
-    .card1 {
+    .card2 {
         flex: 1;
         padding: 25px;
         color: var(--light2);
         transition: all 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
-        background-color: var(--main-hover);
+        background-color: var(--header);
         border-radius: 20px;
-        cursor: pointer;
 
-        &:hover {
-            background-color: var(--main);
-            border-radius: 20px;
-        }
-
-        .img {
+        .card1 {
+            flex: 1;
+            padding: 25px;
+            color: var(--light2);
+            transition: all 0.3s ease-in-out;
             display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-bottom: 10px;
+            flex-direction: column;
+            background-color: var(--header);
+            border-radius: 20px;
+            cursor: pointer;
 
-            img {
-            width: 100%;
-            height: 330px;
-            object-fit: cover;
-            object-position: center;
-            align-content: center;
-            border-radius: 10px;
-            }
-        }
-
-        .info {
-            h2 {
-            font-size: 20px;
+            &:hover {
+                background-color: var(--main-hover);
+                border-radius: 20px;
             }
 
-            p {
-            font-size: 15px;
+            .img {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 10px;
+
+                img {
+                width: 100%;
+                height: 330px;
+                object-fit: cover;
+                object-position: center;
+                align-content: center;
+                border-radius: 10px;
+                }
+            }
+
+            .info {
+                h2 {
+                font-size: 20px;
+                }
+
+                p {
+                font-size: 15px;
+                }
             }
         }
     }

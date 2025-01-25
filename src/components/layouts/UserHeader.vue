@@ -22,10 +22,13 @@
               </router-link>
   
               <div class="dropdown">
-              <button class="username">
+              <button class="button">
                 <span> {{ store.user?.name || 'User' }} </span>
               </button>
               <div class="dropdown-content">
+                <router-link to="/profile" class="nav-link" @click="closeDropdown" style="cursor: pointer">
+                    Profile
+                </router-link>
                 <router-link to="#" class="nav-link" @click="userLogout" style="cursor: pointer">
                   <i class="bi bi-box-arrow-left"></i> Logout
                 </router-link>
