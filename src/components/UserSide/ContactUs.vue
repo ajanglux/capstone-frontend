@@ -11,27 +11,7 @@
         </div>
 
         <div class="contact-form-container">
-          <div class="name">
-            <input v-model="customerDetail.first_name" type="text" id="firstName" name="firstName" placeholder="Firstname" required style="text-transform: capitalize;"/>
-            <input v-model="customerDetail.last_name" type="text" id="lastName" name="lastName" placeholder="Lastname" required style="text-transform: capitalize;"/>
-          </div>
-          <input v-model="customerDetail.phone_number" type="text" id="phone" name="phone" required @input="validatePhoneNumber"placeholder="Phone Number"/>
-          <input v-model="customerDetail.email" type="email" id="email" name="email" placeholder="Email" />
-          <input v-model="customerDetail.address" type="text" id="address" name="address" placeholder="Barangay / Street or Municipality / City or Province" required @input="validateAddress" style="text-transform: capitalize;"/>
-          <p v-if="addressError" class="error-message">Address must include Barangay, Street, and City separated by comma (,)</p>
-
-          <div class="terms-checkbox">
-            <input type="checkbox" v-model="isTermsChecked" id="termsCheckbox" @input="validateTerms" />
-              <a 
-                class="button" 
-                href="/terms-and-conditions" 
-                target="_blank" 
-                rel="noopener noreferrer">
-                Terms and Conditions
-              </a>
-          </div>
           <button type="submit">Submit</button>
-          
         </div>
       </form>
     </div>
@@ -77,13 +57,14 @@ import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { useToast } from 'vue-toastification'; 
 import { useRoute } from 'vue-router';
+import { useAuthStore } from '../../stores/useAuthStore';
+import { getHeaderConfig } from '../../helpers/headerConfig';
+
+const authStore = useAuthStore();
+const userProfile = authStore.user;
 
 const customerDetail = ref({
-  first_name: '',
-  last_name: '',
-  phone_number: '',
-  email: '',
-  address: '',
+  user_id: authStore.user.id,
   description: '',
 });
 
@@ -94,51 +75,33 @@ const toast = useToast();
 const isTermsChecked = ref(false);
 const termsError = ref(false);
 
-const validateTerms = () => {
-  termsError.value = !isTermsChecked.value;
-};
-
-const validatePhoneNumber = (event) => {
-  const input = event.target;
-  let value = input.value.replace(/\D/g, '').trim(); 
-
-  if (value.length > 11) {
-    input.value = value.slice(0, 11);
-  } else {
-    input.value = value;
-  }
-};
-
-const validateAddress = () => {
-  const addressParts = customerDetail.value.address.split(',');
-  addressError.value = addressParts.length < 3;
-};
 
 const isAddressValid = computed(() => !addressError.value);
 
 const saveCustomerDetail = async () => {
   descriptionError.value = !customerDetail.value.description.trim();
 
-  const phoneNumber = customerDetail.value.phone_number ? customerDetail.value.phone_number.replace(/\D/g, '') : '';
-
-  if (phoneNumber.length !== 11) {
-    toast.error('Phone number must contain exactly 11 digits.');
+   // Check if profile data is incomplete
+  if (!userProfile.first_name || !userProfile.last_name || !userProfile.address || !userProfile.phone_number) {
+    toast.error('Please complete your profile information (First Name, Last Name, Address, Phone Number) before submitting.', { timeout: 4000 });
     return;
   }
 
-  if (!isAddressValid.value) {
-    toast.error('Address must include Barangay, Street, and City.');
+    // Check for existing inquiry with status not 'Completed'
+  try {
+    const response = await axios.get(`${BASE_URL}/customer-details/check-inquiries`, getHeaderConfig(authStore.access_token));
+    if (response.data && response.data.hasPendingInquiry) {
+      toast.error('You already have an ongoing inquiry that is not completed. Please wait until it is resolved.', { timeout: 4000 });
+      return;
+    }
+  } catch (error) {
+    console.error('Error checking existing inquiries:', error);
+    toast.error('An error occurred while checking existing inquiries.', { timeout: 4000 });
     return;
   }
 
   if (descriptionError.value) {
     toast.error('Description is required.');
-    return;
-  }
-
-  validateTerms();
-  if (termsError.value) {
-    toast.error('You must agree to the terms and conditions.');
     return;
   }
 
@@ -154,14 +117,8 @@ const saveCustomerDetail = async () => {
 
 const resetForm = () => {
   customerDetail.value = {
-    first_name: '',
-    last_name: '',
-    phone_number: '',
-    email: '',
-    address: '',
     description: ''
   };
-  addressError.value = false;
   descriptionError.value = false;
 };
 

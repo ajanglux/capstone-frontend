@@ -282,6 +282,7 @@ export default {
     return {
       errorList: [],
       model: {
+        user_id: '',
         first_name: '',
         last_name: '',
         phone_number: '',
@@ -368,8 +369,13 @@ export default {
         const response = await axios.get(`${BASE_URL}/customer-details/${this.id}/with-product-info`, getHeaderConfig(authStore.access_token));
         const customerDetail = response.data;
         this.model = customerDetail || {};
+        this.model.first_name = customerDetail.user.first_name;
+        this.model.last_name = customerDetail.user.last_name;
+        this.model.address = customerDetail.user.address;
+        this.model.email = customerDetail.user.email;
+        this.model.user_id = customerDetail.user.id;
         this.productInfo = customerDetail.product_infos[0] || {};
-        this.phoneNumber = this.model.phone_number;
+        this.phoneNumber = this.model.user.phone_number;
       } catch (error) {
         const toast = this.toast();
         toast.error('Failed to load repair details. Please try again.', { timeout: 3000 });
@@ -397,7 +403,11 @@ export default {
           return;
         }
 
-        const repairData = { ...this.model, status: 'On-Going' };
+        const repairData = { 
+        ...this.model, 
+        status: 'On-Going',
+        user_id: this.model.user_id
+         };
 
         const customerResponse = await axios.post(
           `${BASE_URL}/customer-details`,

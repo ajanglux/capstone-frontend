@@ -89,8 +89,14 @@ export default {
         const response = await axios.get(`${BASE_URL}/customer-details/${this.id}/with-product-info`, getHeaderConfig(authStore.access_token));
         const customerDetail = response.data;
         this.model = customerDetail || {};
+        this.model.first_name = customerDetail.user.first_name;
+        this.model.last_name = customerDetail.user.last_name;
+        this.model.address = customerDetail.user.address;
+        this.model.email = customerDetail.user.email;
+        this.model = customerDetail || {};
+        this.model = customerDetail || {};
         this.productInfo = customerDetail.product_infos[0] || {};
-        this.phoneNumber = this.model.phone_number;
+        this.phoneNumber = this.model.user.phone_number;
       } catch (error) {
         console.error('Error fetching repair details:', error);
         this.errorList = [error.response?.data?.message || error.message];

@@ -15,6 +15,7 @@
 
                         <div v-if="status">
                             <div class="timeline-container">
+                            <h1>Code: {{ code }}</h1>
                             <div class="timeline-item" :class="{ active: isActive('On-Going') }">
                                 <div class="timeline-dot"></div>
                                 <div class="timeline-content">
@@ -50,6 +51,11 @@
                                 <p v-else>Not Yet available</p>
                                 </div>
                             </div>
+                            <div v-if="comment && comment.trim()">
+                            <h3>Admin Comment</h3>
+                                <p class="comment-box">{{ comment }}</p>
+                            </div>
+
                             </div>
 
                         </div>
@@ -163,13 +169,30 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { useToast } from 'vue-toastification'; 
+import { BASE_URL } from '../../helpers/baseUrl';
+import { getHeaderConfig } from '../../helpers/headerConfig';
+
+const code = ref('');
+const status = ref(null);
+const onGoingUpdatedAt = ref(null);
+const finishedUpdatedAt = ref(null);
+const readyForPickupUpdatedAt = ref(null);
+const completedUpdatedAt = ref(null);
+const errorMessage = ref('');
+const isLoading = ref(false);
+const finishedStatusAvailable = ref(false); // New reactive variable
+
 
 const router = useRouter();
 const authStore = useAuthStore();
+const token = authStore.access_token;
 const toast = useToast();
+const comment = ref('');
 
 const goToContactUs = (serviceTitle) => {
   if (!authStore.isAuthenticated) {
@@ -182,6 +205,66 @@ const goToContactUs = (serviceTitle) => {
     });
   }
 };
+
+const fetchHomeStatus = async () => {
+  status.value = null;
+  onGoingUpdatedAt.value = null;
+  finishedUpdatedAt.value = null;
+  readyForPickupUpdatedAt.value = null;
+  completedUpdatedAt.value = null;
+  comment.value = '';
+  code.value = '';
+  errorMessage.value = '';
+  isLoading.value = true;
+  finishedStatusAvailable.value = false; // Reset on each fetch
+  try {
+      
+      const headers = getHeaderConfig(token);
+      const response = await axios.get(`${BASE_URL}/customer-details/home/status`, headers);
+      console.log(response)
+      status.value = response.data.data.status;
+      onGoingUpdatedAt.value = response.data.data.on_going_updated_at;
+      finishedUpdatedAt.value = response.data.data.finished_updated_at;
+      readyForPickupUpdatedAt.value = response.data.data.ready_for_pickup_updated_at;
+      completedUpdatedAt.value = response.data.data.completed_updated_at;
+      code.value = response.data.data.code;
+
+    // Check if the comment exists and is not empty
+      comment.value = response.data.data.comment && response.data.data.comment.trim() ? response.data.data.comment : '';
+      if (status.value === 'Ready-for-Pickup' && !finishedUpdatedAt.value) {
+        finishedStatusAvailable.value = true; // Set to available if condition met
+      }
+   
+  } catch (error) {
+    errorMessage.value = 'Invalid code or no status found.';
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+onMounted(fetchHomeStatus);
+
+const formattedOnGoingUpdatedAt = computed(() => formatDate(onGoingUpdatedAt.value));
+const formattedFinishedUpdatedAt = computed(() => formatDate(finishedUpdatedAt.value));
+const formattedReadyForPickupUpdatedAt = computed(() => formatDate(readyForPickupUpdatedAt.value));
+const formattedCompletedUpdatedAt = computed(() => formatDate(completedUpdatedAt.value));
+
+const formatDate = (dateString) => {
+  if (dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return date.toLocaleString('en-US', options);
+  }
+  return '';
+};
+
+const isActive = (checkStatus) => {
+  const order = ['On-Going', 'Finished', 'Ready-for-Pickup', 'Completed'];
+  const currentIndex = order.indexOf(status.value);
+  const checkIndex = order.indexOf(checkStatus);
+  return checkIndex <= currentIndex;
+};
+
 </script>
 
 <style scoped>
@@ -342,6 +425,20 @@ const goToContactUs = (serviceTitle) => {
             }
         }
     }
+
+    .comment-box {
+        background-color: #f3f3f3;
+        padding: 15px;
+        border-left: 4px solid #4CAF50;
+        border-radius: 5px;
+        margin-top: 15px;
+        font-style: italic;
+        font-size: 16px;
+        color: #333;
+        max-width: 100%;
+        word-wrap: break-word;
+    }
+
 }
 
 </style>

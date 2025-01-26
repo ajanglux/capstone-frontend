@@ -33,27 +33,28 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
-              <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
-              <td>{{ repair.first_name || 'N/A' }} {{ repair.last_name || 'N/A' }}</td>
-              <td>{{ repair.email }}</td>
-              <td>{{ repair.phone_number }}</td>
-              <td>{{ repair.address }}</td>
-              <td>{{ repair.status || 'PENDING' }}</td>
-              <td class="actions">
-                <div class="custom-select">
-                  <div class="select-icon">
-                    <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
-                      <option value="">Select</option>
-                      <option value="view">View</option>
-                      <option value="Incomplete">Add to Repair</option>
-                      <option value="Responded">Responded</option>
-                      <option value="delete">Delete</option>
-                    </select>
+              <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
+                <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
+                <td>{{ repair.user?.first_name || 'N/A' }} {{ repair.user?.last_name || 'N/A' }}</td>
+                <td>{{ repair.user?.email || 'N/A' }}</td>
+                <td>{{ repair.user?.phone_number || 'N/A' }}</td>
+                <td>{{ repair.user?.address || 'N/A' }}</td>
+                <td>{{ repair.status || 'PENDING' }}</td>
+                <td class="actions">
+                  <div class="custom-select">
+                    <div class="select-icon">
+                      <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
+                        <option value="">Select</option>
+                        <option value="view">View</option>
+                        <option value="Incomplete">Add to Repair</option>
+                        <option value="Responded">Responded</option>
+                        <option value="delete">Delete</option>
+                      </select>
+                      <button @click="openCommentModal(repair)">Comment</button>
+                    </div>
                   </div>
-                </div>
-              </td>
-            </tr>
+                </td>
+              </tr>
             <tr v-if="paginatedRepairs.length === 0">
               <td colspan="7"><strong>No pending inquiries found.</strong></td>
             </tr>
@@ -72,6 +73,17 @@
 
     <ConfirmationDialog :show="showDeleteDialog" @close="showDeleteDialog = false" @confirm="deleteRepair"/>
   </div>
+
+  <div v-if="showCommentModal" class="modal-overlay" @click.self="showCommentModal = false">
+  <div class="modal-content">
+    <h3>{{ existingComment ? 'Edit Comment' : 'Add Comment' }}</h3>
+    <textarea v-model="commentText" placeholder="Enter your comment..."></textarea>
+    <div class="modal-actions">
+      <button @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
+      <button @click="showCommentModal = false">Cancel</button>
+    </div>
+  </div>
+</div>
 </template>
 
 <script setup>
@@ -95,19 +107,54 @@ const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const toast = useToast()
+const selectedRepair = ref(null);
+const showCommentModal = ref(false);
+const commentText = ref('');
+const existingComment = ref('');
+
+const openCommentModal = (repair) => {
+  selectedRepair.value = repair;
+  existingComment.value = repair.comment || '';  // Store existing comment if available
+  commentText.value = repair.comment || '';  // Populate the textarea with existing comment
+  console.log(repair.comment)
+  showCommentModal.value = true;
+};
+
+const submitComment = async () => {
+  if (!commentText.value.trim()) {
+    toast.error('Comment cannot be empty.');
+    return;
+  }
+
+  try {
+    await axios.put(`${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`, 
+      { comment: commentText.value },
+      getHeaderConfig(authStore.access_token)
+    );
+
+    toast.success(existingComment.value ? 'Comment updated successfully' : 'Comment added successfully');
+    selectedRepair.value.comment = commentText.value;  // Update local data
+    showCommentModal.value = false;
+  } catch (error) {
+    console.error('Error updating comment:', error);
+    toast.error('Failed to update comment. Please try again.');
+  }
+};
 
 const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
-    repairs.value = response.data.data;
-    
+    repairs.value = response.data.data.map(repair => ({
+      ...repair,
+      user: repair.user || { first_name: 'N/A', last_name: 'N/A', email: 'N/A', phone_number: 'N/A', address: 'N/A' }
+    }));
+
     repairs.value.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
 
     repairs.value.forEach(repair => {
       selectedActions.value[repair.id] = '';
     });
   } catch (error) {
-    const toast = this.toast();
     toast.error('Failed to load Inquiries details. Please try again.', { timeout: 3000 });
   }
 };
@@ -117,10 +164,11 @@ const filteredRepairs = computed(() => {
     .filter(repair => repair.status === 'Pending')
     .filter(repair => {
       const searchText = searchQuery.value.toLowerCase();
-      const fullName = `${repair.first_name || ''} ${repair.last_name || ''}`.toLowerCase();
+      const fullName = `${repair.user?.first_name || ''} ${repair.user?.last_name || ''}`.toLowerCase();
       return fullName.includes(searchText);
     });
 });
+
 
 const paginatedRepairs = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
@@ -249,5 +297,50 @@ onMounted(() => {
     font-size: 16px;
     color: #333;
   }
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.modal-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
 }
 </style>

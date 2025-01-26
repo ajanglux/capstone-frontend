@@ -44,7 +44,7 @@
               <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
               <td>{{ formatDate(repair.created_at) }}</td>
               <td>{{ repair.code }}</td>
-              <td>{{ repair.first_name || 'N/A' }} {{ repair.last_name || 'N/A' }}</td>
+               <td>{{ repair.user?.first_name || 'N/A' }} {{ repair.user?.last_name || 'N/A' }}</td>
               <td>{{ repair.status || 'ON GOING' }}</td>
               <td class="actions">
                 <div class="custom-select">
@@ -57,6 +57,7 @@
                     <option value="Ready-for-Pickup" :disabled="repair.status === 'Ready-for-Pickup' || repair.status === 'cancelled' || repair.status === 'Incomplete'">Ready For Pickup</option>
                     <option value="Completed" :disabled="repair.status === 'Incomplete'">Completed</option>
                   </select>
+                  <button @click="openCommentModal(repair)">Comment</button>
                 </div>
               </td>
             </tr>
@@ -83,6 +84,18 @@
       :message="confirmationMessage"
     />
   </div>
+
+  <div v-if="showCommentModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>{{ existingComment ? 'Edit Comment' : 'Add Comment' }}</h3>
+      <textarea v-model="commentText" placeholder="Enter your comment..."></textarea>
+      <div class="modal-actions">
+        <button @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
+        <button @click="showCommentModal = false">Cancel</button>
+      </div>
+    </div>
+</div>
+
 </template>
 
 <script setup>
@@ -109,11 +122,46 @@ const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const toast = useToast()
+const selectedRepair = ref(null);
+const showCommentModal = ref(false);
+const commentText = ref('');
+const existingComment = ref('');
+
+const openCommentModal = (repair) => {
+  selectedRepair.value = repair;
+  existingComment.value = repair.comment || '';  // Store existing comment if available
+  commentText.value = repair.comment || '';  // Populate the textarea with existing comment
+  console.log(repair.comment)
+  showCommentModal.value = true;
+};
+
+const submitComment = async () => {
+  if (!commentText.value.trim()) {
+    toast.error('Comment cannot be empty.');
+    return;
+  }
+
+  try {
+    await axios.put(`${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`, 
+      { comment: commentText.value }, // Use commentText.value instead of existingComment
+      getHeaderConfig(authStore.access_token)
+    );
+    toast.success(existingComment.value ? 'Comment updated successfully' : 'Comment added successfully');
+    selectedRepair.value.comment = commentText.value;  // Update local data
+    showCommentModal.value = false;
+  } catch (error) {
+    console.error('Error updating comment:', error);
+    toast.error('Failed to update comment. Please try again.');
+  }
+};
 
 const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
-    repairs.value = response.data.data;
+    repairs.value = response.data.data.map(repair => ({
+      ...repair,
+      user: repair.user || { first_name: 'N/A', last_name: 'N/A' }
+    }));
 
     repairs.value.sort((a, b) => new Date(a.status_updated_at) - new Date(b.status_updated_at));
 
@@ -137,16 +185,15 @@ const filteredRepairs = computed(() => {
     }
 
     const searchText = searchQuery.value.toLowerCase();
-    const fullName = `${repair.first_name || ''} ${repair.last_name || ''}`.toLowerCase().trim();
-    const matchesSearch =
+    const fullName = `${repair.user?.first_name || ''} ${repair.user?.last_name || ''}`.toLowerCase().trim();
+    const matchesSearch = 
       repair.code.toLowerCase().includes(searchText) ||
-      fullName.includes(searchText) ||
-      (repair.first_name && repair.first_name.toLowerCase().includes(searchText)) ||
-      (repair.last_name && repair.last_name.toLowerCase().includes(searchText));
+      fullName.includes(searchText);
 
     return matchesStatus && matchesSearch;
   });
 });
+
 
 const totalPages = computed(() => {
   return Math.ceil(filteredRepairs.value.length / itemsPerPage.value);
@@ -282,5 +329,49 @@ onMounted(() => {
     font-size: 16px;
     color: #333;
   }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.modal-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
 }
 </style>
