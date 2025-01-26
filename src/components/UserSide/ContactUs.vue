@@ -3,19 +3,20 @@
     <div class="con-container">
       <form class="contact-form" @submit.prevent="saveCustomerDetail">
         <div class="contact-info">
-          <h2>Enter Information For Inquiries</h2> 
+          <h2>Enter Inquiries</h2> 
           <div class="input-group mb-4">
             <textarea v-model="customerDetail.description" class="form-control" placeholder="Short Device Issue Description" required></textarea>
             <p v-if="descriptionError" class="error-message">Description is required.</p>
           </div>
-        </div>
-
-        <div class="contact-form-container">
-          <button type="submit">Submit</button>
+          <div class="button">
+            <button type="submit">Submit</button>
+          </div>
         </div>
       </form>
     </div>
-    <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false" />
+
+    <SuccessModal v-if="showSuccessModal" @close="showSuccessModal = false"/>
+    <ProfileModal v-if="showProfileModal" @close="showProfileModal = false"/>
 
     <div class="con-info">
       <h2>Contact Us</h2>
@@ -60,6 +61,8 @@ import { useRoute } from 'vue-router';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 
+import ProfileModal from './Profile.vue';
+
 const authStore = useAuthStore();
 const userProfile = authStore.user;
 
@@ -75,6 +78,7 @@ const toast = useToast();
 const isTermsChecked = ref(false);
 const termsError = ref(false);
 
+const showProfileModal = ref(false);
 
 const isAddressValid = computed(() => !addressError.value);
 
@@ -83,7 +87,10 @@ const saveCustomerDetail = async () => {
 
    // Check if profile data is incomplete
   if (!userProfile.first_name || !userProfile.last_name || !userProfile.address || !userProfile.phone_number) {
-    toast.error('Please complete your profile information (First Name, Last Name, Address, Phone Number) before submitting.', { timeout: 4000 });
+    toast.error('Please complete your profile information (First Name, Last Name, Address, Phone Number) before submitting.', { timeout: 3000 });
+    console.log('Showing Profile Modal');
+    // Show the profile modal after the toast message / ayaw lumabas
+    showProfileModal.value = true;
     return;
   }
 
@@ -164,71 +171,25 @@ onMounted(() => {
         box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
         padding: 25px;
         width: 100%;
+
+        .button {
+          display: flex;
+          justify-content: flex-end;
+          padding-top: 10px;
+
+          button {
+            background-color: var(--main);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+          }
+
+          button:hover {
+            background-color: var(--main-hover);
+          }
+        }
       }
 
-      .contact-form-container {
-        flex: 1;
-        background: var(--header);
-        border-radius: 15px;
-
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-
-        .name {
-          display: flex;
-          gap: 1pc;
-        }
-
-        input {
-          font-family: 'Poppins';
-          padding: 8px;
-          margin-bottom: 20px;
-          border-radius: 10px;
-          background-color: var(--light);
-          outline: none;
-          border: 2px solid transparent;
-
-          &:focus {
-            border: 2px solid var(--grey);
-          }
-
-        }
-
-        .terms-checkbox {
-          display: flex;
-
-          input[type="checkbox"]:checked {
-            accent-color: var(--header);
-            padding-bottom: -30px;
-          }
-
-          a {
-            font-size: 14px;
-            padding-left: 5px;
-            padding-bottom: 18px;
-            color: var(--light);
-
-            &:hover {
-              text-decoration: underline;
-            }
-          }
-        }
-
-        button {
-          background-color: var(--main);
-          color: white;
-          padding: 10px;
-          margin-left: 100px;
-          margin-right: 100px;
-          border-radius: 13px;
-        }
-
-        button:hover {
-          background-color: var(--main-hover);
-
-        }
-      }
     }
 }
 

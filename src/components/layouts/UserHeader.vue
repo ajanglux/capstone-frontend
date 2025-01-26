@@ -26,9 +26,7 @@
                 <span> {{ store.user?.name || 'User' }} </span>
               </button>
               <div class="dropdown-content">
-                <router-link to="/profile" class="nav-link" @click="closeDropdown" style="cursor: pointer">
-                    Profile
-                </router-link>
+                <a class="nav-link" @click="openProfileModal" style="cursor: pointer">Profile</a>
                 <router-link to="#" class="nav-link" @click="userLogout" style="cursor: pointer">
                   <i class="bi bi-box-arrow-left"></i> Logout
                 </router-link>
@@ -37,6 +35,11 @@
           </div>
   
       </header>
+
+      <!-- Profile Modal -->
+      <!-- <ProfileModal v-if="isProfileModalOpen" @close="closeProfileModal" /> -->
+      <!-- Profile Modal -->
+      <ProfileModal :isModalOpen="isModalOpen" @closeModal="closeModal" />
   
       <!-- Overlay for dark effect -->
       <div v-if="isDropdownOpen && !isViewTerms" class="overlay" @click.stop="closeDropdown"></div>
@@ -52,10 +55,12 @@ import { useToast } from "vue-toastification"
 import { BASE_URL } from '../../helpers/baseUrl.js'
 import { getHeaderConfig } from '../../helpers/headerConfig'
 import { useRoute } from 'vue-router';
+import ProfileModal from '../UserSide/Profile.vue';
 
 const toast = useToast()
 const store = useAuthStore()
 const isDropdownOpen = ref(false);
+const isModalOpen = ref(false);
 const route = useRoute();
 
 const toggleDropdown = () => {
@@ -64,6 +69,16 @@ const toggleDropdown = () => {
 
 const closeDropdown = () => {
   isDropdownOpen.value = false;
+};
+
+// Method to open the modal
+const openProfileModal = () => {
+  isModalOpen.value = true;
+};
+
+// Method to close the modal
+const closeModal = () => {
+  isModalOpen.value = false;
 };
 
 const isViewTerms = computed(() => route.path === '/terms-and-conditions');

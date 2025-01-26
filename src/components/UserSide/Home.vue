@@ -15,53 +15,56 @@
 
                         <div v-if="status">
                             <div class="timeline-container">
-                            <h1>Code: {{ code }}</h1>
-                            <div class="timeline-item" :class="{ active: isActive('On-Going') }">
-                                <div class="timeline-dot"></div>
-                                <div class="timeline-content">
-                                <p class="timeline-location">Device Received</p>
-                                <p v-if="onGoingUpdatedAt">Updated on: {{ formattedOnGoingUpdatedAt }} <br>Your repair status is: On-going</p>
-                                <p v-else>Not Yet available</p>
+                                <div class="code">
+                                    <h3>Code: {{ code }}</h3>
+                                    <p> Save ang code for status checking ng hindi nagllog in, amen. </p>
                                 </div>
-                            </div>
+                                <div class="timeline-item" :class="{ active: isActive('On-Going') }">
+                                    <div class="timeline-dot"></div>
+                                    <div class="timeline-content">
+                                    <p class="timeline-location">Device Received</p>
+                                    <p v-if="onGoingUpdatedAt">Updated on: {{ formattedOnGoingUpdatedAt }} <br>Your repair status is: On-going</p>
+                                    <p v-else>Not Yet available</p>
+                                    </div>
+                                </div>
 
-                            <div class="timeline-item" :class="{ active: isActive('Finished') }">
-                                <div class="timeline-dot"></div>
-                                <div class="timeline-content">
-                                <p class="timeline-location">Repair Finished</p>
-                                <p v-if="finishedUpdatedAt || finishedStatusAvailable">Updated on: {{ formattedFinishedUpdatedAt }} <br>Your device has been successfully repaired.</p>
-                                <p v-else>Not Yet available</p>
+                                <div class="timeline-item" :class="{ active: isActive('Finished') }">
+                                    <div class="timeline-dot"></div>
+                                    <div class="timeline-content">
+                                    <p class="timeline-location">Repair Finished</p>
+                                    <p v-if="finishedUpdatedAt || finishedStatusAvailable">Updated on: {{ formattedFinishedUpdatedAt }} <br>Your device has been successfully repaired.</p>
+                                    <p v-else>Not Yet available</p>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="timeline-item" :class="{ active: isActive('Ready-for-Pickup') }">
-                                <div class="timeline-dot"></div>
-                                <div class="timeline-content">
-                                <p class="timeline-location">Ready for Pickup</p>
-                                <p v-if="readyForPickupUpdatedAt">Updated on: {{ formattedReadyForPickupUpdatedAt }} <br>Our shop is open from 9 AM to 5 PM.<br>You can pick up your device from our shop at any time now.</p>
-                                <p v-else>Not Yet available</p>
+                                <div class="timeline-item" :class="{ active: isActive('Ready-for-Pickup') }">
+                                    <div class="timeline-dot"></div>
+                                    <div class="timeline-content">
+                                    <p class="timeline-location">Ready for Pickup</p>
+                                    <p v-if="readyForPickupUpdatedAt">Updated on: {{ formattedReadyForPickupUpdatedAt }} <br>Our shop is open from 9 AM to 5 PM.<br>You can pick up your device from our shop at any time now.</p>
+                                    <p v-else>Not Yet available</p>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="timeline-item" :class="{ active: isActive('Completed') }">
-                                <div class="timeline-dot"></div>
-                                <div class="timeline-content">
-                                <p class="timeline-location">Repair Completed</p>
-                                <p v-if="completedUpdatedAt">Updated on: {{ formattedCompletedUpdatedAt }} <br>The device has been successfully returned, and the process is now complete.</p>
-                                <p v-else>Not Yet available</p>
+                                <div class="timeline-item" :class="{ active: isActive('Completed') }">
+                                    <div class="timeline-dot"></div>
+                                    <div class="timeline-content">
+                                    <p class="timeline-location">Repair Completed</p>
+                                    <p v-if="completedUpdatedAt">Updated on: {{ formattedCompletedUpdatedAt }} <br>The device has been successfully returned, and the process is now complete.</p>
+                                    <p v-else>Not Yet available</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div v-if="comment && comment.trim()">
-                            <h3>Admin Comment</h3>
-                                <p class="comment-box">{{ comment }}</p>
-                            </div>
+                                <div v-if="comment && comment.trim()">
+                                <h3>Admin Comment</h3>
+                                    <p class="comment-box">{{ comment }}</p>
+                                </div>
 
                             </div>
 
                         </div>
-                        </div>
                     </div>
-                    </div>
+                </div>
+            </div>
 
             <div class="card2">
                 <div class="content-container">
@@ -279,11 +282,8 @@ const isActive = (checkStatus) => {
     margin-left: 20px;
     padding-right: 2.3pc;
     
-
     .card {
-        /* width: 100%;
-        flex: 1; */
-        padding: 80px;
+        padding: 50px;
         background-color: var(--header);
         color: var(--light2);
         box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.322);
@@ -291,19 +291,17 @@ const isActive = (checkStatus) => {
         transition: all 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
+        flex-basis: 50%;
+        min-height: 100%;
 
         .con-container {
-            margin-top: 8pc;
+            display: flex;
+            align-items: start;
             width: auto;
             transition: all 0.3s ease-out;
-            }
+        }
 
-            .contact-info {
-            /* background: var(--light); */
-            padding: 30px;
-            /* border-radius: 15px;
-            box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 13px; */
-            
+        .contact-info {
 
             button {
                 background-color: var(--main);
@@ -328,6 +326,14 @@ const isActive = (checkStatus) => {
 
                 &:focus {
                 border: 1px solid var(--header);
+                }
+            }
+
+            .code {
+                padding-bottom: 20px;
+
+                p {
+                    font-size: 12px;
                 }
             }
 
@@ -379,6 +385,7 @@ const isActive = (checkStatus) => {
         transition: all 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
+        flex-basis: 100%;
         background-color: var(--header);
         border-radius: 20px;
 
