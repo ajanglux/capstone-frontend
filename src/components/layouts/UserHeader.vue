@@ -241,6 +241,7 @@ header {
             width: 100%;
             max-height: 500px; 
             padding: 10px 0;
+            padding-bottom: 90px;
 
             .button {
                 width: 100%;
@@ -256,6 +257,16 @@ header {
                     background-color: var(--main-hover);
                 }
             }
+        }
+    }
+    .dropdown-content{
+
+        display: contents;
+        
+        .nav-link {
+            padding: 10px;
+            color: white;
+            font-weight: 350;
         }
     }
 }

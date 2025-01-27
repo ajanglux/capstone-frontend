@@ -32,7 +32,7 @@
         <div class="input-group">
           <div class="form-field">
             <label for="address">Address</label>
-            <input v-model="userProfile.address" type="text" id="address" placeholder="Barangay / kaya mo na yan" required />
+            <input v-model="userProfile.address" type="text" id="address" placeholder="Street, City, State, ZIP Code" required />
           </div>
         </div>
 

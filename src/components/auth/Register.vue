@@ -248,4 +248,79 @@
     width: 100%;
   }
 }
+
+@media (max-width: 500px) {
+  .container {
+  padding: 10px;
+}
+  .signup-card-wrapper {
+  display: flex;
+  flex-direction: row;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  width: 80%;
+}
+
+/* Login Card */
+.signup-card {
+  padding: 30px 30px 20px 30px;
+
+  .header h3 {
+    font-size: 30px;
+  }
+
+
+  .btn {
+    letter-spacing: 1px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 50px;
+    background-color: var(--main);
+    color: white;
+    width: 50%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+  }
+
+  .btn:hover {
+    background-color: var(--main-hover);
+    transform: translateY(-2px);
+  }
+
+  .terms-checkbox {
+    display: flex;
+    padding-bottom: 10px;
+    margin-top: -15px;
+
+    input[type="checkbox"] {
+      width: 15px;
+    }
+
+    input[type="checkbox"]:checked {
+      accent-color: var(--header);
+    }
+
+    p {
+      font-size: 12px;
+      color: black;
+      margin-top: 15.5px;
+      padding-left: 3px;
+    }
+
+    a {
+      font-size: 12px;
+      color: var(--header);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+}
+
+.logo {
+  display: none;
+}
+}
 </style>

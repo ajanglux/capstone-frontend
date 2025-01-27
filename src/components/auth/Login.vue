@@ -106,102 +106,176 @@
   onUnmounted(() => store.clearErrors())
   </script>
   
-  <style lang="scss" scoped>
-  /* Container */
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: rgb(12, 68, 110);
-    padding: 30px;
+<style lang="scss" scoped>
+/* Container */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: rgb(12, 68, 110);
+  padding: 30px;
+}
+
+/* Login Card Wrapper */
+.login-card-wrapper {
+  display: flex;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  width: 60%;
+}
+
+/* Login Card */
+.login-card {
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: var(--light);
+  padding: 60px;
+  align-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  .form-control {
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
   }
-  
-  /* Login Card Wrapper */
-  .login-card-wrapper {
-    display: flex;
-    border-radius: 12px;
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-    width: 60%;
+
+  .header h3 {
+    font-weight: 700;
+    font-size: 50px;
+    letter-spacing: 0.5px;
+    margin-bottom: 30px;
+    color: var(--main);
+    text-align: center;
+    font-family: 'Poppins';
   }
-  
-  /* Login Card */
-  .login-card {
-    width: 100%;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    background-color: var(--light);
-    padding: 60px;
-    align-content: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-    .form-control {
-      padding: 12px;
-      font-size: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-  
-    .header h3 {
-      font-weight: 700;
-      font-size: 50px;
-      letter-spacing: 0.5px;
-      margin-bottom: 30px;
-      color: var(--main);
-      text-align: center;
-      font-family: 'Poppins';
-    }
-  
-    .text-center {
-      text-align: center;
-    }
-  
-    input {
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-  
-    input::placeholder {
-      color: #999;
-      font-size: 14px;
-    }
-  
-    input:focus {
-      box-shadow: 0 0 8px rgba(0, 123, 255, 0.25) !important;
-      border-color: #007bff !important;
-    }
-  
-    .btn {
-      letter-spacing: 1px;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 50px;
-      background-color: var(--main);
-      color: white;
-      width: 50%;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      border: none;
-    }
-  
-    .btn:hover {
-      background-color: var(--main-hover);
-      transform: translateY(-2px);
-    }
+
+  .text-center {
+    text-align: center;
   }
-  
-  .logo {
-    width: 100%;
-    height: auto;
+
+  input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  input::placeholder {
+    color: #999;
+    font-size: 14px;
+  }
+
+  input:focus {
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.25) !important;
+    border-color: #007bff !important;
+  }
+
+  .btn {
+    letter-spacing: 1px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 50px;
     background-color: var(--main);
-    align-content: space-evenly;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-  
-    img {
-      width: 100%;
+    color: white;
+    width: 50%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+  }
+
+  .btn:hover {
+    background-color: var(--main-hover);
+    transform: translateY(-2px);
+  }
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+  background-color: var(--main);
+  align-content: space-evenly;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  img {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .container {
+  padding: 10px;
+}
+  .login-card-wrapper {
+  display: flex;
+  flex-direction: row;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  width: 80%;
+}
+
+/* Login Card */
+.login-card {
+  padding: 30px 30px 20px 30px;
+
+  .header h3 {
+    font-size: 30px;
+  }
+
+
+  .btn {
+    letter-spacing: 1px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 50px;
+    background-color: var(--main);
+    color: white;
+    width: 50%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+  }
+
+  .btn:hover {
+    background-color: var(--main-hover);
+    transform: translateY(-2px);
+  }
+
+  .terms-checkbox {
+    display: flex;
+    padding-bottom: 10px;
+    margin-top: -15px;
+
+    input[type="checkbox"] {
+      width: 15px;
+    }
+
+    input[type="checkbox"]:checked {
+      accent-color: var(--header);
+    }
+
+    p {
+      font-size: 12px;
+      color: black;
+      margin-top: 15.5px;
+      padding-left: 3px;
+    }
+
+    a {
+      font-size: 12px;
+      color: var(--header);
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
-  </style>
+}
+
+.logo {
+  display: none;
+}
+}
+</style>

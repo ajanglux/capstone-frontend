@@ -293,7 +293,7 @@ const isActive = (checkStatus) => {
         display: flex;
         flex-direction: column;
         flex-basis: 50%;
-        height: 100vh;
+        height: 85vh;
 
         position: sticky;
         top: 6pc;
@@ -307,6 +307,7 @@ const isActive = (checkStatus) => {
         }
 
         .contact-info {
+            width: 100%;
 
             button {
                 background-color: var(--main);
@@ -457,7 +458,202 @@ const isActive = (checkStatus) => {
         max-width: 100%;
         word-wrap: break-word;
     }
+}
 
+@media (max-width: 500px) {
+    .cards {
+    display: flex;
+    flex-direction:column;
+    position: unset;
+    
+    .card {
+        height: 100vh;
+        position: unset;
+
+    }
+    .card2 {
+        flex: 1;
+        padding: 25px;
+        color: var(--light2);
+        transition: all 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        flex-basis: 100%;
+        background-color: var(--header);
+        border-radius: 20px;
+
+        flex-grow: 1;
+        padding: 20px;
+
+        .card1 {
+            flex: 1;
+            padding: 25px;
+            color: var(--light2);
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--header);
+            border-radius: 20px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--main-hover);
+                border-radius: 20px;
+            }
+
+            .img {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 10px;
+
+                img {
+                width: 100%;
+                height: 330px;
+                object-fit: cover;
+                object-position: center;
+                align-content: center;
+                border-radius: 10px;
+                }
+            }
+
+            .info {
+                h2 {
+                font-size: 20px;
+                }
+
+                p {
+                font-size: 15px;
+                }
+            }
+        }
+    }
+
+    .admin-respond {
+        padding: 15px 0;
+    }
+
+    .comment-box {
+        background-color: #f3f3f3;
+        padding: 15px;
+        border-left: 4px solid #4CAF50;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-style: italic;
+        font-size: 16px;
+        color: #333;
+        max-width: 100%;
+        word-wrap: break-word;
+    }
+}
+}
+@media (max-width: 650px) {
+    .dropdown {
+    position: relative;
+    display: inline-block;
+  
+    .dropdown-content {
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+      background-color: white;
+      width: 150px;
+      right: 0;
+      border-radius: 8px;
+      transform: translateY(-50px);
+      display: contents;
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    }
+  }
+
+    .cards {
+    display: flex;
+    flex-direction:column;
+    position: unset;
+    
+    .card {
+        height: 100vh;
+        position: unset;
+
+        .con-container {
+            text-align: center;
+        }
+    }
+    .card2 {
+        flex: 1;
+        padding: 25px;
+        color: var(--light2);
+        transition: all 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        flex-basis: 100%;
+        background-color: var(--header);
+        border-radius: 20px;
+
+        flex-grow: 1;
+        padding: 20px;
+
+        .card1 {
+            flex: 1;
+            padding: 25px;
+            color: var(--light2);
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--header);
+            border-radius: 20px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--main-hover);
+                border-radius: 20px;
+            }
+
+            .img {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 10px;
+
+                img {
+                width: 100%;
+                height: 330px;
+                object-fit: cover;
+                object-position: center;
+                align-content: center;
+                border-radius: 10px;
+                }
+            }
+
+            .info {
+                h2 {
+                font-size: 20px;
+                }
+
+                p {
+                font-size: 15px;
+                }
+            }
+        }
+    }
+
+    .admin-respond {
+        padding: 15px 0;
+    }
+
+    .comment-box {
+        background-color: #f3f3f3;
+        padding: 15px;
+        border-left: 4px solid #4CAF50;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-style: italic;
+        font-size: 16px;
+        color: #333;
+        max-width: 100%;
+        word-wrap: break-word;
+    }
+}
 }
 
 </style>
