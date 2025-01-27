@@ -43,78 +43,67 @@
     </div>
   </div>
 </template>
-  
-  <script setup>
-  import { ref, onMounted } from 'vue';
-  import axios from 'axios';
-  import { BASE_URL } from '../../helpers/baseUrl';
-  // import { ElMessage } from 'element-plus';
-  import { useToast } from 'vue-toastification'; 
-  import { useRoute } from 'vue-router';
-  import { getHeaderConfig } from '../../helpers/headerConfig';
-  import { useAuthStore } from '../../stores/useAuthStore';
-  import { defineProps, defineEmits } from 'vue';
-  
-  const userProfile = ref({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone_number: '',
-    address: ''
-  });
-  
-  const authStore = useAuthStore();
-  const token = authStore.access_token;
-  
-  const isUpdating = ref(false);
 
-  defineProps({
-    isModalOpen: {
-      type: Boolean,
-      required: true
-    }
-  });
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { BASE_URL } from '../../helpers/baseUrl';
+import { getHeaderConfig } from '../../helpers/headerConfig';
+import { useAuthStore } from '../../stores/useAuthStore';
+import { defineProps, defineEmits } from 'vue';
+import { useToast } from 'vue-toastification'; 
 
-  const emit = defineEmits(['closeModal']);
+const userProfile = ref({
+  first_name: '',
+  last_name: '',
+  email: '',
+  phone_number: '',
+  address: ''
+});
 
-  const closeModal = () => {
-    emit('closeModal');
-  };
-  
-  const fetchUserProfile = async () => {
-    try {
-        const headers = getHeaderConfig(token);
-        const response = await axios.get(`${BASE_URL}/user/profile`, headers);
-          userProfile.value = response.data.user;
-    } catch (error) {
-      // ElMessage.error('Failed to fetch user data.');
-    }
-  };
-  
-  const updateProfile = async () => {
-    isUpdating.value = true;
-    try {
-      const headers = getHeaderConfig(token);
-      const response = await axios.put(`${BASE_URL}/user/profile`, userProfile.value, headers);
-      console.log("update data:", response);
-      // ElMessage.success('Profile updated successfully!');
-    } catch (error) {
-      console.error("Error updating profile:", error.response ? error.response.data : error.message);
-      // ElMessage.error(error.response?.data?.message || 'Error updating profile.');
-    } finally {
-      isUpdating.value = false;
-    }
-  };
-  
-  
-  const validatePhoneNumber = (event) => {
-    userProfile.value.phone_number = event.target.value.replace(/\D/g, '').slice(0, 11);
-  };
-  
-  onMounted(
-      fetchUserProfile
-  );
-  </script>
+const authStore = useAuthStore();
+const token = authStore.access_token;
+const toast = useToast();
+const isUpdating = ref(false);
+
+defineProps({
+  isModalOpen: {
+    type: Boolean,
+    required: true
+  }
+});
+
+const emit = defineEmits(['closeModal']);
+
+const closeModal = () => emit('closeModal');
+
+const fetchUserProfile = async () => {
+  try {
+    const headers = getHeaderConfig(token);
+    const response = await axios.get(`${BASE_URL}/user/profile`, headers);
+    userProfile.value = response.data.user;
+  } catch (error) {
+    console.error("Error fetching user profile:", error.response ? error.response.data : error.message);
+    toast.error("Error fetching user profile:");
+  }
+};
+
+const updateProfile = async () => {
+  isUpdating.value = true;
+  try {
+    const headers = getHeaderConfig(token);
+    await axios.put(`${BASE_URL}/user/profile`, userProfile.value, headers);
+    toast.success("Updated Successful", { timeout: 3000 })
+  } catch (error) {
+    console.error("Error updating profile:", error.response ? error.response.data : error.message);
+    toast.error("Error updating profile:");
+  } finally {
+    isUpdating.value = false;
+  }
+};
+
+onMounted(fetchUserProfile);
+</script>
   
 <style scoped>
 .modal-overlay {

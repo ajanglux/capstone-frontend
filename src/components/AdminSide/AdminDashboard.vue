@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
@@ -30,6 +31,10 @@ import BarChart from '../layouts/BarChart.vue';
 export default {
   name: 'AdminDashboard',
   components: { BarChart },
+  setup() {
+    const isLoading = ref(false); // Reactive loading state
+    return { isLoading };
+  },
   data() {
     return {
       stats: [],
@@ -50,17 +55,20 @@ export default {
         return;
       }
 
+      this.isLoading = true; // Start loading
+
       try {
         const headers = getHeaderConfig(token);
         const response = await axios.get(`${BASE_URL}/admin-dashboard-stats`, headers);
         this.stats = [
           { label: 'Total Number of Inquiries', value: response.data.pendingRepairs },
           { label: 'Total Number of On-going Repairs', value: response.data.ongoingRepairs },
-          // { label: 'Total Number of Services', value: response.data.totalServices },
-          { label: 'Total Number of Clients', value: response.data.totalClients }
+          { label: 'Total Number of Clients', value: response.data.totalClients },
         ];
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
+      } finally {
+        this.isLoading = false; // End loading
       }
     },
     async fetchMonthlyCompletedRepairs() {
@@ -72,6 +80,8 @@ export default {
         return;
       }
 
+      this.isLoading = true; // Start loading
+
       try {
         const headers = getHeaderConfig(token);
         const response = await axios.get(`${BASE_URL}/admin-dashboard-stats/completed-repairs`, headers);
@@ -79,6 +89,8 @@ export default {
       } catch (error) {
         console.error('Error fetching monthly completed repairs data:', error);
         this.completedRepairsData = [0, 5, 2, 7, 0, 4, 3, 6, 1, 8, 0, 0];
+      } finally {
+        this.isLoading = false; // End loading
       }
     },
   },

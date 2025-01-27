@@ -5,6 +5,10 @@
             <p>Welcome to techfixph.com, your trusted partner for all your device repair needs. By using our services, 
                 you agree to abide by the following Privacy Policy. Please read these terms carefully before proceeding.
             </p>
+            <br>
+            <p>
+                Fffective Date: January 27, 2025
+            </p>
         </div>
         <div class="privacy-policy">
             <h2>1. Introduction</h2>

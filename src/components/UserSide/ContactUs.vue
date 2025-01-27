@@ -61,7 +61,7 @@ import { useRoute } from 'vue-router';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 
-import ProfileModal from './Profile.vue';
+// import ProfileModal from './Profile.vue';
 
 const authStore = useAuthStore();
 const userProfile = authStore.user;
@@ -75,12 +75,9 @@ const route = useRoute();
 const addressError = ref(false);
 const descriptionError = ref(false);
 const toast = useToast();
-const isTermsChecked = ref(false);
-const termsError = ref(false);
 
 const showProfileModal = ref(false);
 
-const isAddressValid = computed(() => !addressError.value);
 
 const saveCustomerDetail = async () => {
   descriptionError.value = !customerDetail.value.description.trim();

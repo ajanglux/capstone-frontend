@@ -25,9 +25,10 @@
             <tr>
               <th>No.</th>
               <th>Client</th>
-              <th>Email</th>
+              <!-- <th>Email</th>
               <th>Contact No.</th>
-              <th>Address</th>
+              <th>Address</th> -->
+              <th>Description</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -36,9 +37,10 @@
               <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
                 <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
                 <td>{{ repair.user?.first_name || 'N/A' }} {{ repair.user?.last_name || 'N/A' }}</td>
-                <td>{{ repair.user?.email || 'N/A' }}</td>
+                <!-- <td>{{ repair.user?.email || 'N/A' }}</td>
                 <td>{{ repair.user?.phone_number || 'N/A' }}</td>
-                <td>{{ repair.user?.address || 'N/A' }}</td>
+                <td>{{ repair.user?.address || 'N/A' }}</td> -->
+                <td>{{ repair.description || 'No description available' }}</td>
                 <td>{{ repair.status || 'PENDING' }}</td>
                 <td class="actions">
                   <div class="custom-select">
@@ -47,10 +49,9 @@
                         <option value="">Select</option>
                         <option value="view">View</option>
                         <option value="Incomplete">Add to Repair</option>
-                        <option value="Responded">Responded</option>
+                        <option value="Responded">Respond</option>
                         <option value="delete">Delete</option>
                       </select>
-                      <button @click="openCommentModal(repair)">Comment</button>
                     </div>
                   </div>
                 </td>
@@ -76,15 +77,21 @@
 
   <div v-if="showCommentModal" class="modal-overlay" @click.self="showCommentModal = false">
   <div class="modal-content">
-    <h3>{{ existingComment ? 'Edit Comment' : 'Add Comment' }}</h3>
-    <textarea v-model="commentText" placeholder="Enter your comment..."></textarea>
+    <h3>{{ existingComment ? 'Edit Respond' : 'Add Respond' }}</h3>
+    <div class="user-inqui">
+      <p class="description-text">
+        <strong>Customer Inquiry:</strong> {{ selectedRepair?.description || 'No description available.' }}
+      </p>
+    </div>
+    <textarea v-model="commentText" placeholder="Enter your respond..."></textarea>
     <div class="modal-actions">
-      <button @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
-      <button @click="showCommentModal = false">Cancel</button>
+      <button class="submit" @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
+      <button class="cancel" @click="showCommentModal = false">Cancel</button>
     </div>
   </div>
 </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
@@ -113,10 +120,14 @@ const commentText = ref('');
 const existingComment = ref('');
 
 const openCommentModal = (repair) => {
+  if (!repair || !repair.id) {
+    toast.error('Invalid repair object!');
+    return;
+  }
+
   selectedRepair.value = repair;
   existingComment.value = repair.comment || '';  // Store existing comment if available
   commentText.value = repair.comment || '';  // Populate the textarea with existing comment
-  console.log(repair.comment)
   showCommentModal.value = true;
 };
 
@@ -127,14 +138,19 @@ const submitComment = async () => {
   }
 
   try {
-    await axios.put(`${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`, 
-      { comment: commentText.value },
-      getHeaderConfig(authStore.access_token)
-    );
+    // Make sure you're sending the correct repair ID in the request
+    if (selectedRepair.value && selectedRepair.value.id) {
+      await axios.put(`${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`, 
+        { comment: commentText.value },
+        getHeaderConfig(authStore.access_token)
+      );
 
-    toast.success(existingComment.value ? 'Comment updated successfully' : 'Comment added successfully');
-    selectedRepair.value.comment = commentText.value;  // Update local data
-    showCommentModal.value = false;
+      toast.success(existingComment.value ? 'Comment updated successfully' : 'Comment added successfully');
+      selectedRepair.value.comment = commentText.value;  // Update local data
+      showCommentModal.value = false;
+    } else {
+      toast.error('Repair ID not found!');
+    }
   } catch (error) {
     console.error('Error updating comment:', error);
     toast.error('Failed to update comment. Please try again.');
@@ -146,7 +162,8 @@ const fetchRepairs = async () => {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
     repairs.value = response.data.data.map(repair => ({
       ...repair,
-      user: repair.user || { first_name: 'N/A', last_name: 'N/A', email: 'N/A', phone_number: 'N/A', address: 'N/A' }
+      user: repair.user || { first_name: 'N/A', last_name: 'N/A', email: 'N/A', phone_number: 'N/A', address: 'N/A' },
+      description: repair.description || 'No description available' // Add description
     }));
 
     repairs.value.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
@@ -159,6 +176,7 @@ const fetchRepairs = async () => {
   }
 };
 
+
 const filteredRepairs = computed(() => {
   return repairs.value
     .filter(repair => repair.status === 'Pending')
@@ -168,7 +186,6 @@ const filteredRepairs = computed(() => {
       return fullName.includes(searchText);
     });
 });
-
 
 const paginatedRepairs = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
@@ -197,7 +214,8 @@ const handleActionChange = (repairId) => {
   if (action === 'Incomplete') {
     setApproved(repairId);
   } else if (action === 'Responded') {
-    setResponded(repairId);
+    const repair = repairs.value.find(r => r.id === repairId);
+    openCommentModal(repair);
   } else if (action === 'delete') {
     confirmDelete(repairId);
   } else if (action === 'view') {
@@ -211,7 +229,6 @@ const setApproved = async (id) => {
     fetchRepairs();
     toast.success("Status update successful", { timeout: 3000 })
   } catch (error) {
-    const toast = this.toast();
     toast.error('Error updating status. Please try again.', { timeout: 3000 });
   }
 };
@@ -222,7 +239,6 @@ const setResponded = async (id) => {
     fetchRepairs();
     toast.success("Status update successful", { timeout: 3000 })
   } catch (error) {
-    const toast = this.toast();
     toast.error('Error updating status. Please try again.', { timeout: 3000 });
   }
 };
@@ -238,7 +254,6 @@ const deleteRepair = async () => {
     showDeleteDialog.value = false;
     toast.success("Deleted successful", { timeout: 3000 })
   } catch (error) {
-    const toast = this.toast();
     toast.error('Error deleting details. Please try again.', { timeout: 3000 });
   }
 };
@@ -252,6 +267,7 @@ onMounted(() => {
   fetchRepairs();
 });
 </script>
+
 
 
 <style lang="scss" scoped>
@@ -324,23 +340,50 @@ textarea {
   height: 100px;
   margin-top: 10px;
   padding: 10px;
+  outline: none;
+  border-radius: 5px;
+  font-family: 'Poppins';
 }
 
 .modal-actions {
   margin-top: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.description-text {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #555;
+}
+.description-text strong {
+  color: #333;
 }
 
 button {
-  background: #007bff;
   color: white;
   border: none;
-  padding: 8px 15px;
+  padding: 5px 15px;
+  border-radius: 5px;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
-button:hover {
-  background: #0056b3;
+.submit {
+  background: var(--main);
+}
+
+.submit:hover {
+  background: var(--main-hover);
+}
+
+.cancel {
+  background: var(--table);
+}
+
+.cancel:hover {
+  background: var(--grey);
 }
 </style>

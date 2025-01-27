@@ -1,119 +1,119 @@
 <template>
-  <div class="landing-page">
-      <header>
-          <div class="header-top">
-              <div class="left-side">
-                  <img class="app-logo" src="/src/assets/techfix-no.png" alt="TechFix Logo" />
-                  <h3>TechFix</h3>
-              </div>
-  
-              <!-- Menu Icon for small screens -->
-              <div v-if="!isViewTerms" class="menu-icon" @click="toggleDropdown">
-                  <i :class="isDropdownOpen ? 'bx bx-x' : 'bx bx-menu'"></i>
-              </div>
-          </div>
-  
-          <div v-if="!isViewTerms" class="button-container" :class="{ open: isDropdownOpen }">
-              <router-link class="button" active-class="active" to="/home" @click="closeDropdown">
-              <span class="text">Home</span>
-              </router-link>
-              <router-link class="button" active-class="active" to="/contact" @click="closeDropdown">
-              <span class="text">Inquire</span>
-              </router-link>
-  
-              <div class="dropdown">
-              <button class="button">
-                <span> {{ store.user?.name || 'User' }} </span>
-              </button>
-              <div class="dropdown-content">
-                <a class="nav-link" @click="openProfileModal" style="cursor: pointer">Profile</a>
-                <router-link to="#" class="nav-link" @click="userLogout" style="cursor: pointer">
-                  <i class="bi bi-box-arrow-left"></i> Logout
+    <div class="landing-page">
+        <header>
+            <div class="header-top">
+                <div class="left-side">
+                    <img class="app-logo" src="/src/assets/techfix-no.png" alt="TechFix Logo" />
+                    <h3>TechFix</h3>
+                </div>
+    
+                <!-- Menu Icon for small screens -->
+                <div v-if="!isViewTerms" class="menu-icon" @click="toggleDropdown">
+                    <i :class="isDropdownOpen ? 'bx bx-x' : 'bx bx-menu'"></i>
+                </div>
+            </div>
+    
+            <div v-if="!isViewTerms" class="button-container" :class="{ open: isDropdownOpen }">
+                <router-link class="button" active-class="active" to="/home" @click="closeDropdown">
+                <span class="text">Home</span>
                 </router-link>
+                <router-link class="button" active-class="active" to="/contact" @click="closeDropdown">
+                <span class="text">Inquire</span>
+                </router-link>
+    
+                <div class="dropdown">
+                <button class="button">
+                  <span> {{ store.user?.name || 'User' }} </span>
+                </button>
+                <div class="dropdown-content">
+                  <a class="nav-link" @click="openProfileModal" style="cursor: pointer">Profile</a>
+                  <router-link to="#" class="nav-link" @click="userLogout" style="cursor: pointer">
+                    <i class="bi bi-box-arrow-left"></i> Logout
+                  </router-link>
+                </div>
               </div>
             </div>
-          </div>
+    
+        </header>
   
-      </header>
-
-      <!-- Profile Modal -->
-      <!-- <ProfileModal v-if="isProfileModalOpen" @close="closeProfileModal" /> -->
-      <!-- Profile Modal -->
-      <ProfileModal :isModalOpen="isModalOpen" @closeModal="closeModal" />
-  
-      <!-- Overlay for dark effect -->
-      <div v-if="isDropdownOpen && !isViewTerms" class="overlay" @click.stop="closeDropdown"></div>
-  </div> 
+        <!-- Dynamically loaded ProfileModal component -->
+        <ProfileModal :isModalOpen="isModalOpen" @closeModal="closeModal" />
+    
+        <!-- Overlay for dark effect -->
+        <div v-if="isDropdownOpen && !isViewTerms" class="overlay" @click.stop="closeDropdown"></div>
+    </div> 
   </template>
-
-<script setup>
-import { useAuthStore } from '../../stores/useAuthStore.js'
-import router from '../../router'
-import { ref, computed, onMounted } from 'vue'
-import axios from 'axios'
-import { useToast } from "vue-toastification"
-import { BASE_URL } from '../../helpers/baseUrl.js'
-import { getHeaderConfig } from '../../helpers/headerConfig'
-import { useRoute } from 'vue-router';
-import ProfileModal from '../UserSide/Profile.vue';
-
-const toast = useToast()
-const store = useAuthStore()
-const isDropdownOpen = ref(false);
-const isModalOpen = ref(false);
-const route = useRoute();
-
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
-};
-
-const closeDropdown = () => {
-  isDropdownOpen.value = false;
-};
-
-// Method to open the modal
-const openProfileModal = () => {
-  isModalOpen.value = true;
-};
-
-// Method to close the modal
-const closeModal = () => {
-  isModalOpen.value = false;
-};
-
-const isViewTerms = computed(() => route.path === '/terms-and-conditions');
-
-const userLogout = async () => {
-    try {
-        await axios.post(`${BASE_URL}/user/logout`, {}, getHeaderConfig(store.access_token));
-        toast.success("Logout successfully", {
-            timeout: 3000
-        })
-        store.clearStoredData();
-        router.push('/');
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const fetchCurrentUser = async () => {
-    try {
-        const response = await axios.get(`${BASE_URL}/user`, getHeaderConfig(store.access_token));
-        store.setToken(response.data.currentToken)
-        store.setUser(response.data.user);
-    } catch (error) {
-        if(error?.response?.status === 401) {
-            store.clearStoredData()
-        }
-        console.log(error);
-    }
-}
-
-onMounted(() => {
-    if(store.access_token) fetchCurrentUser()
-})
-</script>
-
+  
+  <script setup>
+  import { useAuthStore } from '../../stores/useAuthStore.js'
+  import router from '../../router'
+  import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
+  import axios from 'axios'
+  import { useToast } from "vue-toastification"
+  import { BASE_URL } from '../../helpers/baseUrl.js'
+  import { getHeaderConfig } from '../../helpers/headerConfig'
+  import { useRoute } from 'vue-router';
+  
+  // Dynamically import ProfileModal component
+  const ProfileModal = defineAsyncComponent(() => import('../UserSide/Profile.vue'));
+  
+  const toast = useToast()
+  const store = useAuthStore()
+  const isDropdownOpen = ref(false);
+  const isModalOpen = ref(false);
+  const route = useRoute();
+  
+  const toggleDropdown = () => {
+    isDropdownOpen.value = !isDropdownOpen.value;
+  };
+  
+  const closeDropdown = () => {
+    isDropdownOpen.value = false;
+  };
+  
+  // Method to open the modal
+  const openProfileModal = () => {
+    isModalOpen.value = true;
+  };
+  
+  // Method to close the modal
+  const closeModal = () => {
+    isModalOpen.value = false;
+  };
+  
+  const isViewTerms = computed(() => route.path === '/terms-and-conditions');
+  
+  const userLogout = async () => {
+      try {
+          await axios.post(`${BASE_URL}/user/logout`, {}, getHeaderConfig(store.access_token));
+          toast.success("Logout successfully", {
+              timeout: 3000
+          })
+          store.clearStoredData();
+          router.push('/');
+      } catch (error) {
+          console.log(error);
+      }
+  }
+  
+  const fetchCurrentUser = async () => {
+      try {
+          const response = await axios.get(`${BASE_URL}/user`, getHeaderConfig(store.access_token));
+          store.setToken(response.data.currentToken)
+          store.setUser(response.data.user);
+      } catch (error) {
+          if(error?.response?.status === 401) {
+              store.clearStoredData()
+          }
+          console.log(error);
+      }
+  }
+  
+  onMounted(() => {
+      if(store.access_token) fetchCurrentUser()
+  })
+  </script>  
+  
 <style lang="scss" scoped>
 header {
     background-color: var(--header);

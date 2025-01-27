@@ -57,7 +57,6 @@
                     <option value="Ready-for-Pickup" :disabled="repair.status === 'Ready-for-Pickup' || repair.status === 'cancelled' || repair.status === 'Incomplete'">Ready For Pickup</option>
                     <option value="Completed" :disabled="repair.status === 'Incomplete'">Completed</option>
                   </select>
-                  <button @click="openCommentModal(repair)">Comment</button>
                 </div>
               </td>
             </tr>
@@ -85,17 +84,6 @@
     />
   </div>
 
-  <div v-if="showCommentModal" class="modal-overlay">
-    <div class="modal-content">
-      <h3>{{ existingComment ? 'Edit Comment' : 'Add Comment' }}</h3>
-      <textarea v-model="commentText" placeholder="Enter your comment..."></textarea>
-      <div class="modal-actions">
-        <button @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
-        <button @click="showCommentModal = false">Cancel</button>
-      </div>
-    </div>
-</div>
-
 </template>
 
 <script setup>
@@ -106,7 +94,7 @@ import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import ConfirmationDialog from '../layouts/ConfirmationDialog.vue';
-import { useToast } from 'vue-toastification'
+import { useToast } from 'vue-toastification';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -121,17 +109,17 @@ const selectedStatusAction = ref('');
 const searchQuery = ref('');
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
-const toast = useToast()
+const toast = useToast();
 const selectedRepair = ref(null);
 const showCommentModal = ref(false);
 const commentText = ref('');
 const existingComment = ref('');
+const isLoading = ref(false); // Added isLoading state
 
 const openCommentModal = (repair) => {
   selectedRepair.value = repair;
-  existingComment.value = repair.comment || '';  // Store existing comment if available
-  commentText.value = repair.comment || '';  // Populate the textarea with existing comment
-  console.log(repair.comment)
+  existingComment.value = repair.comment || '';
+  commentText.value = repair.comment || '';
   showCommentModal.value = true;
 };
 
@@ -141,21 +129,26 @@ const submitComment = async () => {
     return;
   }
 
+  isLoading.value = true; // Start loading
   try {
-    await axios.put(`${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`, 
-      { comment: commentText.value }, // Use commentText.value instead of existingComment
+    await axios.put(
+      `${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`,
+      { comment: commentText.value },
       getHeaderConfig(authStore.access_token)
     );
     toast.success(existingComment.value ? 'Comment updated successfully' : 'Comment added successfully');
-    selectedRepair.value.comment = commentText.value;  // Update local data
+    selectedRepair.value.comment = commentText.value;
     showCommentModal.value = false;
   } catch (error) {
     console.error('Error updating comment:', error);
     toast.error('Failed to update comment. Please try again.');
+  } finally {
+    isLoading.value = false; // Stop loading
   }
 };
 
 const fetchRepairs = async () => {
+  isLoading.value = true; // Start loading
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
     repairs.value = response.data.data.map(repair => ({
@@ -171,6 +164,8 @@ const fetchRepairs = async () => {
   } catch (error) {
     console.error('Error fetching repairs:', error);
     errors.value = error.response?.data?.message || 'Error fetching repairs';
+  } finally {
+    isLoading.value = false; // Stop loading
   }
 };
 
@@ -193,7 +188,6 @@ const filteredRepairs = computed(() => {
     return matchesStatus && matchesSearch;
   });
 });
-
 
 const totalPages = computed(() => {
   return Math.ceil(filteredRepairs.value.length / itemsPerPage.value);
@@ -244,6 +238,7 @@ const confirmStatusChange = () => {
 };
 
 const updateStatus = async (id, status) => {
+  isLoading.value = true; // Start loading
   try {
     await axios.patch(`${BASE_URL}/customer-details/${id}/status`, { status }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
@@ -252,6 +247,8 @@ const updateStatus = async (id, status) => {
     console.error(`Error updating repair status to ${status}:`, error);
     const errorMessage = error.response?.data?.message || `Error updating repair status to ${status}`;
     toast.error(errorMessage, { timeout: 4700 });
+  } finally {
+    isLoading.value = false; // Stop loading
   }
 };
 

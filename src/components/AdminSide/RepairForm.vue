@@ -102,69 +102,10 @@
               <h2>Accessories Checklist</h2>
             </div>
 
-            
-            <!-- <div class="input-group mb-3">
-              <span class="input-group-text">Original Box</span>
-              <input v-model="productInfo.orig_box" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">General Box</span>
-              <input v-model="productInfo.gen_box" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">Manual</span>
-              <input v-model="productInfo.manual" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">Driver CD</span>
-              <input v-model="productInfo.driver_cd" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">SATA Cable</span>
-              <input v-model="productInfo.sata_cable" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">SIM Card/Memory Card (GB)</span>
-              <input v-model="productInfo.simcard_memorycard_gb" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">Remote Control</span>
-              <input v-model="productInfo.remote_control" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">Receiver</span>
-              <input v-model="productInfo.receiver" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">Backplate/Metal Plate</span>
-              <input v-model="productInfo.backplate_metal_plate" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div> -->
-          </div> 
-
-          <div class="checklist">
-
             <div class="input-group mb-3">
               <span class="input-group-text">AC Adapter</span>
               <input v-model="productInfo.ac_adapter" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
-
-            <!-- <div class="input-group mb-3">
-              <span class="input-group-text">Battery Pack</span>
-              <input v-model="productInfo.battery_pack" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">Lithium Battery</span>
-              <input v-model="productInfo.lithium_battery" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div> -->
 
             <div class="input-group mb-3">
               <span class="input-group-text">VGA Cable</span>
@@ -175,7 +116,8 @@
               <span class="input-group-text">DVI Cable</span>
               <input v-model="productInfo.dvi_cable" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
-
+          </div> 
+          <div class="checklist">
             <div class="input-group mb-3">
               <span class="input-group-text">Display Cable</span>
               <input v-model="productInfo.display_cable" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
@@ -186,11 +128,6 @@
               <input v-model="productInfo.bag_pn" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <!-- <div class="input-group mb-3">
-              <span class="input-group-text">Swivel Base</span>
-              <input v-model="productInfo.swivel_base" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div> -->
-
             <div class="input-group mb-3">
               <span class="input-group-text">HDD</span>
               <input v-model="productInfo.hdd" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
@@ -198,7 +135,6 @@
           </div>
 
           <div class="checklist">
-
             <div class="input-group mb-3">
               <span class="input-group-text">RAM Brand</span>
               <input v-model="productInfo.ram_brand" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
@@ -213,39 +149,13 @@
               <span class="input-group-text">Power Cord Quantity</span>
               <input v-model="productInfo.power_cord_qty" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
-<!-- 
-            <div class="input-group mb-3">
-              <span class="input-group-text">Printer Cable Quantity</span>
-              <input v-model="productInfo.printer_cable_qty" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">USB Cable Quantity</span>
-              <input v-model="productInfo.usb_cable_qty" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">Paper Tray Quantity</span>
-              <input v-model="productInfo.paper_tray_qty" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">Screw Quantity</span>
-              <input v-model="productInfo.screw_qty" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">Jack Cable Quantity</span>
-              <input v-model="productInfo.jack_cable_qty" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div> -->
           </div>
         </div>
         
         <div class="buttons">
-          <h2>NOTE FROM THE ADMIN</h2>
+          <h2>NOTE</h2>
         </div>
         <div class="input-group mb-3">
-          <span class="input-group-text">Step by Step Repair Documentation</span>
           <textarea v-model="productInfo.documentation" class="form-control" :disabled="isViewing"></textarea>
         </div>
 
@@ -253,7 +163,7 @@
           <button v-if="isEditing" @click="updateRepair()" type="button" class="btn btn-primary">Update</button>
           <button v-else-if="!isViewing" @click="saveRepair()" type="button" class="btn btn-primary">{{ isEditing ? 'Update' : 'Submit' }}</button>
           <router-link to="/repair-list" class="btn btn-secondary">Cancel</router-link>
-          <button v-if="isEditing" @click="generateInvoice" type="button" class="btn btn-success">Generate Receipt</button>
+          <button v-if="isViewing" @click="generateInvoice" type="button" class="btn btn-success">Generate Statement</button>
         </div>
       </div>
     </div>
@@ -299,15 +209,6 @@ export default {
         purchase_date: '',
         documentation: '',
         warranty_status: '',
-        // orig_box: '',
-        // gen_box: '',
-        // manual: '',
-        // driver_cd: '',
-        // sata_cable: '',
-        // simcard_memorycard_gb: '',
-        // remote_control: '',
-        // receiver: '',
-        // backplate_metal_plate: '',
         ac_adapter: '',
         battery_pack: '',
         lithium_battery: '',
@@ -488,7 +389,7 @@ export default {
             <p style="margin: 2px 0; font-size: 12px;">${warrantyStatusCheckboxes.chargeable}</p>
           </div>
           <div style="width: 48%;">
-            <h3 style="font-size: 14px; margin-bottom: 5px;">Customer Problem/Error</h3>
+            <h3 style="font-size: 14px; margin-bottom: 5px;">Detailed Customer Problem/Error</h3>
             <p style="margin: 2px 0; font-size: 12px;">${displayValue(this.model.description)}</p>
           </div>
         </div>
@@ -496,32 +397,15 @@ export default {
         <div style="margin-bottom: 5px;">
           <h3 style="font-size: 14px; margin-bottom: 5px;">Checklist</h3>
           <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; font-size: 12px;">
-            <p style="margin: 2px 0;"><strong>Original Box:</strong> ${displayValue(this.productInfo.orig_box)}</p>
-            <p style="margin: 2px 0;"><strong>General Box:</strong> ${displayValue(this.productInfo.gen_box)}</p>
-            <p style="margin: 2px 0;"><strong>Manual:</strong> ${displayValue(this.productInfo.manual)}</p>
-            <p style="margin: 2px 0;"><strong>Driver CD:</strong> ${displayValue(this.productInfo.driver_cd)}</p>
-            <p style="margin: 2px 0;"><strong>SATA Cable:</strong> ${displayValue(this.productInfo.sata_cable)}</p>
-            <p style="margin: 2px 0;"><strong>SIM Card/Memory Card (GB):</strong> ${displayValue(this.productInfo.simcard_memorycard_gb)}</p>
-            <p style="margin: 2px 0;"><strong>Remote Control:</strong> ${displayValue(this.productInfo.remote_control)}</p>
-            <p style="margin: 2px 0;"><strong>Receiver:</strong> ${displayValue(this.productInfo.receiver)}</p>
-            <p style="margin: 2px 0;"><strong>Backplate/Metal Plate:</strong> ${displayValue(this.productInfo.backplate_metal_plate)}</p>
             <p style="margin: 2px 0;"><strong>AC Adapter:</strong> ${displayValue(this.productInfo.ac_adapter)}</p>
-            <p style="margin: 2px 0;"><strong>Battery Pack:</strong> ${displayValue(this.productInfo.battery_pack)}</p>
-            <p style="margin: 2px 0;"><strong>Lithium Battery:</strong> ${displayValue(this.productInfo.lithium_battery)}</p>
             <p style="margin: 2px 0;"><strong>VGA Cable:</strong> ${displayValue(this.productInfo.vga_cable)}</p>
             <p style="margin: 2px 0;"><strong>DVI Cable:</strong> ${displayValue(this.productInfo.dvi_cable)}</p>
             <p style="margin: 2px 0;"><strong>Display Cable:</strong> ${displayValue(this.productInfo.display_cable)}</p>
             <p style="margin: 2px 0;"><strong>Bag (PN):</strong> ${displayValue(this.productInfo.bag_pn)}</p>
-            <p style="margin: 2px 0;"><strong>Swivel Base:</strong> ${displayValue(this.productInfo.swivel_base)}</p>
             <p style="margin: 2px 0;"><strong>HDD:</strong> ${displayValue(this.productInfo.hdd)}</p>
             <p style="margin: 2px 0;"><strong>RAM Brand:</strong> ${displayValue(this.productInfo.ram_brand)}</p>
             <p style="margin: 2px 0;"><strong>RAM Size (GB):</strong> ${displayValue(this.productInfo.ram_size_gb)}</p>
             <p style="margin: 2px 0;"><strong>Power Cord Quantity:</strong> ${displayValue(this.productInfo.power_cord_qty)}</p>
-            <p style="margin: 2px 0;"><strong>Printer Cable Quantity:</strong> ${displayValue(this.productInfo.printer_cable_qty)}</p>
-            <p style="margin: 2px 0;"><strong>USB Cable Quantity:</strong> ${displayValue(this.productInfo.usb_cable_qty)}</p>
-            <p style="margin: 2px 0;"><strong>Paper Tray Quantity:</strong> ${displayValue(this.productInfo.paper_tray_qty)}</p>
-            <p style="margin: 2px 0;"><strong>Screw Quantity:</strong> ${displayValue(this.productInfo.screw_qty)}</p>
-            <p style="margin: 2px 0;"><strong>Jack Cable Quantity:</strong> ${displayValue(this.productInfo.jack_cable_qty)}</p>
           </div>
         </div>
       </div>

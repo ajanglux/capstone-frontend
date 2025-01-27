@@ -15,14 +15,14 @@
   
               <div class="filters">
                 <!-- Unified Filter -->
-                <label for="filterType">Select Filter Type:</label>
+                <label for="filterType">Select Type:</label>
                 <select id="filterType" v-model="filterType">
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
                   <option value="monthly">Monthly</option>
                 </select>
   
-                <label for="filterValue">Select Date/Week/Month:</label>
+                <label for="filterValue">Select Date:</label>
                 <input 
                 id="filterValue" 
                 :type="inputType" 
@@ -119,19 +119,30 @@
   
   const filteredRepairs = computed(() => {
     return repairs.value.filter((repair) => {
+      // Apply the existing filter logic (daily, weekly, monthly)
+      let matchesFilter = true;
       if (filterType.value === 'daily' && selectedFilterValue.value) {
         const repairDate = new Date(repair.created_at).toISOString().split('T')[0];
-        return repairDate === selectedFilterValue.value;
+        matchesFilter = repairDate === selectedFilterValue.value;
       } else if (filterType.value === 'weekly' && selectedFilterValue.value) {
         const repairWeek = `${new Date(repair.created_at).getFullYear()}-W${String(
           Math.ceil(new Date(repair.created_at).getDate() / 7)
         ).padStart(2, '0')}`;
-        return repairWeek === selectedFilterValue.value;
+        matchesFilter = repairWeek === selectedFilterValue.value;
       } else if (filterType.value === 'monthly' && selectedFilterValue.value) {
         const repairMonth = new Date(repair.created_at).toISOString().slice(0, 7);
-        return repairMonth === selectedFilterValue.value;
+        matchesFilter = repairMonth === selectedFilterValue.value;
       }
-      return true;
+
+      // Apply the search query filter
+      const searchText = searchQuery.value.toLowerCase();
+      const fullName = `${repair.user?.first_name || ''} ${repair.user?.last_name || ''}`.toLowerCase().trim();
+      const matchesSearch = 
+        repair.code.toLowerCase().includes(searchText) ||
+        fullName.includes(searchText);
+
+      // Return repairs that match both the filter and the search query
+      return matchesFilter && matchesSearch;
     });
   });
   
