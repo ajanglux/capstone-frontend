@@ -17,7 +17,6 @@
                             <div class="timeline-container">
                                 <div class="code">
                                     <h3>Code: {{ code }}</h3>
-                                    <p> Save ang code for status checking ng hindi nagllog in, amen. </p>
                                 </div>
                                 <div class="timeline-item" :class="{ active: isActive('On-Going') }">
                                     <div class="timeline-dot"></div>
@@ -239,7 +238,7 @@ const fetchHomeStatus = async () => {
       }
    
   } catch (error) {
-    errorMessage.value = 'Invalid code or no status found.';
+    errorMessage.value = 'No status found.';
   } finally {
     isLoading.value = false;
   }

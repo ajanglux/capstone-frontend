@@ -115,6 +115,12 @@ const routes = [
     component: () => import('../components/UserSide/TermsAndConditions.vue'),
     beforeEnter: [checkIfNotLogged],
   },
+  {
+    path: '/privacy-policy',
+    name: 'privacy-policy',
+    component: () => import('../components/UserSide/PrivacyPolicy.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
 
   //AUTH
 

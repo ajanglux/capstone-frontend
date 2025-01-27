@@ -7,8 +7,8 @@
           <p>Your trusted partner for all your device repair needs. Providing a comprehensive system where you can explore a wide range of shop offers, And ensuring you get the best service options available. Once you've submitted your device for repair, you'll receive a unique code that allows you to conveniently track the progress of your repair in real-time. Additionally, our platform makes it easy for you to send inquiries directly through the app, giving you a smooth and hassle-free experience from start to finish. We're here to make repairs easier and more accessible for you!</p>
       
           <p>Create an account? 
-            <router-link to="/register">Register</router-link> or 
-            <router-link to="/login">Login</router-link>
+            <router-link class="link" to="/register">Register</router-link> or 
+            <router-link class="link" to="/login">Login</router-link>
           </p>
         </div>
 
@@ -55,6 +55,22 @@ export default {
       font-size: 18px;
       padding-top: 20px;
       transition: all 0.3s ease-out;
+    }
+
+    .link {
+      text-decoration: none;
+      padding: 3px 10px;
+      margin: 0 3px;
+      background-color: var(--main-hover);
+      color: var(--light);
+      letter-spacing: 0.5px;
+      border-radius: 5px;
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        background-color: var(--main);
+        text-decoration: underline;
+      }
     }
   }
 

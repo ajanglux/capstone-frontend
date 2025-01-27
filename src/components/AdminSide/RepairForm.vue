@@ -99,9 +99,11 @@
         <div class="whole-checklist">
           <div class="checklist">
             <div class="buttons">
-              <h2>Checklist</h2>
+              <h2>Accessories Checklist</h2>
             </div>
-            <div class="input-group mb-3">
+
+            
+            <!-- <div class="input-group mb-3">
               <span class="input-group-text">Original Box</span>
               <input v-model="productInfo.orig_box" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
@@ -144,8 +146,8 @@
             <div class="input-group mb-3">
               <span class="input-group-text">Backplate/Metal Plate</span>
               <input v-model="productInfo.backplate_metal_plate" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-          </div>
+            </div> -->
+          </div> 
 
           <div class="checklist">
 
@@ -154,7 +156,7 @@
               <input v-model="productInfo.ac_adapter" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <div class="input-group mb-3">
+            <!-- <div class="input-group mb-3">
               <span class="input-group-text">Battery Pack</span>
               <input v-model="productInfo.battery_pack" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
@@ -162,7 +164,7 @@
             <div class="input-group mb-3">
               <span class="input-group-text">Lithium Battery</span>
               <input v-model="productInfo.lithium_battery" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
+            </div> -->
 
             <div class="input-group mb-3">
               <span class="input-group-text">VGA Cable</span>
@@ -184,10 +186,10 @@
               <input v-model="productInfo.bag_pn" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <div class="input-group mb-3">
+            <!-- <div class="input-group mb-3">
               <span class="input-group-text">Swivel Base</span>
               <input v-model="productInfo.swivel_base" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
+            </div> -->
 
             <div class="input-group mb-3">
               <span class="input-group-text">HDD</span>
@@ -211,7 +213,7 @@
               <span class="input-group-text">Power Cord Quantity</span>
               <input v-model="productInfo.power_cord_qty" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
-
+<!-- 
             <div class="input-group mb-3">
               <span class="input-group-text">Printer Cable Quantity</span>
               <input v-model="productInfo.printer_cable_qty" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
@@ -235,7 +237,7 @@
             <div class="input-group mb-3">
               <span class="input-group-text">Jack Cable Quantity</span>
               <input v-model="productInfo.jack_cable_qty" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
+            </div> -->
           </div>
         </div>
         
@@ -297,15 +299,15 @@ export default {
         purchase_date: '',
         documentation: '',
         warranty_status: '',
-        orig_box: '',
-        gen_box: '',
-        manual: '',
-        driver_cd: '',
-        sata_cable: '',
-        simcard_memorycard_gb: '',
-        remote_control: '',
-        receiver: '',
-        backplate_metal_plate: '',
+        // orig_box: '',
+        // gen_box: '',
+        // manual: '',
+        // driver_cd: '',
+        // sata_cable: '',
+        // simcard_memorycard_gb: '',
+        // remote_control: '',
+        // receiver: '',
+        // backplate_metal_plate: '',
         ac_adapter: '',
         battery_pack: '',
         lithium_battery: '',

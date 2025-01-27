@@ -7,55 +7,64 @@
             </p>
         </div>
         <div class="privacy-policy">
-            <h2>1. Information We Collect</h2>
-            <p>We collect the following types of information:
-                <br> • <strong>Personal Information:</strong> Your name, email address, and phone number.
-                <br> • <strong>Device Information:</strong> Details about your computer or device, including specifications and issues you report.
-                <br> • <strong>Technical Information:</strong> IP addresses, browser types, and operating systems, where applicable.
+            <h2>1. Introduction</h2>
+            <p>Welcome to Techfix, a Computer Repair Management Platform developed for Brandcom I.T. Services. Your privacy is important to us. 
+                This Privacy Policy explains how we collect, use, disclose, and protect your information when you use our platform.
             </p>
         </div>
         <div class="privacy-policy">
-            <h2>2. How We Use Your Information</h2>
-            <p>We use the information you provide to:
-                <br> • Facilitate and manage your repair booking requests.
-                <br> • Diagnose and resolve computer-related issues based on the details you provide.
-                <br> • Communicate updates, confirmations, or questions about your repair bookings.
-                <br> • Improve and personalize our services based on user feedback and analytics.
+            <h2>2. Information We Collect</h2>
+            <p>We collect the following types of information when you use Techfix:
+                <br> • Personal Information: Name, contact details (email, phone number), and address.
+                <br> • Device Information: Model, brand, serial number, and issue descriptions.
+                <br> • Transaction Information: Repair history and service requests.
+                <br> • Communication Data: Messages, inquiries, and feedback submitted through the platform.
+                <br> • Technical Information: IP address, browser type, operating system, and usage data.
             </p>
         </div>
         <div class="privacy-policy">
-            <h2>3. Data Retention</h2>
-            <p>We retain your personal data only as long as necessary to fulfill the purposes outlined in this policy, or as required by law. Once no longer needed, your information will be securely deleted or anonymized.
-            </p>
-        </div>
-        <div class="privacy-policy">
-            <h2>4. Data Storage and Security</h2>
+            <h2>3. How We Use Your Information</h2>
             <p>
-                <br> • Your data is stored locally on secure systems to prevent unauthorized access.
-                <br> • We implement reasonable security measures, including encryption and access controls, to safeguard your information against loss, theft, and unauthorized disclosure.
+                We use your information for the following purposes:
+
+                <br> • To process repair requests and manage service records.
+                <br> • To provide real-time tracking of repair progress.
+                <br> • To communicate with you regarding service updates and inquiries.
+                <br> • To improve our platform, services, and user experience.
+                <br> • To ensure security, prevent fraud, and comply with legal obligations.
+
             </p>
         </div>
         <div class="privacy-policy">
-            <h2>5. Sharing Your Information</h2>
-            <p>We do not sell, rent, or share your information with third parties unless required by law or with your explicit consent. If sharing is necessary to provide a service, we ensure that your data is protected by appropriate agreements.
+            <h2>4. Sharing and Disclosure</h2>
+            <p>
+                We do not sell, trade, or rent your personal information. However, we may disclose your information if required by law, regulation, or legal process.
             </p>
         </div>
         <div class="privacy-policy">
-            <h2>6. Your Rights</h2>
-            <p>You have the following rights regarding your personal data:
-                <br> • <strong>Access and Update:</strong> You can request access to or updates of your personal information stored in our system.
-                <br> • <strong>Deletion:</strong> You may request that we delete your personal information, subject to legal and operational requirements.
-                <br> • <strong>Data Portability:</strong> You may request a copy of your personal data in a structured, machine-readable format.
+            <h2>5. Data Security</h2>
+            <p>
+                We implement industry-standard security measures to protect your data from unauthorized access, alteration, or disclosure. However, no method of transmission over the Internet is completely secure.
             </p>
         </div>
         <div class="privacy-policy">
-            <h2>7. Cookies and Tracking</h2>
+            <h2>6. Your Rights and Choices</h2>
+            <p>You have the right to:
+                <br> • Access, update, or delete your personal information.
+                <br> • Opt-out of marketing communications.
+                <br> • Request data portability, where applicable.
+                <br> • Restrict or object to certain processing activities.
+            </p>
+        </div>
+        <div class="privacy-policy">
+            <h2>7. Cookies and Tracking Technologies</h2>
             <p>If our system uses cookies or similar technologies to enhance user experience, we will notify you and provide options for managing your preferences. These cookies may include session cookies for tracking user activity within the site.
             </p>
         </div>
         <div class="privacy-policy">
-            <h2>8. International Data Transfers</h2>
-            <p>If your data is transferred outside your country of residence, we ensure that it is protected under applicable privacy standards and legal safeguards.
+            <h2>8. Changes to This Privacy Policy</h2>
+            <p>
+                We may update this policy periodically. Any changes will be posted on this page with an updated effective date.
             </p>
         </div>
         <div class="privacy-policy">
@@ -70,11 +79,8 @@
         </div>
         <div class="privacy-policy">
             <h2>11. Contact Us</h2>
-            <p>For any questions, concerns, or feedback about this Privacy Policy or how your data is handled, please contact us through the platform or at our official support email:
-                <br> • <strong>Email:</strong> raymart.williams@brandcomph.com
-                <br> • <strong>Phone:</strong> +639661908734
-                <br>Thank you for trusting us with your device repair needs. We are committed to providing you with the best possible experience!
-            </p>
+            <p>If you have any questions about this Privacy Policy, please contact us at:
+                <br> • <strong>Brandcom I.T. Services</strong></p>
         </div>
     </div>
 </template>

@@ -34,19 +34,9 @@
 
             <div class="terms-checkbox">
               <input type="checkbox" v-model="isTermsChecked" id="termsCheckbox" @input="validateTerms" />
-                <a  
-                  href="/terms-and-conditions" 
-                  target="_blank" 
-                  rel="noopener noreferrer">
-                  Terms and Conditions
-                </a>
-                <a>&</a>
-                <a  
-                  href="/terms-and-conditions" 
-                  target="_blank" 
-                  rel="noopener noreferrer">
-                  Privacy Policy
-                </a>
+                <p> I agree to the <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer"> Terms and Conditions </a> &
+                  <a href="/privacy-policy" target="_blank" rel="noopener noreferrer"> Privacy Policy </a>
+                </p>
             </div>
 
             <div class="form-group mb-3 text-center">
@@ -54,8 +44,10 @@
               <button v-else type="submit" class="btn btn-dark btn-sm rounded-0 w-100">
                 Submit
               </button> <br>
-              <router-link to="/login">Login</router-link> <br>
-              <router-link to="/">Go Back</router-link>
+              <div class="down">
+                <p> Already have an account?  <router-link class="primary" to="/login">Login</router-link></p>
+                <router-link class="secondary" to="/">Go Back</router-link>
+              </div>
             </div>
           </form>
         </div>
@@ -152,7 +144,7 @@
   border-bottom-left-radius: 10px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   background-color: var(--light);
-  padding: 60px;
+  padding: 60px 60px 50px 60px;
   align-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
@@ -214,19 +206,26 @@
 
   .terms-checkbox {
     display: flex;
-    height: 50%;
-    width: 20%;
+    padding-bottom: 10px;
+    margin-top: -15px;
+
+    input[type="checkbox"] {
+      width: 15px;
+    }
 
     input[type="checkbox"]:checked {
       accent-color: var(--header);
-      padding-bottom: -10px;
+    }
+
+    p {
+      font-size: 12px;
+      color: black;
+      margin-top: 15.5px;
+      padding-left: 3px;
     }
 
     a {
-      font-size: 10px;
-      padding-left: 5px;
-      padding-top: 9px;
-      padding-bottom: 18px;
+      font-size: 12px;
       color: var(--header);
 
       &:hover {

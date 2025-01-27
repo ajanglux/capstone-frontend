@@ -1,7 +1,7 @@
 <template>
     <div class="terms">
         <div class="terms-content">
-            <h1>Terms and Contidition</h1>
+            <h1>Terms and Conditions</h1>
             <p>Welcome to our techfixph.com, your trusted partner for all your device repair needs. By using our services, 
                 you agree to abide by the following terms and conditions. Please read these terms carefully before proceeding.
             </p>

@@ -155,3 +155,36 @@ button {
         }
     }
 }
+
+.down {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 5px;
+    padding-top: 40px;
+    width: 100%;
+
+    p {
+        font-size: 15px;
+        color: black;
+    }
+
+    .primary {
+        color: var(--main);
+        font-weight: 500;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .secondary {
+        font-size: 14px;
+        color: var(--header);
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

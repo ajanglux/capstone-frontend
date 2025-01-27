@@ -32,12 +32,10 @@
               </button>
             </div>
           </form>
-          <div class="nav-item">
-                  <router-link class="nav-link" aria-current="page" to="/register">
-                    Register
-                  </router-link>
-                  <br> <router-link to="/">Go Back</router-link>
-                </div>
+          <div class="down">
+            <p> Create an account? <router-link class="primary" aria-current="page" to="/register"> Register </router-link> </p>
+            <router-link class="secondary" to="/">Go Back</router-link>
+          </div>
         </div>
       </div>
       <div class="logo">

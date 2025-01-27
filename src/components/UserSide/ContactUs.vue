@@ -5,7 +5,7 @@
         <div class="contact-info">
           <h2>Enter Inquiries</h2> 
           <div class="input-group mb-4">
-            <textarea v-model="customerDetail.description" class="form-control" placeholder="Short Device Issue Description" required></textarea>
+            <textarea v-model="customerDetail.description" class="form-control" placeholder="" required></textarea>
             <p v-if="descriptionError" class="error-message">Description is required.</p>
           </div>
           <div class="button">
