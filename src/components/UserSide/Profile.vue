@@ -25,7 +25,7 @@
           </div>
           <div class="form-field">
             <label for="phone">Phone</label>
-            <input v-model="userProfile.phone_number" type="text" id="phone" placeholder="+63XXXXXXXXXX" required />
+            <input v-model="userProfile.phone_number" type="text" id="phone" placeholder="09XXXXXXXXX" required />
           </div>
         </div>
 

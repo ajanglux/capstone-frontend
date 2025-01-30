@@ -25,6 +25,7 @@
             <tr>
               <th>No.</th>
               <th>Client</th>
+              <th>Date</th>
               <!-- <th>Email</th>
               <th>Contact No.</th>
               <th>Address</th> -->
@@ -37,6 +38,7 @@
               <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
                 <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
                 <td>{{ repair.user?.first_name || 'N/A' }} {{ repair.user?.last_name || 'N/A' }}</td>
+                <td>{{ formatDate(repair.created_at) }}</td>
                 <!-- <td>{{ repair.user?.email || 'N/A' }}</td>
                 <td>{{ repair.user?.phone_number || 'N/A' }}</td>
                 <td>{{ repair.user?.address || 'N/A' }}</td> -->
@@ -174,6 +176,15 @@ const fetchRepairs = async () => {
   } catch (error) {
     toast.error('Failed to load Inquiries details. Please try again.', { timeout: 3000 });
   }
+};
+
+const formatDate = (dateString) => {
+  if (dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return date.toLocaleString('en-US', options);
+  }
+  return '';
 };
 
 

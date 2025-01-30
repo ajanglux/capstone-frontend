@@ -31,7 +31,6 @@ aside {
     min-width: 250px;
     background-color: var(--main);
     height: 100vh;
-    /* padding: 20px; */
     display: block;
     position: fixed;
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
@@ -55,17 +54,6 @@ aside {
         padding: 20px;
         text-align: center;
     }
-    
-    /* flex-direction: column;
-    width: calc(2.5rem + 32px);
-    min-height: 100vh;
-    overflow: hidden;
-    padding: 1rem;
-    background-color: var(--dark);
-    color: var(--light);
-    position: -webkit-sticky;
-    position: sticky;
-    transition: 0.2s ease-out; */
 
     .menu {
         display: inline-grid;

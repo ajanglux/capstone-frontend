@@ -142,6 +142,12 @@ const routes = [
     component: () => import('../components/UserSide/Profile.vue'),
     beforeEnter: [checkIfLogged, checkIfUser],
   },
+  {
+    path: '/user-history',
+    name: 'user-history',
+    component: () => import('../components/UserSide/UserHistory.vue'),
+    beforeEnter: [checkIfLogged, checkIfUser],
+  },
 ];
 
 function checkIfLogged(to, from, next) {

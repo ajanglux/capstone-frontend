@@ -7,7 +7,7 @@
             </p>
             <br>
             <p>
-                Fffective Date: January 27, 2025
+                Effective Date: January 27, 2025
             </p>
         </div>
         <div class="privacy-policy">
