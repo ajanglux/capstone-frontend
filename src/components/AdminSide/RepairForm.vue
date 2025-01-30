@@ -102,35 +102,35 @@
               <h2>Accessories Checklist</h2>
             </div>
 
-            <div class="input-group mb-3">
+            <div class="mb3">
               <span class="input-group-text">AC Adapter</span>
-              <input v-model="productInfo.ac_adapter" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.ac_adapter" type="radio" id="ac_adapter" value="ac_adapter" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <div class="input-group mb-3">
+            <div class="mb3">
               <span class="input-group-text">VGA Cable</span>
-              <input v-model="productInfo.vga_cable" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.vga_cable" type="radio" id="vga_cable" value="vga_cable" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <div class="input-group mb-3">
+            <div class="mb3">
               <span class="input-group-text">DVI Cable</span>
-              <input v-model="productInfo.dvi_cable" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.dvi_cable" type="radio" id="dvi_cable" value="dvi_cable" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
           </div> 
           <div class="checklist">
-            <div class="input-group mb-3">
+            <div class="mb3">
               <span class="input-group-text">Display Cable</span>
-              <input v-model="productInfo.display_cable" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.display_cable" type="radio" id="display_cable" value="display_cable" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <div class="input-group mb-3">
+            <div class="mb3">
               <span class="input-group-text">Bag (PN)</span>
-              <input v-model="productInfo.bag_pn" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.bag_pn" type="radio" id="bag" value="bag" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <div class="input-group mb-3">
+            <div class="mb3">
               <span class="input-group-text">HDD</span>
-              <input v-model="productInfo.hdd" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.hdd" type="radio" id="hdd" value="hdd" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
           </div>
 
@@ -458,6 +458,18 @@ h2 {
     .checklist:nth-child(2),
     .checklist:nth-child(3) {
       padding-top: 57px;
+    }
+  }
+  .checklist {
+    margin: 0;
+    .mb3 {
+
+      input {
+        width: 15px;
+        height: 15px;
+        margin-left: 40px;
+        margin-top: 10px;
+      }
     }
   }
 

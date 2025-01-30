@@ -6,8 +6,7 @@
                     <img class="app-logo" src="/src/assets/techfix-no.png" alt="TechFix Logo" />
                     <h3>TechFix</h3>
                 </div>
-    
-                <!-- Menu Icon for small screens -->
+
                 <div v-if="!isViewTerms" class="menu-icon" @click="toggleDropdown">
                     <i :class="isDropdownOpen ? 'bx bx-x' : 'bx bx-menu'"></i>
                 </div>
@@ -17,13 +16,17 @@
                 <router-link class="button" active-class="active" to="/home" @click="closeDropdown">
                 <span class="text">Home</span>
                 </router-link>
-                <router-link class="button" active-class="active" to="/contact" @click="closeDropdown">
-                <span class="text">Inquire</span>
+                <a class="button" @click="openInquireModal">
+                    <span class="text">Ticket</span>
+                </a>
+
+                <router-link class="button" active-class="active" to="/user-history" @click="closeDropdown">
+                <span class="text">History</span>
                 </router-link>
     
                 <div class="dropdown">
                 <button class="button">
-                  <span> {{ store.user?.name || 'User' }} </span>
+                  <span> {{ store.user?.first_name || 'User' }} </span>
                 </button>
                 <div class="dropdown-content">
                   <a class="nav-link" @click="openProfileModal" style="cursor: pointer">Profile</a>
@@ -35,11 +38,11 @@
             </div>
     
         </header>
-  
-        <!-- Dynamically loaded ProfileModal component -->
-        <ProfileModal :isModalOpen="isModalOpen" @closeModal="closeModal" />
+
+        <ProfileModal :isModalOpen="isProfileModalOpen" @closeModal="closeProfileModal" />
+
+        <InquireModal :isModalOpen="isInquireModalOpen" @closeModal="closeInquireModal" />
     
-        <!-- Overlay for dark effect -->
         <div v-if="isDropdownOpen && !isViewTerms" class="overlay" @click.stop="closeDropdown"></div>
     </div> 
   </template>
@@ -54,13 +57,14 @@
   import { getHeaderConfig } from '../../helpers/headerConfig'
   import { useRoute } from 'vue-router';
   
-  // Dynamically import ProfileModal component
   const ProfileModal = defineAsyncComponent(() => import('../UserSide/Profile.vue'));
+  const InquireModal = defineAsyncComponent(() => import("../UserSide/ContactUs.vue"));
   
   const toast = useToast()
   const store = useAuthStore()
   const isDropdownOpen = ref(false);
-  const isModalOpen = ref(false);
+  const isProfileModalOpen = ref(false);
+  const isInquireModalOpen = ref(false);
   const route = useRoute();
   
   const toggleDropdown = () => {
@@ -71,15 +75,19 @@
     isDropdownOpen.value = false;
   };
   
-  // Method to open the modal
-  const openProfileModal = () => {
-    isModalOpen.value = true;
-  };
-  
-  // Method to close the modal
-  const closeModal = () => {
-    isModalOpen.value = false;
-  };
+    const openProfileModal = () => {
+    isProfileModalOpen.value = true;
+    };
+    const closeProfileModal = () => {
+    isProfileModalOpen.value = false;
+    };
+
+    const openInquireModal = () => {
+    isInquireModalOpen.value = true;
+    };
+    const closeInquireModal = () => {
+    isInquireModalOpen.value = false;
+    };
   
   const isViewTerms = computed(() => route.path === '/terms-and-conditions');
   
@@ -97,17 +105,17 @@
   }
   
   const fetchCurrentUser = async () => {
-      try {
-          const response = await axios.get(`${BASE_URL}/user`, getHeaderConfig(store.access_token));
-          store.setToken(response.data.currentToken)
-          store.setUser(response.data.user);
-      } catch (error) {
-          if(error?.response?.status === 401) {
-              store.clearStoredData()
-          }
-          console.log(error);
-      }
-  }
+    try {
+        const response = await axios.get(`${BASE_URL}/user`, getHeaderConfig(store.access_token));
+        store.setToken(response.data.currentToken); 
+        store.setUser(response.data.user);
+    } catch (error) {
+        if(error?.response?.status === 401) {
+            store.clearStoredData();
+        }
+        console.log(error);
+    }
+}
   
   onMounted(() => {
       if(store.access_token) fetchCurrentUser()

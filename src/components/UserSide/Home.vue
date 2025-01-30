@@ -13,12 +13,16 @@
                             <p>{{ errorMessage }}</p>
                         </div>
 
-                        <!-- Show status updates or comment based on the status -->
+                        <div class="user-inqui">
+                            <h4>Your Inquiry:</h4>
+                            <p class="comment-box">{{ description }}</p>
+                            <p v-if="descriptionUpdatedAt" class="timestamp">Updated on: {{ formattedDescriptionUpdatedAt }}</p>
+                        </div>
+
                         <div class="admin-respond" v-if="status === 'Responded'">
                             <h4>Admin Respond</h4>
-                            <p class="comment-box"> {{ comment }}</p>
-
-                            <!-- <p>Your inquiry message: {{ inquiryMessage }}</p> -->
+                            <p class="comment-box">{{ comment }}</p>
+                            <p v-if="adminCommentUpdatedAt" class="timestamp">Updated on: {{ formattedAdminCommentUpdatedAt }}</p>
                         </div>
 
                         <div v-else>
@@ -74,11 +78,11 @@
 
             <div class="card2">
                 <div class="content-container">
-                    <h1>WE OFFER</h1>
+                    <h1>Services</h1>
                     <div class="cards1">
                         <!-- Services -->
                         <div class="side-card">
-                            <div class="card1" @click="goToContactUs('Computer Service & Repair')">
+                            <div class="card1" @click="openContactUsModal('Computer Service & Repair')">
                                 <div class="img">
                                     <img src="../../assets/computer-repair.jpg" alt="Service Image" class="img-thumbnail" />
                                 </div>
@@ -88,7 +92,8 @@
                                 </div>
                             </div>
 
-                            <div class="card1" @click="goToContactUs('Free: Check up for Laptop & Desktop')">
+                            <div class="card1" @click="openContactUsModal('Free: Check up for Laptop & Desktop')">
+                                
                                 <div class="img">
                                     <img src="../../assets/Laptop-check.jpg" alt="Service Image" class="img-thumbnail" />
                                 </div>
@@ -101,7 +106,8 @@
 
                         <!-- More Services -->
                         <div class="side-card">
-                            <div class="card1" @click="goToContactUs('Software and Hardware Installation')">
+                            <div class="card1"@click="openContactUsModal('Software and Hardware Installation')">
+                                
                                 <div class="img">
                                     <img src="../../assets/hardware-installation.jpg" alt="Service Image" class="img-thumbnail" />
                                 </div>
@@ -111,7 +117,8 @@
                                 </div>
                             </div>
 
-                            <div class="card1" @click="goToContactUs('Reformat & Reprogram')">
+                            <div class="card1" @click="openContactUsModal('Reformat & Reprogram')">
+                               
                                 <div class="img">
                                     <img src="../../assets/reset.jpg" alt="Service Image" class="img-thumbnail" />
                                 </div>
@@ -122,29 +129,34 @@
                             </div>
                         </div>
 
+                        <div class="side-card">
+                            <div class="card1" @click="openContactUsModal('Remove Viruses and Malware')">
+                               
+                               <div class="img">
+                                   <img src="../../assets/remove-viruses.jpg" alt="Service Image" class="img-thumbnail" />
+                               </div>
+                               <div class="info">
+                                   <h2>Remove Viruses and Malware</h2>
+                                   <p>Effective virus and malware removal to protect your device and restore its security and performance.</p>
+                               </div>
+                           </div>
+
+                           <div class="card1" @click="openContactUsModal('Networking')">
+                               
+                               <div class="img">
+                                   <img src="../../assets/networking.jpg" alt="Service Image" class="img-thumbnail" />
+                               </div>
+                               <div class="info">
+                                   <h2>Networking</h2>
+                                   <p>Expert networking solutions for seamless connectivity, setup, and troubleshooting of your home or office network.</p>
+                               </div>
+                           </div>
+                        </div>
+
                         <!-- More Services -->
                         <div class="line-card">
-                            <div class="card1" @click="goToContactUs('Remove Viruses and Malware')">
-                                <div class="img">
-                                    <img src="../../assets/remove-viruses.jpg" alt="Service Image" class="img-thumbnail" />
-                                </div>
-                                <div class="info">
-                                    <h2>Remove Viruses and Malware</h2>
-                                    <p>Effective virus and malware removal to protect your device and restore its security and performance.</p>
-                                </div>
-                            </div>
-
-                            <div class="card1" @click="goToContactUs('Networking')">
-                                <div class="img">
-                                    <img src="../../assets/networking.jpg" alt="Service Image" class="img-thumbnail" />
-                                </div>
-                                <div class="info">
-                                    <h2>Networking</h2>
-                                    <p>Expert networking solutions for seamless connectivity, setup, and troubleshooting of your home or office network.</p>
-                                </div>
-                            </div>
-
-                            <div class="card1" @click="goToContactUs('CCTV Installation')">
+                            <div class="card1" @click="openContactUsModal('CCTV Installation')">
+                                
                                 <div class="img">
                                     <img src="../../assets/cctv.jpg" alt="Service Image" class="img-thumbnail" />
                                 </div>
@@ -156,6 +168,11 @@
                         </div>
                     </div>
                 </div>
+                <InquireModal
+                    :isModalOpen="isInquireModalOpen"
+                    :serviceTitle="selectedService"
+                    @closeModal="closeInquireModal"
+                    />
             </div>
         </div>
     </div>
@@ -163,13 +180,16 @@
 
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, defineAsyncComponent  } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { useToast } from 'vue-toastification'; 
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
+import InquireModal from '../UserSide/ContactUs.vue';
+
+// const InquireModal = defineAsyncComponent(() => import("../UserSide/ContactUs.vue"));
 
 const code = ref('');
 const status = ref(null);
@@ -187,17 +207,25 @@ const authStore = useAuthStore();
 const token = authStore.access_token;
 const toast = useToast();
 const comment = ref('');
+const description = ref('');
+const isInquireModalOpen = ref(false);
+const selectedService = ref('');
 
-const goToContactUs = (serviceTitle) => {
+const descriptionUpdatedAt = ref(null);
+const adminCommentUpdatedAt = ref(null);
+
+const openContactUsModal = (serviceTitle, serviceDescription) => {
   if (!authStore.isAuthenticated) {
-    toast.error('Please log in before proceeding', { timeout: 3000 });
-    router.push('/login');
+    toast.error('Please log in to proceed', { timeout: 3000 });
   } else {
-    router.push({
-      name: 'contact',
-      query: { service: serviceTitle },
-    });
+    selectedService.value = serviceTitle;
+    description.value = serviceDescription;
+    isInquireModalOpen.value = true;
   }
+};
+
+const closeInquireModal = () => {
+  isInquireModalOpen.value = false;
 };
 
 const statusUpdateVisible = ref(true);
@@ -208,8 +236,11 @@ const fetchHomeStatus = async () => {
   finishedUpdatedAt.value = null;
   readyForPickupUpdatedAt.value = null;
   completedUpdatedAt.value = null;
+  descriptionUpdatedAt.value = null;
+  adminCommentUpdatedAt.value = null;
   comment.value = '';
   code.value = '';
+  description.value = '';
   errorMessage.value = '';
   isLoading.value = true;
   finishedStatusAvailable.value = false; // Reset on each fetch
@@ -224,9 +255,16 @@ const fetchHomeStatus = async () => {
       readyForPickupUpdatedAt.value = response.data.data.ready_for_pickup_updated_at;
       completedUpdatedAt.value = response.data.data.completed_updated_at;
       code.value = response.data.data.code;
+      descriptionUpdatedAt.value = response.data.data.description_updated_at;
+      adminCommentUpdatedAt.value = response.data.data.admin_comment_updated_at;
+      
 
-    // Check if the comment exists and is not empty
+     // Check if the comment exists and is not empty
       comment.value = response.data.data.comment && response.data.data.comment.trim() ? response.data.data.comment : '';
+
+      // Check if the description exists and is not empty
+      description.value = response.data.data.description && response.data.data.description.trim() ? response.data.data.description : '';
+
       if (status.value === 'Ready-for-Pickup' && !finishedUpdatedAt.value) {
         finishedStatusAvailable.value = true; // Set to available if condition met
       }
@@ -239,13 +277,16 @@ const fetchHomeStatus = async () => {
         }
    
   } catch (error) {
-    errorMessage.value = 'No status found.';
+    errorMessage.value = 'No status found. Click Ticket to submit a question or request a repair.';
   } finally {
     isLoading.value = false;
   }
 };
 
 onMounted(fetchHomeStatus);
+
+const formattedDescriptionUpdatedAt = computed(() => formatDate(descriptionUpdatedAt.value));
+const formattedAdminCommentUpdatedAt = computed(() => formatDate(adminCommentUpdatedAt.value));
 
 const formattedOnGoingUpdatedAt = computed(() => formatDate(onGoingUpdatedAt.value));
 const formattedFinishedUpdatedAt = computed(() => formatDate(finishedUpdatedAt.value));
@@ -287,13 +328,12 @@ const isActive = (checkStatus) => {
         padding: 50px;
         background-color: var(--header);
         color: var(--light2);
-        /* box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.322); */
         border-radius: 20px;
         transition: all 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
         flex-basis: 50%;
-        height: 85vh;
+        height: 100vh;
 
         position: sticky;
         top: 6pc;
@@ -308,6 +348,10 @@ const isActive = (checkStatus) => {
 
         .contact-info {
             width: 100%;
+            
+            p {
+                /* margin-bottom: 50px; */
+            }
 
             button {
                 background-color: var(--main);
@@ -398,6 +442,15 @@ const isActive = (checkStatus) => {
         flex-grow: 1;
         padding: 20px;
 
+        .side-card {
+            display: flex;
+        }
+
+        h1 {
+            margin-bottom: 4px;
+            margin-top: 2px;
+        }
+
         .card1 {
             flex: 1;
             padding: 25px;
@@ -449,7 +502,6 @@ const isActive = (checkStatus) => {
     .comment-box {
         background-color: #f3f3f3;
         padding: 15px;
-        border-left: 4px solid #4CAF50;
         border-radius: 5px;
         margin-top: 10px;
         font-style: italic;
@@ -471,83 +523,9 @@ const isActive = (checkStatus) => {
         position: unset;
 
     }
-    .card2 {
-        flex: 1;
-        padding: 25px;
-        color: var(--light2);
-        transition: all 0.3s ease-in-out;
-        display: flex;
-        flex-direction: column;
-        flex-basis: 100%;
-        background-color: var(--header);
-        border-radius: 20px;
-
-        flex-grow: 1;
-        padding: 20px;
-
-        .card1 {
-            flex: 1;
-            padding: 25px;
-            color: var(--light2);
-            transition: all 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--header);
-            border-radius: 20px;
-            cursor: pointer;
-
-            &:hover {
-                background-color: var(--main-hover);
-                border-radius: 20px;
-            }
-
-            .img {
-                display: flex;
-                justify-content: center;
-                width: 100%;
-                margin-bottom: 10px;
-
-                img {
-                width: 100%;
-                height: 330px;
-                object-fit: cover;
-                object-position: center;
-                align-content: center;
-                border-radius: 10px;
-                }
-            }
-
-            .info {
-                h2 {
-                font-size: 20px;
-                }
-
-                p {
-                font-size: 15px;
-                }
-            }
-        }
-    }
-
-    .admin-respond {
-        padding: 15px 0;
-    }
-
-    .comment-box {
-        background-color: #f3f3f3;
-        padding: 15px;
-        border-left: 4px solid #4CAF50;
-        border-radius: 5px;
-        margin-top: 10px;
-        font-style: italic;
-        font-size: 16px;
-        color: #333;
-        max-width: 100%;
-        word-wrap: break-word;
-    }
 }
 }
-@media (max-width: 650px) {
+@media (max-width: 700px) {
     .dropdown {
     position: relative;
     display: inline-block;
@@ -578,80 +556,6 @@ const isActive = (checkStatus) => {
         .con-container {
             text-align: center;
         }
-    }
-    .card2 {
-        flex: 1;
-        padding: 25px;
-        color: var(--light2);
-        transition: all 0.3s ease-in-out;
-        display: flex;
-        flex-direction: column;
-        flex-basis: 100%;
-        background-color: var(--header);
-        border-radius: 20px;
-
-        flex-grow: 1;
-        padding: 20px;
-
-        .card1 {
-            flex: 1;
-            padding: 25px;
-            color: var(--light2);
-            transition: all 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--header);
-            border-radius: 20px;
-            cursor: pointer;
-
-            &:hover {
-                background-color: var(--main-hover);
-                border-radius: 20px;
-            }
-
-            .img {
-                display: flex;
-                justify-content: center;
-                width: 100%;
-                margin-bottom: 10px;
-
-                img {
-                width: 100%;
-                height: 330px;
-                object-fit: cover;
-                object-position: center;
-                align-content: center;
-                border-radius: 10px;
-                }
-            }
-
-            .info {
-                h2 {
-                font-size: 20px;
-                }
-
-                p {
-                font-size: 15px;
-                }
-            }
-        }
-    }
-
-    .admin-respond {
-        padding: 15px 0;
-    }
-
-    .comment-box {
-        background-color: #f3f3f3;
-        padding: 15px;
-        border-left: 4px solid #4CAF50;
-        border-radius: 5px;
-        margin-top: 10px;
-        font-style: italic;
-        font-size: 16px;
-        color: #333;
-        max-width: 100%;
-        word-wrap: break-word;
     }
 }
 }

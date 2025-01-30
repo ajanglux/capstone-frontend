@@ -14,7 +14,6 @@
               </div>
   
               <div class="filters">
-                <!-- Unified Filter -->
                 <label for="filterType">Select Type:</label>
                 <select id="filterType" v-model="filterType">
                   <option value="daily">Daily</option>
@@ -106,45 +105,52 @@
   
   const fetchRepairs = async () => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/customer-details`,
-        getHeaderConfig(authStore.access_token)
-      );
-      repairs.value = response.data.data;
+        const response = await axios.get(
+            `${BASE_URL}/customer-details`,
+            getHeaderConfig(authStore.access_token)
+        );
+        repairs.value = response.data.data;
     } catch (error) {
-      console.error('Error fetching repairs:', error);
-      errors.value = error.response?.data?.message || 'Error fetching repairs';
+        console.error('Error fetching repairs:', error);
+        errors.value = error.response?.data?.message || 'Error fetching repairs';
     }
-  };
+};
+
   
-  const filteredRepairs = computed(() => {
-    return repairs.value.filter((repair) => {
-      // Apply the existing filter logic (daily, weekly, monthly)
-      let matchesFilter = true;
-      if (filterType.value === 'daily' && selectedFilterValue.value) {
-        const repairDate = new Date(repair.created_at).toISOString().split('T')[0];
-        matchesFilter = repairDate === selectedFilterValue.value;
-      } else if (filterType.value === 'weekly' && selectedFilterValue.value) {
-        const repairWeek = `${new Date(repair.created_at).getFullYear()}-W${String(
-          Math.ceil(new Date(repair.created_at).getDate() / 7)
-        ).padStart(2, '0')}`;
-        matchesFilter = repairWeek === selectedFilterValue.value;
-      } else if (filterType.value === 'monthly' && selectedFilterValue.value) {
-        const repairMonth = new Date(repair.created_at).toISOString().slice(0, 7);
-        matchesFilter = repairMonth === selectedFilterValue.value;
-      }
-
-      // Apply the search query filter
-      const searchText = searchQuery.value.toLowerCase();
-      const fullName = `${repair.user?.first_name || ''} ${repair.user?.last_name || ''}`.toLowerCase().trim();
-      const matchesSearch = 
-        repair.code.toLowerCase().includes(searchText) ||
-        fullName.includes(searchText);
-
-      // Return repairs that match both the filter and the search query
-      return matchesFilter && matchesSearch;
-    });
-  });
+const filteredRepairs = computed(() => {
+    return repairs.value
+        .filter(repair => repair.status === 'Completed' || repair.status === 'Cancelled')
+        .filter(repair => {
+            if (!selectedFilterValue.value) return true;
+            const repairDate = new Date(repair.created_at);
+            const filterValue = new Date(selectedFilterValue.value);
+            
+            if (filterType.value === 'daily') {
+                return repairDate.toDateString() === filterValue.toDateString();
+            } else if (filterType.value === 'weekly') {
+                const weekStart = new Date(filterValue);
+                weekStart.setDate(filterValue.getDate() - filterValue.getDay());
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekStart.getDate() + 6);
+                return repairDate >= weekStart && repairDate <= weekEnd;
+            } else if (filterType.value === 'monthly') {
+                return (
+                    repairDate.getFullYear() === filterValue.getFullYear() &&
+                    repairDate.getMonth() === filterValue.getMonth()
+                );
+            }
+            return false;
+        })
+        .filter(repair => {
+            const searchText = searchQuery.value.toLowerCase();
+            const fullName = `${repair.user?.first_name || ''} ${repair.user?.last_name || ''}`.toLowerCase().trim();
+            return (
+                repair.code?.toLowerCase().includes(searchText) ||
+                fullName.includes(searchText)
+            );
+        })
+        .sort((a, b) => new Date(b.status_updated_at) - new Date(a.status_updated_at));
+});
   
   const generateReport = async () => {
     const workbook = new ExcelJS.Workbook();
@@ -176,12 +182,13 @@
   };
   
   const formatDate = (dateString) => {
+  if (dateString) {
     const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${day}-${month}-${year}`;
-  };
+    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return date.toLocaleString('en-US', options);
+  }
+  return '';
+};
 
   const inputType = computed(() => {
   if (filterType.value === 'daily') return 'date';
