@@ -16,14 +16,19 @@
                 required
               />
             </div>
-            <div class="form-group mb-3">
-              <input
-                type="password"
+            <div class="form-group mb-3 position-relative">
+              <input 
+                :type="passwordVisible ? 'text' : 'password'" 
                 v-model="data.user.password"
-                placeholder="Password"
+                placeholder="Password" 
                 class="form-control rounded-0"
-                required
-              />
+                required>
+              <i 
+              id="show-hide"
+                class="bx" 
+                :class="passwordVisible ? 'bx-show' : 'bx-hide'" 
+                @click="togglePasswordVisibility" 
+                ></i>
             </div>
             <div class="form-group mb-3 text-center">
               <Spinner v-if="data.loading" />
@@ -42,7 +47,7 @@
 </template>
 
 <script setup>
-  import { reactive, onUnmounted } from 'vue'
+  import { ref, reactive, onUnmounted } from 'vue'
   import { useAuthStore } from '../../stores/useAuthStore.js'
   import { useToast } from 'vue-toastification'
   import axios from 'axios'
@@ -52,6 +57,11 @@
   
   const store = useAuthStore()
   const toast = useToast()
+  const passwordVisible = ref(false);
+
+  const togglePasswordVisibility = () => {
+    passwordVisible.value = !passwordVisible.value;
+  };
   
   const data = reactive({
     loading: false,
@@ -86,11 +96,16 @@
       }
     } catch (error) {
       data.loading = false
-      if (error.response && error.response.status === 422) {
-        store.setErrors(error.response.data.errors)
+      
+      if (error.response?.status === 422) {
+        store.setErrors(error.response.data.errors);
+      } else if (error.response?.status === 401) {
+        toast.error('Incorrect password. Please try again.', { timeout: 3000 });
       } else {
-        toast.error('An unexpected error occurred. Please try again.', { timeout: 2500 })
+        toast.error('An unexpected error occurred. Please try again.', { timeout: 3000 });
       }
+
+      console.error(error);
     }
   }
   
@@ -98,7 +113,7 @@
   </script>
   
 <style lang="scss" scoped>
-/* Container */
+
 .container {
   display: flex;
   justify-content: center;
@@ -108,7 +123,6 @@
   padding: 30px;
 }
 
-/* Login Card Wrapper */
 .login-card-wrapper {
   display: flex;
   border-radius: 12px;
@@ -116,7 +130,6 @@
   width: 60%;
 }
 
-/* Login Card */
 .login-card {
   width: 100%;
   border-top-left-radius: 10px;
@@ -126,6 +139,21 @@
   padding: 60px;
   align-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  i { 
+    color: black; 
+  }
+
+  .card-body {
+    position: relative;
+  }
+
+  #show-hide {
+    position: absolute;
+    margin-top: 18px;
+    right: 15px;
+  }
+
 
   .form-control {
     padding: 12px;

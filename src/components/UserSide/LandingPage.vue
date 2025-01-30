@@ -6,9 +6,10 @@
           <h2>Welcome to <br>TechFix</h2>
           <p>Your trusted partner for all your device repair needs. Providing a comprehensive system where you can explore a wide range of shop offers, And ensuring you get the best service options available. Once you've submitted your device for repair, you'll receive a unique code that allows you to conveniently track the progress of your repair in real-time. Additionally, our platform makes it easy for you to send inquiries directly through the app, giving you a smooth and hassle-free experience from start to finish. We're here to make repairs easier and more accessible for you!</p>
       
-          <p>Create an account? 
-            <router-link class="link" to="/register">Register</router-link> or 
+          <p>
+            <router-link class="link" to="/register">Sign up</router-link> or 
             <router-link class="link" to="/login">Login</router-link>
+            to get started.
           </p>
         </div>
 

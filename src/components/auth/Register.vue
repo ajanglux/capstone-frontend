@@ -10,8 +10,32 @@
             <div class="form-group mb-3">
               <input 
                 type="text" 
-                v-model="data.user.name"
-                placeholder="Username" 
+                v-model="data.user.first_name"
+                placeholder="First Name" 
+                class="form-control rounded-0"
+                required>
+            </div>
+            <div class="form-group mb-3">
+              <input 
+                type="text" 
+                v-model="data.user.last_name"
+                placeholder="Last Name" 
+                class="form-control rounded-0"
+                required>
+            </div>
+            <div class="form-group mb-3">
+              <input 
+                type="text" 
+                v-model="data.user.phone_number"
+                placeholder="Phone Number" 
+                class="form-control rounded-0"
+                required>
+            </div>
+            <div class="form-group mb-3">
+              <input 
+                type="text" 
+                v-model="data.user.address"
+                placeholder="Address" 
                 class="form-control rounded-0"
                 required>
             </div>
@@ -23,13 +47,33 @@
                 class="form-control rounded-0"
                 required>
             </div>
-            <div class="form-group mb-3">
+            <div class="form-group mb-3 position-relative">
               <input 
-                type="password" 
+                :type="passwordVisible ? 'text' : 'password'" 
                 v-model="data.user.password"
                 placeholder="Password" 
                 class="form-control rounded-0"
                 required>
+              <i 
+              id="show-hide"
+                class="bx" 
+                :class="passwordVisible ? 'bx-show' : 'bx-hide'" 
+                @click="togglePasswordVisibility" 
+                ></i>
+            </div>
+            <div class="form-group mb-3 position-relative">
+              <input 
+                :type="confirmPasswordVisible ? 'text' : 'password'" 
+                v-model="data.user.password_confirmation"
+                placeholder="Confirm Password" 
+                class="form-control rounded-0"
+                required>
+              <i 
+              id="show-hide"
+                class="bx" 
+                :class="confirmPasswordVisible ? 'bx-show' : 'bx-hide'" 
+                @click="toggleConfirmPasswordVisibility" 
+                ></i>
             </div>
 
             <div class="terms-checkbox">
@@ -59,7 +103,6 @@
   </div>
 </template>
 
-
 <script setup>
   import { ref, onUnmounted, reactive } from "vue"
   import router from '../../router'
@@ -74,6 +117,17 @@
   const isTermsChecked = ref(false);
   const termsError = ref(false);
   
+  const passwordVisible = ref(false); 
+  const confirmPasswordVisible = ref(false);
+
+  const togglePasswordVisibility = () => {
+    passwordVisible.value = !passwordVisible.value;
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    confirmPasswordVisible.value = !confirmPasswordVisible.value; 
+  };
+
   const validateTerms = () => {
     termsError.value = !isTermsChecked.value;
   };
@@ -81,9 +135,13 @@
   const data = reactive({
     loading: false,
     user: {
-        name: '',
+        first_name: '',
+        last_name: '',
+        phone_number: '',
+        address: '',
         email: '',
-        password: ''
+        password: '',
+        password_confirmation:''
     }
   })
 
@@ -94,6 +152,18 @@
     validateTerms();
     if (termsError.value) {
       toast.error('You must agree to the terms and conditions.');
+      data.loading = false;
+      return;
+    }
+
+    if (data.user.password.length < 8) {
+      toast.error('Password must be at least 8 characters long.');
+      data.loading = false;
+      return;
+    }
+
+    if (data.user.password !== data.user.password_confirmation) {
+      toast.error('Passwords do not match.');
       data.loading = false;
       return;
     }
@@ -119,7 +189,6 @@
 </script>
 
 <style lang="scss" scoped>
-/* Container */
 .container {
   display: flex;
   justify-content: center;
@@ -129,7 +198,6 @@
   padding: 30px;
 }
 
-/* Login Card Wrapper */
 .signup-card-wrapper {
   display: flex;
   border-radius: 12px;
@@ -137,29 +205,42 @@
   width: 60%;
 }
 
-/* Login Card */
 .signup-card {
   width: 100%;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   background-color: var(--light);
-  padding: 60px 60px 50px 60px;
+  padding: 30px 60px 20px 60px;
   align-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
+  i { 
+    color: black; 
+  }
+
+  .card-body {
+    position: relative;
+  }
+
+  #show-hide {
+    position: absolute;
+    margin-top: 18px;
+    right: 15px;
+  }
+
   .form-control {
-    padding: 12px;
-    font-size: 15px;
+    padding: 5px 13px;
+    font-size: 14px;
     border-radius: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
 
   .header h3 {
     font-weight: 700;
     font-size: 50px;
     letter-spacing: 0.5px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     color: var(--main);
     text-align: center;
     font-family: 'Poppins';
@@ -171,7 +252,7 @@
   }
 
   input {
-    padding: 12px;
+    padding: 10px;
     border-radius: 8px;
     border: 1px solid #ddd;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -261,7 +342,6 @@
   width: 80%;
 }
 
-/* Login Card */
 .signup-card {
   padding: 30px 30px 20px 30px;
 
