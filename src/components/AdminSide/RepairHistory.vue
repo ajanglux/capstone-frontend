@@ -41,7 +41,7 @@
               <thead>
                 <tr>
                   <th>No.</th>
-                  <th>Date</th>
+                  <th>Date & Time</th>
                   <th>Client</th>
                   <th>Status</th>
                   <th>Action</th>

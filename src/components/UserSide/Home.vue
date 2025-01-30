@@ -19,7 +19,7 @@
                             <p v-if="descriptionUpdatedAt" class="timestamp">Updated on: {{ formattedDescriptionUpdatedAt }}</p>
                         </div>
 
-                        <div class="admin-respond" v-if="status === 'Responded'">
+                        <div class="admin-respond" v-if="status === 'Responded' || status === 'Incomplete'">
                             <h4>Admin Respond</h4>
                             <p class="comment-box">{{ comment }}</p>
                             <p v-if="adminCommentUpdatedAt" class="timestamp">Updated on: {{ formattedAdminCommentUpdatedAt }}</p>
@@ -348,10 +348,6 @@ const isActive = (checkStatus) => {
 
         .contact-info {
             width: 100%;
-            
-            p {
-                /* margin-bottom: 50px; */
-            }
 
             button {
                 background-color: var(--main);

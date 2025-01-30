@@ -25,10 +25,7 @@
             <tr>
               <th>No.</th>
               <th>Client</th>
-              <th>Date</th>
-              <!-- <th>Email</th>
-              <th>Contact No.</th>
-              <th>Address</th> -->
+              <th>Date & Time</th>
               <th>Description</th>
               <th>Status</th>
               <th>Actions</th>
@@ -39,9 +36,6 @@
                 <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
                 <td>{{ repair.user?.first_name || 'N/A' }} {{ repair.user?.last_name || 'N/A' }}</td>
                 <td>{{ formatDate(repair.created_at) }}</td>
-                <!-- <td>{{ repair.user?.email || 'N/A' }}</td>
-                <td>{{ repair.user?.phone_number || 'N/A' }}</td>
-                <td>{{ repair.user?.address || 'N/A' }}</td> -->
                 <td>{{ repair.description || 'No description available' }}</td>
                 <td>{{ repair.status || 'PENDING' }}</td>
                 <td class="actions">
@@ -78,20 +72,20 @@
   </div>
 
   <div v-if="showCommentModal" class="modal-overlay" @click.self="showCommentModal = false">
-  <div class="modal-content">
-    <h3>{{ existingComment ? 'Edit Respond' : 'Add Respond' }}</h3>
-    <div class="user-inqui">
-      <p class="description-text">
-        <strong>Customer Inquiry:</strong> {{ selectedRepair?.description || 'No description available.' }}
-      </p>
-    </div>
-    <textarea v-model="commentText" placeholder="Enter your respond..."></textarea>
-    <div class="modal-actions">
-      <button class="submit" @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
-      <button class="cancel" @click="showCommentModal = false">Cancel</button>
+    <div class="modal-content">
+      <h3>{{ existingComment ? 'Edit Respond' : 'Add Respond' }}</h3>
+      <div class="user-inqui">
+        <p class="description-text">
+          <strong>Customer Inquiry:</strong> {{ selectedRepair?.description || 'No description available.' }}
+        </p>
+      </div>
+      <textarea v-model="commentText" placeholder="Enter your respond..."></textarea>
+      <div class="modal-actions">
+        <button class="submit" @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
+        <button class="cancel" @click="showCommentModal = false">Cancel</button>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 

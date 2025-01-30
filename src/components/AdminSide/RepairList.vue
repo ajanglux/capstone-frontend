@@ -32,11 +32,12 @@
           <thead>
             <tr>
               <th>No.</th>
-              <th>Date Created</th>
+              <th>Date & Time</th>
               <th>Code</th>
               <th>Client</th>
               <th>Status</th>
               <th>Actions</th>
+              <th>Update Status</th>
             </tr>
           </thead>
           <tbody>
@@ -51,7 +52,16 @@
                   <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                     <option value="">Select Action</option>
                     <option value="edit">Edit</option>
+                    <option value="Responded">Note</option>
                     <option value="Cancelled" :disabled="repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'On-Going' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Cancel</option>
+                  </select>
+                </div>
+              </td>
+              <td class="actions">
+                <div class="custom-select">
+                  <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
+                    <option value="">Select Status</option>
+                    <option value="Responded">Unrepairable</option>
                     <option value="On-Going" :disabled="repair.status === 'On-Going' || repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">On-Going</option>
                     <option value="Finished" :disabled="repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Cancelled' || repair.status === 'Incomplete'">Finished</option>
                     <option value="Ready-for-Pickup" :disabled="repair.status === 'Ready-for-Pickup' || repair.status === 'cancelled' || repair.status === 'Incomplete'">Ready For Pickup</option>
@@ -82,6 +92,17 @@
       @confirm="confirmStatusChange"
       :message="confirmationMessage"
     />
+  </div>
+
+  <div v-if="showCommentModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>{{ existingComment ? 'Edit Comment' : 'Add Comment' }}</h3>
+      <textarea v-model="commentText" placeholder="Enter your comment..."></textarea>
+      <div class="modal-actions">
+        <button @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
+        <button @click="showCommentModal = false">Cancel</button>
+      </div>
+    </div>
   </div>
 
 </template>
@@ -117,9 +138,14 @@ const existingComment = ref('');
 const isLoading = ref(false); // Added isLoading state
 
 const openCommentModal = (repair) => {
+  if (!repair || !repair.id) {
+    toast.error('Invalid repair object!');
+    return;
+  }
+
   selectedRepair.value = repair;
-  existingComment.value = repair.comment || '';
-  commentText.value = repair.comment || '';
+  existingComment.value = repair.comment || '';  // Store existing comment if available
+  commentText.value = repair.comment || '';  // Populate the textarea with existing comment
   showCommentModal.value = true;
 };
 
@@ -129,21 +155,23 @@ const submitComment = async () => {
     return;
   }
 
-  isLoading.value = true; // Start loading
   try {
-    await axios.put(
-      `${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`,
-      { comment: commentText.value },
-      getHeaderConfig(authStore.access_token)
-    );
-    toast.success(existingComment.value ? 'Comment updated successfully' : 'Comment added successfully');
-    selectedRepair.value.comment = commentText.value;
-    showCommentModal.value = false;
+    // Make sure you're sending the correct repair ID in the request
+    if (selectedRepair.value && selectedRepair.value.id) {
+      await axios.put(`${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`, 
+        { comment: commentText.value },
+        getHeaderConfig(authStore.access_token)
+      );
+
+      toast.success(existingComment.value ? 'Comment updated successfully' : 'Comment added successfully');
+      selectedRepair.value.comment = commentText.value;  // Update local data
+      showCommentModal.value = false;
+    } else {
+      toast.error('Repair ID not found!');
+    }
   } catch (error) {
     console.error('Error updating comment:', error);
     toast.error('Failed to update comment. Please try again.');
-  } finally {
-    isLoading.value = false; // Stop loading
   }
 };
 
@@ -174,7 +202,7 @@ const filteredRepairs = computed(() => {
     let matchesStatus = true;
 
     if (selectedStatus.value === '') {
-      matchesStatus = repair.status === 'On-Going' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Incomplete';
+      matchesStatus = repair.status === 'On-Going' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Incomplete' || repair.status === 'Responded';
     } else {
       matchesStatus = repair.status === selectedStatus.value;
     }
@@ -214,6 +242,9 @@ const handleActionChange = (repairId) => {
   const action = selectedActions.value[repairId];
   if (action === 'edit') {
     router.push({ name: 'repair-form', params: { id: repairId, view: 'edit' } });
+  } else if (action === 'Responded') {
+    const repair = repairs.value.find(r => r.id === repairId);
+    openCommentModal(repair);
   } else {
     selectedRepairId.value = repairId;
     selectedStatusAction.value = action;
@@ -353,23 +384,50 @@ textarea {
   height: 100px;
   margin-top: 10px;
   padding: 10px;
+  outline: none;
+  border-radius: 5px;
+  font-family: 'Poppins';
 }
 
 .modal-actions {
   margin-top: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.description-text {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #555;
+}
+.description-text strong {
+  color: #333;
 }
 
 button {
-  background: #007bff;
-  color: white;
+  color: var(--main);
   border: none;
-  padding: 8px 15px;
+  padding: 5px 15px;
+  border-radius: 5px;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
 
-button:hover {
-  background: #0056b3;
+.submit {
+  background: var(--main);
+}
+
+.submit:hover {
+  background: var(--main-hover);
+}
+
+.cancel {
+  background: var(--table);
+}
+
+.cancel:hover {
+  background: var(--grey);
 }
 </style>
