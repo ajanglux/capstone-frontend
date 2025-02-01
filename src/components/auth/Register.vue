@@ -146,7 +146,6 @@
   })
 
   const registerUser = async () => {
-    store.clearErrors()
     data.loading = true
 
     validateTerms();
@@ -169,22 +168,23 @@
     }
 
     try {
-      const response = await axios.post(`${BASE_URL}/user/register`, data.user);
-      data.loading = false;
-      toast.success(response.data.message, {
-        timeout: 3000
-      })
-      router.push('/login')
+    const response = await axios.post(`${BASE_URL}/user/register`, data.user);
+    data.loading = false;
+    toast.success(response.data.message, {
+      timeout: 3000
+    });
+
+    router.push('/email-verification');
     } catch (error) {
-      data.loading = false; 
+      data.loading = false;
       if (error.response?.status === 422) {
-        store.setErrors(error.response.data.errors)
+        store.setErrors(error.response.data.errors);
       }
       console.log(error);
-    }
+  }
   }
 
-  onUnmounted(() => store.clearErrors())
+  onUnmounted()
 
 </script>
 

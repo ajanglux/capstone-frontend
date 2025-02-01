@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div class="app">
-      <template v-if="!isRegisterPage && !isAdminLoginPage && !isLoginPage">
+      <template v-if="!isRegisterPage && !isAdminLoginPage && !isLoginPage && !isForgotPass && !isResetPass">
         <template v-if="isAdmin">
           <AdminSidebar />
           <div class="headerAndContent">
@@ -71,6 +71,13 @@ export default {
     isViewTerms() {
       return this.$route.path === '/terms-and-condtions';
     },
+    isForgotPass() {
+      return this.$route.path === '/forgot-password';
+    },
+    isResetPass() {
+      return this.$route.path === '/reset-password';
+    },
+
     // ADMIN
     isAdmin() {
       const store = useAuthStore();

@@ -31,7 +31,7 @@
                 ></i>
             </div>
             <div class="forgot">
-              <p><router-link class="primary" aria-current="page" to=""> Forgot Password? </router-link> </p>
+              <p><router-link class="primary" aria-current="page" to="/forgot-password"> Forgot Password? </router-link> </p>
             </div>
             <div class="form-group mb-3 text-center">
               <Spinner v-if="data.loading" />
@@ -52,76 +52,105 @@
     </div>
   </div>
 </template>
-  
-  <script setup>
-  import { ref, onUnmounted, reactive } from 'vue'
-  import router from '../../router'
-  import { useAuthStore } from '../../stores/useAuthStore.js'
-  import axios from 'axios'
-  import { useToast } from 'vue-toastification'
-  import { BASE_URL } from '../../helpers/baseUrl'
-  import Spinner from '../layouts/Spinner.vue'
-  
-  const toast = useToast()
-  const store = useAuthStore()
-  const passwordVisible = ref(false);
 
-  const togglePasswordVisibility = () => {
-    passwordVisible.value = !passwordVisible.value;
-  };
-  
-  const data = reactive({
-    loading: false,
-    user: {
-      email: '',
-      password: ''
+<script setup>
+import { ref, onMounted, reactive } from 'vue'
+import { useAuthStore } from '../../stores/useAuthStore.js'
+import axios from 'axios'
+import { useToast } from 'vue-toastification'
+import { BASE_URL } from '../../helpers/baseUrl'
+import Spinner from '../layouts/Spinner.vue'
+import { useRoute } from 'vue-router'
+import router from '../../router'
+
+const toast = useToast()
+const store = useAuthStore()
+const passwordVisible = ref(false)
+
+const togglePasswordVisibility = () => {
+  passwordVisible.value = !passwordVisible.value
+}
+
+const data = reactive({
+  loading: false,
+  user: {
+    email: '',
+    password: ''
+  }
+})
+
+const verifyEmailToken = async () => {
+  const route = useRoute();
+  const verificationUrl = route.query.url; // Ensure the URL contains the proper parameters
+
+  if (verificationUrl) {
+    data.loading = true;
+    try {
+      // Send the URL to the backend for verification
+      const response = await axios.get(verificationUrl);
+      
+      if (response.data.success) {
+        toast.success('Email successfully verified!', { timeout: 3000 });
+        // Redirect to login after successful verification
+        router.push('/login');
+      } else {
+        toast.error('Email verification failed. Please try again.', { timeout: 3000 });
+      }
+    } catch (error) {
+      toast.error('An error occurred during email verification. Please try again.', { timeout: 3000 });
+      console.error(error);
+    } finally {
+      data.loading = false;
     }
-  })
-  
-  const userAuth = async () => {
-  store.clearErrors();
-  data.loading = true;
+  }
+};
+
+// Login action
+const userAuth = async () => {
+  data.loading = true // Show loading spinner
 
   try {
-    const response = await axios.post(`${BASE_URL}/user/login`, data.user);
-    data.loading = false;
+    const response = await axios.post(`${BASE_URL}/user/login`, data.user)
+    data.loading = false
 
     if (response.data.error) {
-      toast.error(response.data.error, { timeout: 3000 });
+      toast.error(response.data.error, { timeout: 3000 })
     } else {
-      const user = response.data.user;
-      const token = response.data.currentToken;
+      const user = response.data.user
+      const token = response.data.currentToken
 
       if (user.role === 0) { 
-        store.setToken(token);
-        store.setUser(user);
-        toast.success(response.data.message, { timeout: 3000 });
-        router.push('/home');
+        store.setToken(token)
+        store.setUser(user)
+        toast.success(response.data.message, { timeout: 3000 })
+        router.push('/home')
       } else {
-        toast.error("Access Denied", { timeout: 3000 });
-        store.clearToken();
-        store.clearUser();
+        toast.error("Access Denied", { timeout: 3000 })
+        store.clearToken()
+        store.clearUser()
       }
     }
   } catch (error) {
-    data.loading = false;
+    data.loading = false
 
     if (error.response?.status === 422) {
-      store.setErrors(error.response.data.errors);
+      store.setErrors(error.response.data.errors)
     } else if (error.response?.status === 401) {
-      toast.error('Incorrect password. Please try again.', { timeout: 3000 });
+      toast.error('Incorrect password. Please try again.', { timeout: 3000 })
     } else {
-      toast.error('An unexpected error occurred. Please try again.', { timeout: 3000 });
+      toast.error('An unexpected error occurred. Please try again.', { timeout: 3000 })
     }
 
-    console.error(error);
+    console.error(error)
   }
 }
 
-  
-  onUnmounted(() => store.clearErrors())
-  </script>
-  
+onMounted(() => {
+  verifyEmailToken()
+})
+</script>
+
+
 <style lang="scss" scoped>
 .container {
   display: flex;

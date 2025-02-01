@@ -15,6 +15,24 @@ const routes = [
     beforeEnter: [checkIfNotLogged],
   },
   {
+    path: '/email-verification',
+    name: 'email-verification',
+    component: () => import('../components/auth/EmailVerification.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
+  {
+    path: '/forgot-password',
+    name: 'forgot-password',
+    component: () => import('../components/auth/ForgotPassword.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },    
+  {
+    path: '/reset-password',
+    name: 'reset-password',
+    component: () => import('../components/auth/ResetPassword.vue'),
+    beforeEnter: [checkIfNotLogged],
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../components/auth/Login.vue'),
@@ -146,6 +164,27 @@ const routes = [
     path: '/user-history',
     name: 'user-history',
     component: () => import('../components/UserSide/UserHistory.vue'),
+    beforeEnter: [checkIfLogged, checkIfUser],
+  },
+
+  //Userside Forms
+
+  {
+    path: '/form-',
+    name: 'form-1',
+    component: () => import('../components/ServicesForms/Form1.vue'),
+    beforeEnter: [checkIfLogged, checkIfUser],
+  },
+  {
+    path: '/form-2',
+    name: 'form-2',
+    component: () => import('../components/ServicesForms/Form2.vue'),
+    beforeEnter: [checkIfLogged, checkIfUser],
+  },
+  {
+    path: '/form-3',
+    name: 'form-3',
+    component: () => import('../components/ServicesForms/Form3.vue'),
     beforeEnter: [checkIfLogged, checkIfUser],
   },
 ];
