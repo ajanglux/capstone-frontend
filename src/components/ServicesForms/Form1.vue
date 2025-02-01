@@ -149,15 +149,6 @@
           purchase_date: '',
           documentation: '',
           warranty_status: '',
-          ac_adapter: '',
-          vga_cable: '',
-          dvi_cable: '',
-          display_cable: '',
-          bag_pn: '',
-          hdd: '',
-          ram_brand: '',
-          ram_size_gb: '',
-          power_cord_qty: '',
         },
         isEditing: false,
         phoneNumber: '',
@@ -181,6 +172,11 @@
     mounted() {
       console.log('View prop in mounted:', this.view);
       this.handleQueryParams();
+      this.fetchUserProfile();
+
+      if (this.$route.query.service) {
+      this.model.description = this.$route.query.service;
+      }
       if (this.id) {
         this.isEditing = !this.isViewing;
         this.getRepairDetails();
@@ -214,6 +210,25 @@
         } catch (error) {
           const toast = this.toast();
           toast.error('Failed to load repair details. Please try again.', { timeout: 3000 });
+        }
+      },
+      async fetchUserProfile() {
+        try {
+          const authStore = useAuthStore(); // Get authentication store
+          const headers = getHeaderConfig(authStore.access_token); // Get headers with token
+
+          const response = await axios.get(`${BASE_URL}/user/profile`, { headers }); 
+          this.model = { // Assign user details to the model
+            user_id: response.customerDetail.user.id,
+            first_name: response.customerDetail.user.first_name,
+            last_name: response.customerDetail.user.last_name,
+            phone_number: response.customerDetail.user.phone_number,
+            email: response.customerDetail.user.email,
+            address: response.customerDetail.user.address
+          };
+        } catch (error) {
+          const toast = this.toast();
+          toast.error(`Error fetching user profile: ${error.response?.data?.message || error.message}`);
         }
       },
       validatePhoneNumber(event) {

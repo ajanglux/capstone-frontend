@@ -82,17 +82,23 @@
                     <div class="cards1">
                         <!-- Services -->
                         <div class="side-card">
-                            <div class="card1" @click="openContactUsModal('Computer Service & Repair')">
+                            <div class="card1"
+                                @click="goToContactForm1('Computer Service & Repair')"
+                                >
                                 <div class="img">
                                     <img src="../../assets/computer-repair.jpg" alt="Service Image" class="img-thumbnail" />
                                 </div>
                                 <div class="info">
                                     <h2>Computer Service & Repair</h2>
-                                    <p>Expert computer service and repair to fix hardware, software, and performance issues quickly and efficiently.</p>
+                                    <p>
+                                    Expert computer service and repair to fix hardware, software, and performance issues
+                                    quickly and efficiently.
+                                    </p>
                                 </div>
                             </div>
 
-                            <div class="card1" @click="openContactUsModal('Free: Check up for Laptop & Desktop')">
+
+                            <div class="card1" @click="goToContactForm1('Free: Check up for Laptop & Desktop')">
                                 
                                 <div class="img">
                                     <img src="../../assets/Laptop-check.jpg" alt="Service Image" class="img-thumbnail" />
@@ -106,7 +112,7 @@
 
                         <!-- More Services -->
                         <div class="side-card">
-                            <div class="card1"@click="openContactUsModal('Software and Hardware Installation')">
+                            <div class="card1"@click="goToContactUsForm2('Software and Hardware Installation')">
                                 
                                 <div class="img">
                                     <img src="../../assets/hardware-installation.jpg" alt="Service Image" class="img-thumbnail" />
@@ -117,7 +123,7 @@
                                 </div>
                             </div>
 
-                            <div class="card1" @click="openContactUsModal('Reformat & Reprogram')">
+                            <div class="card1" @click="goToContactForm1('Reformat & Reprogram')">
                                
                                 <div class="img">
                                     <img src="../../assets/reset.jpg" alt="Service Image" class="img-thumbnail" />
@@ -130,7 +136,7 @@
                         </div>
 
                         <div class="side-card">
-                            <div class="card1" @click="openContactUsModal('Remove Viruses and Malware')">
+                            <div class="card1" @click="goToContactForm1('Remove Viruses and Malware')">
                                
                                <div class="img">
                                    <img src="../../assets/remove-viruses.jpg" alt="Service Image" class="img-thumbnail" />
@@ -141,7 +147,7 @@
                                </div>
                            </div>
 
-                           <div class="card1" @click="openContactUsModal('Networking')">
+                           <div class="card1" @click="goToContactUsForm3('Networking')">
                                
                                <div class="img">
                                    <img src="../../assets/networking.jpg" alt="Service Image" class="img-thumbnail" />
@@ -155,7 +161,7 @@
 
                         <!-- More Services -->
                         <div class="line-card">
-                            <div class="card1" @click="openContactUsModal('CCTV Installation')">
+                            <div class="card1" @click="goToContactUsForm3('CCTV Installation')">
                                 
                                 <div class="img">
                                     <img src="../../assets/cctv.jpg" alt="Service Image" class="img-thumbnail" />
@@ -168,11 +174,11 @@
                         </div>
                     </div>
                 </div>
-                <InquireModal
+                <!-- <InquireModal
                     :isModalOpen="isInquireModalOpen"
                     :serviceTitle="selectedService"
                     @closeModal="closeInquireModal"
-                    />
+                    /> -->
             </div>
         </div>
     </div>
@@ -187,7 +193,7 @@ import { useAuthStore } from '../../stores/useAuthStore';
 import { useToast } from 'vue-toastification'; 
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
-import InquireModal from '../UserSide/ContactUs.vue';
+// import InquireModal from '../UserSide/ContactUs.vue';
 
 // const InquireModal = defineAsyncComponent(() => import("../UserSide/ContactUs.vue"));
 
@@ -208,24 +214,31 @@ const token = authStore.access_token;
 const toast = useToast();
 const comment = ref('');
 const description = ref('');
-const isInquireModalOpen = ref(false);
-const selectedService = ref('');
+// const isInquireModalOpen = ref(false);
+// const selectedService = ref('');
 
 const descriptionUpdatedAt = ref(null);
 const adminCommentUpdatedAt = ref(null);
 
-const openContactUsModal = (serviceTitle, serviceDescription) => {
-  if (!authStore.isAuthenticated) {
-    toast.error('Please log in to proceed', { timeout: 3000 });
-  } else {
-    selectedService.value = serviceTitle;
-    description.value = serviceDescription;
-    isInquireModalOpen.value = true;
-  }
+const goToContactForm1 = (serviceTitle) => {
+  router.push({
+    name: 'form-1', // Ensure the route name matches your router configuration
+    query: { service: serviceTitle }, // Pass the service title as a query parameter
+  });
 };
 
-const closeInquireModal = () => {
-  isInquireModalOpen.value = false;
+const goToContactUsForm2 = (serviceTitle) => {
+  router.push({
+    name: 'form-2', // Ensure the route name matches your router configuration
+    query: { service: serviceTitle }, // Pass the service title as a query parameter
+  });
+};
+
+const goToContactUsForm3 = (serviceTitle) => {
+  router.push({
+    name: 'form-3', // Ensure the route name matches your router configuration
+    query: { service: serviceTitle }, // Pass the service title as a query parameter
+  });
 };
 
 const statusUpdateVisible = ref(true);
