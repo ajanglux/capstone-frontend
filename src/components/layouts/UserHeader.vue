@@ -16,6 +16,24 @@
                 <router-link class="button" active-class="active" to="/home" @click="closeDropdown">
                 <span class="text">Home</span>
                 </router-link>
+
+                <div class="dropdown">
+                    <button class="button">
+                    <span> Repair Request </span>
+                    </button>
+                    <div class="dropdown-content">
+                    <router-link to="/form-1" class="nav-link" style="cursor: pointer">
+                        Form 1
+                    </router-link>
+                    <router-link to="form-2" class="nav-link" style="cursor: pointer">
+                        Form 2
+                    </router-link>
+                    <router-link to="form-3" class="nav-link" style="cursor: pointer">
+                        Form 3
+                    </router-link>
+                    </div>
+                </div>
+
                 <a class="button" @click="openInquireModal">
                     <span class="text">Ticket</span>
                 </a>
@@ -25,18 +43,17 @@
                 </router-link>
     
                 <div class="dropdown">
-                <button class="button">
-                  <span> {{ store.user?.first_name || 'User' }} </span>
-                </button>
-                <div class="dropdown-content">
-                  <a class="nav-link" @click="openProfileModal" style="cursor: pointer">Profile</a>
-                  <router-link to="#" class="nav-link" @click="userLogout" style="cursor: pointer">
-                    <i class="bi bi-box-arrow-left"></i> Logout
-                  </router-link>
+                    <button class="button">
+                    <span> {{ store.user?.first_name || 'User' }} </span>
+                    </button>
+                    <div class="dropdown-content">
+                    <a class="nav-link" @click="openProfileModal" style="cursor: pointer">Profile</a>
+                    <router-link to="#" class="nav-link" @click="userLogout" style="cursor: pointer">
+                        <i class="bi bi-box-arrow-left"></i> Logout
+                    </router-link>
+                    </div>
                 </div>
-              </div>
             </div>
-    
         </header>
 
         <ProfileModal :isModalOpen="isProfileModalOpen" @closeModal="closeProfileModal" />

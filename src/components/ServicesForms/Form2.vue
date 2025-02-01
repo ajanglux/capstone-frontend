@@ -102,8 +102,7 @@
         <div class="buttons">
           <button v-if="isEditing" @click="updateRepair()" type="button" class="btn btn-primary">Update</button>
           <button v-else-if="!isViewing" @click="saveRepair()" type="button" class="btn btn-primary">{{ isEditing ? 'Update' : 'Submit' }}</button>
-          <router-link to="/repair-list" class="btn btn-secondary">Cancel</router-link>
-          <button v-if="isViewing" @click="generateInvoice" type="button" class="btn btn-success">Generate Statement</button>
+          <router-link to="/home" class="btn btn-secondary">Cancel</router-link>
         </div>
       </div>
     </div>

@@ -170,7 +170,7 @@ const routes = [
   //Userside Forms
 
   {
-    path: '/form-',
+    path: '/form-1',
     name: 'form-1',
     component: () => import('../components/ServicesForms/Form1.vue'),
     beforeEnter: [checkIfLogged, checkIfUser],
