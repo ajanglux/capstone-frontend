@@ -120,7 +120,7 @@
   import { useToast } from 'vue-toastification';
   
   export default {
-    name: 'RepairForm',
+    name: 'Form1',
     props: {
       id: {
         type: Number,
@@ -170,7 +170,6 @@
       }
     },
     mounted() {
-      console.log('View prop in mounted:', this.view);
       this.handleQueryParams();
       this.fetchUserProfile();
 
@@ -214,21 +213,28 @@
       },
       async fetchUserProfile() {
         try {
-          const authStore = useAuthStore(); // Get authentication store
-          const headers = getHeaderConfig(authStore.access_token); // Get headers with token
+          const authStore = useAuthStore();
+          const headers = getHeaderConfig(authStore.access_token); // Ensure token is correctly fetched
 
-          const response = await axios.get(`${BASE_URL}/user/profile`, { headers }); 
-          this.model = { // Assign user details to the model
-            user_id: response.customerDetail.user.id,
-            first_name: response.customerDetail.user.first_name,
-            last_name: response.customerDetail.user.last_name,
-            phone_number: response.customerDetail.user.phone_number,
-            email: response.customerDetail.user.email,
-            address: response.customerDetail.user.address
+          if (!authStore.access_token) {
+            this.toast().error("Authentication token missing. Please log in again.");
+            return;
+          }
+
+          const response = await axios.get(`${BASE_URL}/user/profile`, headers);
+
+          this.model = {
+            ...this.model,
+            user_id: response.data.user.id,
+            first_name: response.data.user.first_name,
+            last_name: response.data.user.last_name,
+            phone_number: response.data.user.phone_number,
+            email: response.data.user.email,
+            address: response.data.user.address,
           };
         } catch (error) {
-          const toast = this.toast();
-          toast.error(`Error fetching user profile: ${error.response?.data?.message || error.message}`);
+          console.error("Error fetching user profile:", error.response?.data || error.message);
+          this.toast().error(`Error fetching user profile: ${error.response?.data?.message || error.message}`);
         }
       },
       validatePhoneNumber(event) {

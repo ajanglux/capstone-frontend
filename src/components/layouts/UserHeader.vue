@@ -17,23 +17,6 @@
                 <span class="text">Home</span>
                 </router-link>
 
-                <div class="dropdown">
-                    <button class="button">
-                    <span> Repair Request </span>
-                    </button>
-                    <div class="dropdown-content">
-                    <router-link to="/form-1" class="nav-link" style="cursor: pointer">
-                        Form 1
-                    </router-link>
-                    <router-link to="form-2" class="nav-link" style="cursor: pointer">
-                        Form 2
-                    </router-link>
-                    <router-link to="form-3" class="nav-link" style="cursor: pointer">
-                        Form 3
-                    </router-link>
-                    </div>
-                </div>
-
                 <a class="button" @click="openInquireModal">
                     <span class="text">Ticket</span>
                 </a>

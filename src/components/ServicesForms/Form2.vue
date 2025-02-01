@@ -117,7 +117,7 @@ import { useAuthStore } from '../../stores/useAuthStore';
 import { useToast } from 'vue-toastification';
 
 export default {
-  name: 'RepairForm',
+  name: 'Form2',
   props: {
     id: {
       type: Number,
@@ -146,15 +146,6 @@ export default {
         purchase_date: '',
         documentation: '',
         warranty_status: '',
-        ac_adapter: '',
-        vga_cable: '',
-        dvi_cable: '',
-        display_cable: '',
-        bag_pn: '',
-        hdd: '',
-        ram_brand: '',
-        ram_size_gb: '',
-        power_cord_qty: '',
       },
       isEditing: false,
       phoneNumber: '',
@@ -176,13 +167,18 @@ export default {
     }
   },
   mounted() {
-    console.log('View prop in mounted:', this.view);
-    this.handleQueryParams();
-    if (this.id) {
-      this.isEditing = !this.isViewing;
-      this.getRepairDetails();
-    }
-  },
+      console.log('View prop in mounted:', this.view);
+      this.handleQueryParams();
+      this.fetchUserProfile();
+
+      if (this.$route.query.service) {
+      this.model.description = this.$route.query.service;
+      }
+      if (this.id) {
+        this.isEditing = !this.isViewing;
+        this.getRepairDetails();
+      }
+    },
   methods: {
     toast() {
       return useToast();
@@ -211,6 +207,31 @@ export default {
       } catch (error) {
         const toast = this.toast();
         toast.error('Failed to load repair details. Please try again.', { timeout: 3000 });
+      }
+    },
+    async fetchUserProfile() {
+      try {
+        const authStore = useAuthStore();
+        const headers = getHeaderConfig(authStore.access_token); // Ensure token is correctly fetched
+
+        if (!authStore.access_token) {
+          this.toast().error("Authentication token missing. Please log in again.");
+          return;
+        }
+
+        const response = await axios.get(`${BASE_URL}/user/profile`, headers);
+
+        this.model = {
+          user_id: response.data.user.id,
+          first_name: response.data.user.first_name,
+          last_name: response.data.user.last_name,
+          phone_number: response.data.user.phone_number,
+          email: response.data.user.email,
+          address: response.data.user.address,
+        };
+      } catch (error) {
+        console.error("Error fetching user profile:", error.response?.data || error.message);
+        this.toast().error(`Error fetching user profile: ${error.response?.data?.message || error.message}`);
       }
     },
     validatePhoneNumber(event) {
