@@ -186,11 +186,10 @@
 
 
 <script setup>
-import { ref, computed, onMounted, defineAsyncComponent  } from 'vue';
+import { ref, computed, onMounted  } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/useAuthStore';
-import { useToast } from 'vue-toastification'; 
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 // import InquireModal from '../UserSide/ContactUs.vue';
@@ -211,7 +210,6 @@ const finishedStatusAvailable = ref(false); // New reactive variable
 const router = useRouter();
 const authStore = useAuthStore();
 const token = authStore.access_token;
-const toast = useToast();
 const comment = ref('');
 const description = ref('');
 // const isInquireModalOpen = ref(false);
@@ -221,79 +219,74 @@ const descriptionUpdatedAt = ref(null);
 const adminCommentUpdatedAt = ref(null);
 
 const goToContactForm1 = (serviceTitle) => {
-  router.push({
-    name: 'form-1', // Ensure the route name matches your router configuration
-    query: { service: serviceTitle }, // Pass the service title as a query parameter
-  });
+    router.push({
+        name: 'form-1',
+        query: { service: serviceTitle },
+    });
 };
 
 const goToContactUsForm2 = (serviceTitle) => {
-  router.push({
-    name: 'form-2', // Ensure the route name matches your router configuration
-    query: { service: serviceTitle }, // Pass the service title as a query parameter
-  });
+    router.push({
+        name: 'form-2', 
+        query: { service: serviceTitle }, 
+    });
 };
 
 const goToContactUsForm3 = (serviceTitle) => {
-  router.push({
-    name: 'form-3', // Ensure the route name matches your router configuration
-    query: { service: serviceTitle }, // Pass the service title as a query parameter
-  });
+    router.push({
+        name: 'form-3', 
+        query: { service: serviceTitle },
+    });
 };
 
 const statusUpdateVisible = ref(true);
 
 const fetchHomeStatus = async () => {
-  status.value = null;
-  onGoingUpdatedAt.value = null;
-  finishedUpdatedAt.value = null;
-  readyForPickupUpdatedAt.value = null;
-  completedUpdatedAt.value = null;
-  descriptionUpdatedAt.value = null;
-  adminCommentUpdatedAt.value = null;
-  comment.value = '';
-  code.value = '';
-  description.value = '';
-  errorMessage.value = '';
-  isLoading.value = true;
-  finishedStatusAvailable.value = false; // Reset on each fetch
-  try {
-      
-      const headers = getHeaderConfig(token);
-      const response = await axios.get(`${BASE_URL}/customer-details/home/status`, headers);
-      console.log(response)
-      status.value = response.data.data.status;
-      onGoingUpdatedAt.value = response.data.data.on_going_updated_at;
-      finishedUpdatedAt.value = response.data.data.finished_updated_at;
-      readyForPickupUpdatedAt.value = response.data.data.ready_for_pickup_updated_at;
-      completedUpdatedAt.value = response.data.data.completed_updated_at;
-      code.value = response.data.data.code;
-      descriptionUpdatedAt.value = response.data.data.description_updated_at;
-      adminCommentUpdatedAt.value = response.data.data.admin_comment_updated_at;
-      
+    status.value = null;
+    onGoingUpdatedAt.value = null;
+    finishedUpdatedAt.value = null;
+    readyForPickupUpdatedAt.value = null;
+    completedUpdatedAt.value = null;
+    descriptionUpdatedAt.value = null;
+    adminCommentUpdatedAt.value = null;
+    comment.value = '';
+    code.value = '';
+    description.value = '';
+    errorMessage.value = '';
+    isLoading.value = true;
+    finishedStatusAvailable.value = false;
 
-     // Check if the comment exists and is not empty
-      comment.value = response.data.data.comment && response.data.data.comment.trim() ? response.data.data.comment : '';
+    try {
+        const headers = getHeaderConfig(token);
+        const response = await axios.get(`${BASE_URL}/customer-details/home/status`, headers);
+        console.log(response)
+        status.value = response.data.data.status;
+        onGoingUpdatedAt.value = response.data.data.on_going_updated_at;
+        finishedUpdatedAt.value = response.data.data.finished_updated_at;
+        readyForPickupUpdatedAt.value = response.data.data.ready_for_pickup_updated_at;
+        completedUpdatedAt.value = response.data.data.completed_updated_at;
+        code.value = response.data.data.code;
+        descriptionUpdatedAt.value = response.data.data.description_updated_at;
+        adminCommentUpdatedAt.value = response.data.data.admin_comment_updated_at;
 
-      // Check if the description exists and is not empty
-      description.value = response.data.data.description && response.data.data.description.trim() ? response.data.data.description : '';
+        comment.value = response.data.data.comment && response.data.data.comment.trim() ? response.data.data.comment : '';
+        description.value = response.data.data.description && response.data.data.description.trim() ? response.data.data.description : '';
+        
+        if (status.value === 'Ready-for-Pickup' && !finishedUpdatedAt.value) {
+            finishedStatusAvailable.value = true; // Set to available if condition met
+        }
 
-      if (status.value === 'Ready-for-Pickup' && !finishedUpdatedAt.value) {
-        finishedStatusAvailable.value = true; // Set to available if condition met
-      }
-
-      // Check if status is "Responded", hide status updates
-      if (status.value === "Responded") {
+        if (status.value === "Responded") {
             statusUpdateVisible.value = false;  // Hide status updates when "Responded"
         } else {
             statusUpdateVisible.value = true;   // Show status updates for all other statuses
         }
-   
-  } catch (error) {
-    errorMessage.value = 'No status found. Click Ticket to submit a question or request a repair.';
-  } finally {
-    isLoading.value = false;
-  }
+    
+    } catch (error) {
+        errorMessage.value = 'No status found. Click Ticket to submit a question or request a repair.';
+    } finally {
+        isLoading.value = false;
+    }
 };
 
 onMounted(fetchHomeStatus);
@@ -307,21 +300,20 @@ const formattedReadyForPickupUpdatedAt = computed(() => formatDate(readyForPicku
 const formattedCompletedUpdatedAt = computed(() => formatDate(completedUpdatedAt.value));
 
 const formatDate = (dateString) => {
-  if (dateString) {
+    if (dateString) {
     const date = new Date(dateString);
     const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     return date.toLocaleString('en-US', options);
-  }
-  return '';
+    }
+    return '';
 };
 
 const isActive = (checkStatus) => {
-  const order = ['On-Going', 'Finished', 'Ready-for-Pickup', 'Completed'];
-  const currentIndex = order.indexOf(status.value);
-  const checkIndex = order.indexOf(checkStatus);
-  return checkIndex <= currentIndex;
+    const order = ['On-Going', 'Finished', 'Ready-for-Pickup', 'Completed'];
+    const currentIndex = order.indexOf(status.value);
+    const checkIndex = order.indexOf(checkStatus);
+    return checkIndex <= currentIndex;
 };
-
 </script>
 
 <style scoped>

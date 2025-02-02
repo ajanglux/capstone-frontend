@@ -109,11 +109,10 @@ import { ref, reactive } from "vue"
 import router from '../../router'
 import { useAuthStore } from '../../stores/useAuthStore.js'
 import axios from 'axios'
-import { useToast } from "vue-toastification"
 import { BASE_URL } from '../../helpers/baseUrl'
 import Spinner from '../layouts/Spinner.vue'
+import Swal from 'sweetalert2'
 
-const toast = useToast()
 const store = useAuthStore()
 const isTermsChecked = ref(false);
 const termsError = ref(false);
@@ -148,8 +147,19 @@ const data = reactive({
 
 const validatePhoneNumber = () => {
   data.user.phone_number = data.user.phone_number.replace(/\D/g, "").slice(0, 11);
-
   phoneError.value = data.user.phone_number.length !== 11;
+};
+
+const showToast = (icon, title) => {
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    icon: icon,
+    title: title,
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
 };
 
 const registerUser = async () => {
@@ -157,37 +167,36 @@ const registerUser = async () => {
 
   validateTerms();
   if (termsError.value) {
-    toast.error('You must agree to the terms and conditions.');
+    showToast("error", "You must agree to the terms and conditions.");
     data.loading = false;
     return;
   }
 
   if (data.user.password.length < 8) {
-    toast.error('Password must be at least 8 characters long.');
+    showToast("error", "Password must be at least 8 characters long.");
     data.loading = false;
     return;
   }
 
   if (data.user.phone_number.length < 11) {
-    toast.error('Phone number must be at least 11 numbers long.');
+    showToast("error", "Phone number must be at least 11 numbers long.");
     data.loading = false;
     return;
   }
 
   if (data.user.password !== data.user.password_confirmation) {
-    toast.error('Passwords do not match.');
+    showToast("error", "Passwords do not match.");
     data.loading = false;
     return;
   }
 
   try {
-  const response = await axios.post(`${BASE_URL}/user/register`, data.user);
-  data.loading = false;
-  toast.success(response.data.message, {
-    timeout: 3000
-  });
+    const response = await axios.post(`${BASE_URL}/user/register`, data.user);
+    data.loading = false;
 
-  router.push('/email-verification');
+    showToast("success", response.data.message);
+    
+    router.push('/email-verification');
   } catch (error) {
     data.loading = false;
     if (error.response?.status === 422) {

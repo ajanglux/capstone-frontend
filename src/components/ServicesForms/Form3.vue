@@ -60,10 +60,10 @@ import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
-import { useToast } from 'vue-toastification';
+import Swal from 'sweetalert2'
 
 export default {
-  name: 'RepairForm',
+  name: 'Form3',
   props: {
     id: {
       type: Number,
@@ -111,19 +111,25 @@ export default {
     this.handleQueryParams();
     this.fetchUserProfile();
 
-    
     if (this.$route.query.service) {
     this.model.description = this.$route.query.service;
     }
-    
     if (this.id) {
       this.isEditing = !this.isViewing;
       this.getRepairDetails();
     }
   },
   methods: {
-    toast() {
-      return useToast();
+    showToast (icon, title) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: icon,
+        title: title,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
     },
     handleQueryParams() {
       const queryParams = this.$route.query;
@@ -147,8 +153,7 @@ export default {
         this.model.user_id = customerDetail.user.id;
         this.productInfo = customerDetail.product_infos[0] || {};
       } catch (error) {
-        const toast = this.toast();
-        toast.error('Failed to load repair details. Please try again.', { timeout: 3000 });
+        this.showToast("error", "Failed to load repair details. Please try again.")
       }
     },
     async fetchUserProfile() {
@@ -157,7 +162,7 @@ export default {
         const headers = getHeaderConfig(authStore.access_token); // Ensure token is correctly fetched
 
         if (!authStore.access_token) {
-          this.toast().error("Authentication token missing. Please log in again.");
+          this.showToast("error", "Authentication token missing.");
           return;
         }
 
@@ -173,8 +178,7 @@ export default {
           address: response.data.user.address,
         };
       } catch (error) {
-        console.error("Error fetching user profile:", error.response?.data || error.message);
-        this.toast().error(`Error fetching user profile: ${error.response?.data?.message || error.message}`);
+        this.showToast("error", `Error fetching user profile: ${error.response?.data?.message || error.message}`);
       }
     },
     async saveRepair() {
@@ -184,8 +188,7 @@ export default {
         const isProductInfoComplete = this.productInfo.brand && this.productInfo.model && this.productInfo.serial_number && this.productInfo.purchase_date;
 
         if (!isProductInfoComplete) {
-          const toast = this.toast();
-          toast.error('Failed to save. Incomplete details.', { timeout: 3000 });
+          this.showToast("error", "Failed to save. Incomplete details.");
           return;
         }
 
@@ -193,7 +196,7 @@ export default {
         ...this.model, 
         status: 'Pending',
         user_id: this.model.user_id
-         };
+          };
 
         const customerResponse = await axios.post(
           `${BASE_URL}/customer-details`,
@@ -208,12 +211,10 @@ export default {
             getHeaderConfig(authStore.access_token)
           );
         }
-        const toast = this.toast();
-        toast.success("Details saved successful", { timeout: 3000 })
+        this.showToast("success", "Details saved successful")
         setTimeout(() => this.$router.push({ name: 'home' }), 1500);
       } catch (error) {
-        const toast = this.toast();
-        toast.error('Failed to save. There are missing details or an error occurred.', { timeout: 3000 });
+        this.showToast("error", "Failed to save. There are missing details or an error occurred.");
       }
     },
     async updateRepair() {
@@ -225,12 +226,10 @@ export default {
         } else {
           await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: this.id }, getHeaderConfig(authStore.access_token));
         }
-        const toast = this.toast();
-        toast.success("Details updated successful", { timeout: 3000 })
+        this.showToast("success", "Details updated successful")
         setTimeout(() => this.$router.push({ name: 'home' }), 1500);
       } catch (error) {
-        const toast = this.toast();
-        toast.error('Failed to update. There are missing details.', { timeout: 3000 });
+        this.showToast("error", "Failed to update. There are missing details.");
       }
     },
   },

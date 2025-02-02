@@ -17,6 +17,7 @@
     "exceljs": "^4.4.0",
     "html2pdf.js": "^0.10.2",
     "pinia": "^2.1.7",
+    "sweetalert2": "^11.15.10",
     "vite-plugin-pwa": "^0.21.1",
     "vue": "^3.4.15",
     "vue-chartjs": "^5.3.1",

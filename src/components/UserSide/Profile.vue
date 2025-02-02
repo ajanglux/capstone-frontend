@@ -51,7 +51,7 @@ import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { defineProps, defineEmits } from 'vue';
-import { useToast } from 'vue-toastification'; 
+import Swal from 'sweetalert2'
 
 const userProfile = ref({
   first_name: '',
@@ -63,7 +63,6 @@ const userProfile = ref({
 
 const authStore = useAuthStore();
 const token = authStore.access_token;
-const toast = useToast();
 const isUpdating = ref(false);
 
 defineProps({
@@ -77,14 +76,25 @@ const emit = defineEmits(['closeModal']);
 
 const closeModal = () => emit('closeModal');
 
+const showToast = (icon, title) => {
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    icon: icon,
+    title: title,
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
+};
+
 const fetchUserProfile = async () => {
   try {
     const headers = getHeaderConfig(token);
     const response = await axios.get(`${BASE_URL}/user/profile`, headers);
     userProfile.value = response.data.user;
   } catch (error) {
-    console.error("Error fetching user profile:", error.response ? error.response.data : error.message);
-    toast.error("Error fetching user profile:");
+    showToast("error", "Error fetching user profile:");
   }
 };
 
@@ -93,10 +103,9 @@ const updateProfile = async () => {
   try {
     const headers = getHeaderConfig(token);
     await axios.put(`${BASE_URL}/user/profile`, userProfile.value, headers);
-    toast.success("Updated Successful", { timeout: 3000 })
+    showToast("success", "Updated Successful")
   } catch (error) {
-    console.error("Error updating profile:", error.response ? error.response.data : error.message);
-    toast.error("Error updating profile:");
+    showToast("error", "Error updating profile:");
   } finally {
     isUpdating.value = false;
   }

@@ -57,13 +57,12 @@
 import { ref, onMounted, reactive } from 'vue'
 import { useAuthStore } from '../../stores/useAuthStore.js'
 import axios from 'axios'
-import { useToast } from 'vue-toastification'
 import { BASE_URL } from '../../helpers/baseUrl'
 import Spinner from '../layouts/Spinner.vue'
 import { useRoute } from 'vue-router'
 import router from '../../router'
+import Swal from 'sweetalert2'
 
-const toast = useToast()
 const store = useAuthStore()
 const passwordVisible = ref(false)
 const route = useRoute();
@@ -80,6 +79,18 @@ const data = reactive({
   }
 })
 
+const showToast = (icon, title) => {
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    icon: icon,
+    title: title,
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
+};
+
 const verifyEmailToken = async () => {
   const verificationUrl = route.query.url; // Ensure the URL contains the proper parameters
 
@@ -90,14 +101,13 @@ const verifyEmailToken = async () => {
       const response = await axios.get(verificationUrl);
       
       if (response.data.success) {
-        toast.success('Email successfully verified!', { timeout: 3000 });
-        // Redirect to login after successful verification
-        router.push('/login');
+        showToast("success", "Email successfully verified!")
+        router.push('/login')
       } else {
-        toast.error('Email verification failed. Please try again.', { timeout: 3000 });
+        showToast("error", "Email verification failed. Please try again.")
       }
     } catch (error) {
-      toast.error('An error occurred during email verification. Please try again.', { timeout: 3000 });
+      showToast("error", "An error occurred during email verification. Please try again.")
       console.error(error);
     } finally {
       data.loading = false;
@@ -113,7 +123,7 @@ const userAuth = async () => {
     data.loading = false
 
     if (response.data.error) {
-      toast.error(response.data.error, { timeout: 3000 })
+      showToast("error", response.data.error)
     } else {
       const user = response.data.user
       const token = response.data.currentToken
@@ -121,10 +131,10 @@ const userAuth = async () => {
       if (user.role === 0) { 
         store.setToken(token)
         store.setUser(user)
-        toast.success(response.data.message, { timeout: 3000 })
+        showToast("success", response.data.message)
         router.push('/home')
       } else {
-        toast.error("Access Denied", { timeout: 3000 })
+        showToast("error", "Access Denied")
         store.clearToken()
         store.clearUser()
       }
@@ -135,9 +145,9 @@ const userAuth = async () => {
     if (error.response?.status === 422) {
       store.setErrors(error.response.data.errors)
     } else if (error.response?.status === 401) {
-      toast.error('Incorrect password. Please try again.', { timeout: 3000 })
+      showToast("error", "Incorrect password. Please try again.")
     } else {
-      toast.error('An unexpected error occurred. Please try again.', { timeout: 3000 })
+      showToast("error", "An unexpected error occurred. Please try again.")
     }
 
     console.error(error)

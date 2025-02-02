@@ -1,33 +1,32 @@
 <template>
-        <div class="container">
-            <div class="card-header">
-              <h3>History</h3>
-                <div v-if="isLoading">Loading...</div>
-            </div>
-            <div class="history">
-                <div class="table-header">  
-                </div>
+  <div class="container">
+    <div class="card-header">
+      <h3>History</h3>
+        <div v-if="isLoading">Loading...</div>
+    </div>
+      <div class="history">
+        <div class="table-header">  
+        </div>
 
-                <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
 
-                <table class="table table-bordered">
-                  <div v-if="descriptions.length > 0">
-                      <ul>
-                      <li v-for="(description, index) in descriptions" :key="index">
-                          {{ description.description || description.desc }}
-                      </li>
-                      </ul>
-                  </div>
-              </table>
-            </div>
+        <table class="table table-bordered">
+          <div v-if="descriptions.length > 0">
+              <ul>
+                <li v-for="(description, index) in descriptions" :key="index">
+                  {{ description.description || description.desc }}
+                </li>
+              </ul>
+          </div>
+        </table>
       </div>
-  </template>
+  </div>
+</template>
   
   <script setup>
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
   import { useAuthStore } from '../../stores/useAuthStore';
-  import { useToast } from 'vue-toastification';
   import { BASE_URL } from '../../helpers/baseUrl';
   import { getHeaderConfig } from '../../helpers/headerConfig';
   
@@ -37,7 +36,6 @@
   
   const authStore = useAuthStore();
   const token = authStore.access_token;
-  const toast = useToast();
 
   const fetchDescriptions = async () => {
     isLoading.value = true;

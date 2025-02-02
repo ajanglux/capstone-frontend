@@ -24,7 +24,7 @@
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { defineProps, defineEmits } from 'vue';
-import { useToast } from 'vue-toastification';
+import Swal from 'sweetalert2'
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
@@ -40,7 +40,6 @@ const customerDetail = ref({
 
 const route = useRoute();
 const descriptionError = ref(false);
-const toast = useToast();
 
 defineProps({
   isModalOpen: {
@@ -63,38 +62,48 @@ onMounted(() => {
   }
 });
 
+const showToast = (icon, title) => {
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    icon: icon,
+    title: title,
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
+};
+
 const saveCustomerDetail = async () => {
   descriptionError.value = !customerDetail.value.description.trim();
 
   if (!userProfile.first_name || !userProfile.last_name || !userProfile.address || !userProfile.phone_number) {
-    toast.error('Please complete your profile information (First Name, Last Name, Address, Phone Number) before submitting.', { timeout: 3000 });
+    showToast("error", "Please complete your profile information (First Name, Last Name, Address, Phone Number) before submitting.");
     return;
   }
 
   try {
     const response = await axios.get(`${BASE_URL}/customer-details/check-inquiries`, getHeaderConfig(authStore.access_token));
     if (response.data && response.data.hasPendingInquiry) {
-      toast.error('You already have an ongoing inquiry that is not completed. Please wait until it is resolved.', { timeout: 4000 });
+      showToast("error", "You already have an ongoing inquiry that is not completed. Please wait until it is resolved.");
       return;
     }
   } catch (error) {
-    console.error('Error checking existing inquiries:', error);
-    toast.error('An error occurred while checking existing inquiries.', { timeout: 4000 });
+    showToast("error", "An error occurred while checking existing inquiries.");
     return;
   }
 
   if (descriptionError.value) {
-    toast.error('Description is required.');
+    showToast("error", "Description is required.");
     return;
   }
 
   try {
     await axios.post(`${BASE_URL}/customer-details`, customerDetail.value);
-    toast.success("Details saved successfully", { timeout: 3000 });
+   showToast("success", "Details saved successfully");
     resetForm();
   } catch (error) {
-    console.error('Error saving customer details:', error);
-    toast.error('An error occurred while saving customer details.');
+    showToast("error", "An error occurred while saving customer details.");
   }
 };
 

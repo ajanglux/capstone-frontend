@@ -103,15 +103,26 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/useAuthStore';
-import { useToast } from 'vue-toastification'; 
+import Swal from 'sweetalert2'
 
 const router = useRouter();
 const authStore = useAuthStore();
-const toast = useToast();
+
+const showToast = (icon, title) => {
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    icon: icon,
+    title: title,
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
+};
 
 const goToContactUs = (serviceTitle) => {
   if (!authStore.isAuthenticated) {
-    toast.error('Please log in to proceed', { timeout: 3000 });
+    showToast("error", "Please log in to proceed");
     router.push('/login');
   } else {
     router.push({
@@ -144,17 +155,6 @@ const goToContactUs = (serviceTitle) => {
 }
 
 .cards {
-  // display: grid;
-  // flex-direction: column;
-  // justify-content: center;
-  // align-items: start;
-  // grid-template-columns: 1fr 1fr 1fr;
-  // grid-template-columns: auto;
-  // gap: 35px;
-  // padding: 0 130px;
-  // margin-bottom: 30px;
-  // height: 50%;
-  // align-items: stretch;
 
   display: flex;
   flex-direction: column;
