@@ -1,82 +1,82 @@
 <template>
-    <<div class="container">
-        <div class="login-card-wrapper">
-            <div class="login-card">
-                <div class="header">
-            <h3>Forgot Password</h3>
-            </div>
-            <form @submit.prevent="submitEmail">
-            <div class="form-group">
-                <label for="email">Enter Email Address to send code</label>
-                <input
-                v-model="email"
-                type="email"
-                id="email"
-                class="form-control"
-                placeholder="Enter your email"
-                required
-                />
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <p v-if="message" :class="messageClass">{{ message }}</p>
-            </form>
+  <div class="container">
+    <div class="login-card-wrapper">
+      <div class="login-card">
+        <div class="header">
+          <h3>Forgot Password</h3>
+        </div>
+        <form @submit.prevent="submitEmail">
+          <div class="form-group">
+            <label for="email">Enter Email Address to send code</label>
+            <input
+            v-model="email"
+            type="email"
+            id="email"
+            class="form-control"
+            placeholder="Enter your email"
+            required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <p v-if="message" :class="messageClass">{{ message }}</p>
+        </form>
 
-            <div class="forgot">
-                <p><router-link class="primary" aria-current="page" to="/reset-password"> Reset Password </router-link> </p>
-                <router-link class="secondary" to="/">Go Back</router-link>
-                </div>
-            </div>
+        <div class="forgot">
+          <p><router-link class="primary" aria-current="page" to="/reset-password"> Reset Password </router-link> </p>
+          <router-link class="secondary" to="/login">Go Back</router-link>
+        </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
   
-  <script>
-  import axios from 'axios';
-  import { ref } from 'vue';
-  import { useToast } from 'vue-toastification';
-  import { BASE_URL } from '../../helpers/baseUrl';
-  import { useRouter } from 'vue-router';
+<script>
+import axios from 'axios';
+import { ref } from 'vue';
+import { useToast } from 'vue-toastification';
+import { BASE_URL } from '../../helpers/baseUrl';
+import { useRouter } from 'vue-router';
 
-  
-  export default {
-    setup() {
-      const toast = useToast();
-      const email = ref('');
-      const message = ref('');
-      const messageClass = ref('');
-      const router = useRouter();
-  
-      const submitEmail = async () => {
-        try {
-            const response = await axios.post(`${BASE_URL}/user/forgot-password`, {
-            email: email.value,
-            });
-            message.value = response.data.message;
-            messageClass.value = 'success';
-            toast.success(message.value, { timeout: 3000 });
 
-            // Pass the email as a query parameter to the reset-password page
-            router.push({ path: '/reset-password', query: { email: email.value } });
-        } catch (error) {
-            message.value = error.response?.data.error || 'An error occurred';
-            messageClass.value = 'error';
-            toast.error(message.value, { timeout: 3000 });
-        }
-        };
+export default {
+  setup() {
+    const toast = useToast();
+    const email = ref('');
+    const message = ref('');
+    const messageClass = ref('');
+    const router = useRouter();
 
+    const submitEmail = async () => {
+      try {
+        const response = await axios.post(`${BASE_URL}/user/forgot-password`, {
+        email: email.value,
+        });
+        message.value = response.data.message;
+        messageClass.value = 'success';
+        toast.success(message.value, { timeout: 3000 });
+
+        // Pass the email as a query parameter to the reset-password page
+        router.push({ path: '/reset-password', query: { email: email.value } });
+      } 
+      catch (error) {
+        message.value = error.response?.data.error || 'An error occurred';
+        messageClass.value = 'error';
+        toast.error(message.value, { timeout: 3000 });
+      }
+    };
+
+    return {
+      email,
+      message,
+      messageClass,
+      submitEmail,
+    };
+  },
+};
+</script>
   
-      return {
-        email,
-        message,
-        messageClass,
-        submitEmail,
-      };
-    },
-  };
-  </script>
   
-  
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
 .container {
   display: flex;
   justify-content: center;
@@ -187,5 +187,5 @@
     transform: translateY(-2px);
   }
 }
-  </style>
+</style>
   

@@ -55,15 +55,14 @@
           <p v-if="message" :class="messageClass">{{ message }}</p>
         </form>
         <div class="forgot">
-                <p><router-link class="primary" aria-current="page" to="/reset-password"> Reset Password </router-link> </p>
-                <router-link class="secondary" to="/">Go Back</router-link>
-                </div>
+          <router-link class="secondary" to="/forgot-password">Go Back</router-link>
+          </div>
       </div>
     </div>
   </template>
   
   <script>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useRoute } from 'vue-router';
 import axios from 'axios';

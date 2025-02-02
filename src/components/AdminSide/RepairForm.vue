@@ -97,38 +97,38 @@
             </div>
 
         <div class="whole-checklist">
-          <div class="checklist">
+          <div class="checkbox">
             <div class="buttons">
               <h2>Accessories Checklist</h2>
             </div>
 
-            <div class="mb3">
+            <div class="accessory">
               <span class="input-group-text">AC Adapter</span>
               <input v-model="productInfo.ac_adapter" type="radio" id="ac_adapter" value="ac_adapter" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <div class="mb3">
+            <div class="accessory">
               <span class="input-group-text">VGA Cable</span>
               <input v-model="productInfo.vga_cable" type="radio" id="vga_cable" value="vga_cable" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <div class="mb3">
+            <div class="accessory">
               <span class="input-group-text">DVI Cable</span>
               <input v-model="productInfo.dvi_cable" type="radio" id="dvi_cable" value="dvi_cable" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
           </div> 
-          <div class="checklist">
-            <div class="mb3">
+          <div class="checkbox">
+            <div class="accessory">
               <span class="input-group-text">Display Cable</span>
               <input v-model="productInfo.display_cable" type="radio" id="display_cable" value="display_cable" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <div class="mb3">
+            <div class="accessory">
               <span class="input-group-text">Bag (PN)</span>
               <input v-model="productInfo.bag_pn" type="radio" id="bag" value="bag" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
 
-            <div class="mb3">
+            <div class="accessory">
               <span class="input-group-text">HDD</span>
               <input v-model="productInfo.hdd" type="radio" id="hdd" value="hdd" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
             </div>
@@ -210,22 +210,14 @@ export default {
         documentation: '',
         warranty_status: '',
         ac_adapter: '',
-        battery_pack: '',
-        lithium_battery: '',
         vga_cable: '',
         dvi_cable: '',
         display_cable: '',
         bag_pn: '',
-        swivel_base: '',
         hdd: '',
         ram_brand: '',
         ram_size_gb: '',
         power_cord_qty: '',
-        printer_cable_qty: '',
-        usb_cable_qty: '',
-        paper_tray_qty: '',
-        screw_qty: '',
-        jack_cable_qty: '',
       },
       isEditing: false,
       phoneNumber: '',
@@ -493,5 +485,53 @@ h2 {
       }
     }
   }
+}
+
+.whole-checklist {
+  width: 100%;
+
+  .checkbox {
+      display: flex;
+      flex-direction: column;
+      gap: 23px;
+      width: 100%;
+      padding-top: 3px;
+  }
+
+  .checkbox:nth-child(2) {
+      padding-top: 82px;
+  }
+
+  .accessory {
+      margin-bottom: 10px;
+      height: 50px;
+      width: 100%;
+      border-radius: 10px;
+      outline: none;
+      border: none;
+      padding: 10px;
+      transition: all 0.3s ease-in-out;
+      background-color: var(--light);
+      display: flex;
+      align-items: center;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+
+      &:hover {
+        background-color: var(--light2);
+      }
+
+      .input-group-text {
+          font-size: 14px;
+          color: black;
+          padding: 10px;
+      }
+
+      .form-control {
+          font-family: 'Poppins';
+          width: 20px;
+      }
+  }
+
 }
 </style>

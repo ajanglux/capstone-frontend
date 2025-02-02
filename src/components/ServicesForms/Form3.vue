@@ -1,6 +1,6 @@
 <template>
-  <div class="content">
-    <div class="container">
+  <div class="user-content">
+    <div class="user-container">
       <div class="card-header">
         <h2>{{ isEditing ? 'EDIT' : isViewing ? 'VIEW' : 'Add Repair' }}</h2>
       </div>
@@ -24,7 +24,7 @@
             </div>
             <div class="input-group mb-3">
               <span class="input-group-text">Tel. No.</span>
-              <input v-model="phoneNumber" @input="validatePhoneNumber" type="text" class="form-control" :disabled="isEditing || isViewing" />
+              <input v-model="model.phone_number" type="text" class="form-control" :disabled="isEditing || isViewing" />
             </div>
             <div class="input-group mb-3">
               <span class="input-group-text">Email</span>
@@ -35,6 +35,14 @@
               <input v-model="model.address" type="text" class="form-control" :disabled="isEditing || isViewing" style="text-transform: capitalize;" />
             </div>
           </div>
+        </div>
+
+        <div class="buttons">
+          <h2>Service Description</h2>
+        </div>
+        <div class="input-group mb-4">
+          <span class="input-group-text"></span>
+          <textarea v-model="model.description" class="form-control" :disabled="isViewing"></textarea>
         </div>
 
         <div class="buttons">
@@ -84,19 +92,8 @@ export default {
         purchase_date: '',
         documentation: '',
         warranty_status: '',
-        ac_adapter: '',
-        vga_cable: '',
-        dvi_cable: '',
-        display_cable: '',
-        bag_pn: '',
-        hdd: '',
-        ram_brand: '',
-        ram_size_gb: '',
-        power_cord_qty: '',
       },
       isEditing: false,
-      phoneNumber: '',
-      minDate: new Date().toISOString().split('T')[0],
     };
   },
   computed: {
@@ -105,18 +102,19 @@ export default {
     }
   },
   watch: {
-    phoneNumber(value) {
-      this.model.phone_number = value;
-    },
     isViewing(newValue) {
       if (newValue) {
       }
     }
   },
   mounted() {
-    console.log('View prop in mounted:', this.view);
     this.handleQueryParams();
     this.fetchUserProfile();
+
+    
+    if (this.$route.query.service) {
+    this.model.description = this.$route.query.service;
+    }
     
     if (this.id) {
       this.isEditing = !this.isViewing;
@@ -143,11 +141,11 @@ export default {
         this.model = customerDetail || {};
         this.model.first_name = customerDetail.user.first_name;
         this.model.last_name = customerDetail.user.last_name;
+        this.model.phone_number = customerDetail.user.phone_number;
         this.model.address = customerDetail.user.address;
         this.model.email = customerDetail.user.email;
         this.model.user_id = customerDetail.user.id;
         this.productInfo = customerDetail.product_infos[0] || {};
-        this.phoneNumber = this.model.user.phone_number;
       } catch (error) {
         const toast = this.toast();
         toast.error('Failed to load repair details. Please try again.', { timeout: 3000 });
@@ -166,6 +164,7 @@ export default {
         const response = await axios.get(`${BASE_URL}/user/profile`, headers);
 
         this.model = {
+          ...this.model,
           user_id: response.data.user.id,
           first_name: response.data.user.first_name,
           last_name: response.data.user.last_name,
@@ -177,16 +176,6 @@ export default {
         console.error("Error fetching user profile:", error.response?.data || error.message);
         this.toast().error(`Error fetching user profile: ${error.response?.data?.message || error.message}`);
       }
-    },
-    validatePhoneNumber(event) {
-      const input = event.target;
-      const value = input.value.replace(/\D/g, '');
-      if (value.length > 11) {
-        input.value = value.slice(0, 11);
-      } else {
-        input.value = value;
-      }
-      this.phoneNumber = input.value;
     },
     async saveRepair() {
       try {
@@ -202,7 +191,7 @@ export default {
 
         const repairData = { 
         ...this.model, 
-        status: 'On-Going',
+        status: 'Pending',
         user_id: this.model.user_id
          };
 
@@ -221,7 +210,7 @@ export default {
         }
         const toast = this.toast();
         toast.success("Details saved successful", { timeout: 3000 })
-        setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
+        setTimeout(() => this.$router.push({ name: 'home' }), 1500);
       } catch (error) {
         const toast = this.toast();
         toast.error('Failed to save. There are missing details or an error occurred.', { timeout: 3000 });
@@ -238,7 +227,7 @@ export default {
         }
         const toast = this.toast();
         toast.success("Details updated successful", { timeout: 3000 })
-        setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
+        setTimeout(() => this.$router.push({ name: 'home' }), 1500);
       } catch (error) {
         const toast = this.toast();
         toast.error('Failed to update. There are missing details.', { timeout: 3000 });

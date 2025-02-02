@@ -230,7 +230,7 @@ const handleActionChange = (repairId) => {
 
 const setApproved = async (id) => {
   try {
-    await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'Incomplete' }, getHeaderConfig(authStore.access_token));
+    await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'On-Going' }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
     toast.success("Status update successful", { timeout: 3000 })
   } catch (error) {
@@ -238,15 +238,15 @@ const setApproved = async (id) => {
   }
 };
 
-const setResponded = async (id) => {
-  try {
-    await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'Responded' }, getHeaderConfig(authStore.access_token));
-    fetchRepairs();
-    toast.success("Status update successful", { timeout: 3000 })
-  } catch (error) {
-    toast.error('Error updating status. Please try again.', { timeout: 3000 });
-  }
-};
+// const setResponded = async (id) => {
+//   try {
+//     await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'Responded' }, getHeaderConfig(authStore.access_token));
+//     fetchRepairs();
+//     toast.success("Status update successful", { timeout: 3000 })
+//   } catch (error) {
+//     toast.error('Error updating status. Please try again.', { timeout: 3000 });
+//   }
+// };
 
 const viewRepair = (id) => {
   router.push({ name: 'inquiries-view', params: { id } });

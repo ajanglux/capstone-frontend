@@ -27,8 +27,7 @@
                 :type="inputType" 
                 v-model="selectedFilterValue" 
                 />
-
-  
+                
                 <button @click="generateReport">Generate Report</button>
               </div>
             </div>
@@ -236,6 +235,9 @@ const filteredRepairs = computed(() => {
     
         .filters {
             color: #333;
+            display: flex;
+            align-items: center;
+            gap: 5px;
     
             input {
               margin-left: 5px;

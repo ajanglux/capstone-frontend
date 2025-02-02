@@ -25,7 +25,7 @@
           </div>
           <div class="form-field">
             <label for="phone">Phone</label>
-            <input v-model="userProfile.phone_number" type="text" id="phone" placeholder="09XXXXXXXXX" required />
+            <input v-model="userProfile.phone_number" @input="validatePhoneNumber" type="text" id="phone" placeholder="09XXXXXXXXX" required />
           </div>
         </div>
 
@@ -100,6 +100,12 @@ const updateProfile = async () => {
   } finally {
     isUpdating.value = false;
   }
+};
+
+const validatePhoneNumber = () => {
+  userProfile.value.phone_number = userProfile.value.phone_number
+    .replace(/\D/g, '')  // Remove non-numeric characters
+    .slice(0, 11);       // Limit to 11 digits
 };
 
 onMounted(fetchUserProfile);

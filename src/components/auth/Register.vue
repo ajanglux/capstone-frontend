@@ -27,6 +27,7 @@
               <input 
                 type="text" 
                 v-model="data.user.phone_number"
+                @input="validatePhoneNumber"
                 placeholder="Phone Number" 
                 class="form-control rounded-0"
                 required>
@@ -104,88 +105,97 @@
 </template>
 
 <script setup>
-  import { ref, onUnmounted, reactive } from "vue"
-  import router from '../../router'
-  import { useAuthStore } from '../../stores/useAuthStore.js'
-  import axios from 'axios'
-  import { useToast } from "vue-toastification"
-  import { BASE_URL } from '../../helpers/baseUrl'
-  import Spinner from '../layouts/Spinner.vue'
+import { ref, reactive } from "vue"
+import router from '../../router'
+import { useAuthStore } from '../../stores/useAuthStore.js'
+import axios from 'axios'
+import { useToast } from "vue-toastification"
+import { BASE_URL } from '../../helpers/baseUrl'
+import Spinner from '../layouts/Spinner.vue'
 
-  const toast = useToast()
-  const store = useAuthStore()
-  const isTermsChecked = ref(false);
-  const termsError = ref(false);
-  
-  const passwordVisible = ref(false); 
-  const confirmPasswordVisible = ref(false);
+const toast = useToast()
+const store = useAuthStore()
+const isTermsChecked = ref(false);
+const termsError = ref(false);
+const phoneError = ref(false);
+const passwordVisible = ref(false); 
+const confirmPasswordVisible = ref(false);
 
-  const togglePasswordVisibility = () => {
-    passwordVisible.value = !passwordVisible.value;
-  };
+const togglePasswordVisibility = () => {
+  passwordVisible.value = !passwordVisible.value;
+};
 
-  const toggleConfirmPasswordVisibility = () => {
-    confirmPasswordVisible.value = !confirmPasswordVisible.value; 
-  };
+const toggleConfirmPasswordVisibility = () => {
+  confirmPasswordVisible.value = !confirmPasswordVisible.value; 
+};
 
-  const validateTerms = () => {
-    termsError.value = !isTermsChecked.value;
-  };
+const validateTerms = () => {
+  termsError.value = !isTermsChecked.value;
+};
 
-  const data = reactive({
-    loading: false,
-    user: {
-        first_name: '',
-        last_name: '',
-        phone_number: '',
-        address: '',
-        email: '',
-        password: '',
-        password_confirmation:''
-    }
-  })
+const data = reactive({
+  loading: false,
+  user: {
+      first_name: '',
+      last_name: '',
+      phone_number: '',
+      address: '',
+      email: '',
+      password: '',
+      password_confirmation:''
+  },
+})
 
-  const registerUser = async () => {
-    data.loading = true
+const validatePhoneNumber = () => {
+  data.user.phone_number = data.user.phone_number.replace(/\D/g, "").slice(0, 11);
 
-    validateTerms();
-    if (termsError.value) {
-      toast.error('You must agree to the terms and conditions.');
-      data.loading = false;
-      return;
-    }
+  phoneError.value = data.user.phone_number.length !== 11;
+};
 
-    if (data.user.password.length < 8) {
-      toast.error('Password must be at least 8 characters long.');
-      data.loading = false;
-      return;
-    }
+const registerUser = async () => {
+  data.loading = true
 
-    if (data.user.password !== data.user.password_confirmation) {
-      toast.error('Passwords do not match.');
-      data.loading = false;
-      return;
-    }
-
-    try {
-    const response = await axios.post(`${BASE_URL}/user/register`, data.user);
+  validateTerms();
+  if (termsError.value) {
+    toast.error('You must agree to the terms and conditions.');
     data.loading = false;
-    toast.success(response.data.message, {
-      timeout: 3000
-    });
-
-    router.push('/email-verification');
-    } catch (error) {
-      data.loading = false;
-      if (error.response?.status === 422) {
-        store.setErrors(error.response.data.errors);
-      }
-      console.log(error);
-  }
+    return;
   }
 
-  onUnmounted()
+  if (data.user.password.length < 8) {
+    toast.error('Password must be at least 8 characters long.');
+    data.loading = false;
+    return;
+  }
 
+  if (data.user.phone_number.length < 11) {
+    toast.error('Phone number must be at least 11 numbers long.');
+    data.loading = false;
+    return;
+  }
+
+  if (data.user.password !== data.user.password_confirmation) {
+    toast.error('Passwords do not match.');
+    data.loading = false;
+    return;
+  }
+
+  try {
+  const response = await axios.post(`${BASE_URL}/user/register`, data.user);
+  data.loading = false;
+  toast.success(response.data.message, {
+    timeout: 3000
+  });
+
+  router.push('/email-verification');
+  } catch (error) {
+    data.loading = false;
+    if (error.response?.status === 422) {
+      store.setErrors(error.response.data.errors);
+    }
+    console.log(error);
+  }
+}
 </script>
 
 <style lang="scss" scoped>

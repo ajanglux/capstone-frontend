@@ -66,6 +66,7 @@ import router from '../../router'
 const toast = useToast()
 const store = useAuthStore()
 const passwordVisible = ref(false)
+const route = useRoute();
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value
@@ -80,7 +81,6 @@ const data = reactive({
 })
 
 const verifyEmailToken = async () => {
-  const route = useRoute();
   const verificationUrl = route.query.url; // Ensure the URL contains the proper parameters
 
   if (verificationUrl) {
@@ -105,9 +105,8 @@ const verifyEmailToken = async () => {
   }
 };
 
-// Login action
 const userAuth = async () => {
-  data.loading = true // Show loading spinner
+  data.loading = true
 
   try {
     const response = await axios.post(`${BASE_URL}/user/login`, data.user)

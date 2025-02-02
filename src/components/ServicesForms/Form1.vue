@@ -1,6 +1,6 @@
 <template>
-    <div class="content">
-      <div class="container">
+    <div class="user-content">
+      <div class="user-container">
         <div class="card-header">
           <h2>{{ isEditing ? 'EDIT' : isViewing ? 'VIEW' : 'Add Repair' }}</h2>
         </div>
@@ -24,7 +24,7 @@
               </div>
               <div class="input-group mb-3">
                 <span class="input-group-text">Tel. No.</span>
-                <input v-model="phoneNumber" @input="validatePhoneNumber" type="text" class="form-control" :disabled="isEditing || isViewing" />
+                <input v-model="model.phone_number" type="text" class="form-control" :disabled="isEditing || isViewing" />
               </div>
               <div class="input-group mb-3">
                 <span class="input-group-text">Email</span>
@@ -90,18 +90,17 @@
                 <span class="input-group-text">Purchase Date</span>
                 <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isViewing"/>
               </div>
-  
             </div>
           </div>
   
           <div class="buttons">
-                <h2>Device Issue Description</h2>
-              </div>
-              <div class="input-group mb-4">
-                <span class="input-group-text"></span>
-                <textarea v-model="model.description" class="form-control" :disabled="isViewing"></textarea>
-              </div>
-  
+            <h2>Device Issue Description</h2>
+          </div>
+          <div class="input-group mb-4">
+            <span class="input-group-text"></span>
+            <textarea v-model="model.description" class="form-control" :disabled="isViewing"></textarea>
+          </div>
+
           <div class="buttons">
             <button v-if="isEditing" @click="updateRepair()" type="button" class="btn btn-primary">Update</button>
             <button v-else-if="!isViewing" @click="saveRepair()" type="button" class="btn btn-primary">{{ isEditing ? 'Update' : 'Submit' }}</button>
@@ -151,8 +150,6 @@
           warranty_status: '',
         },
         isEditing: false,
-        phoneNumber: '',
-        minDate: new Date().toISOString().split('T')[0],
       };
     },
     computed: {
@@ -161,9 +158,6 @@
       }
     },
     watch: {
-      phoneNumber(value) {
-        this.model.phone_number = value;
-      },
       isViewing(newValue) {
         if (newValue) {
         }
@@ -201,11 +195,11 @@
           this.model = customerDetail || {};
           this.model.first_name = customerDetail.user.first_name;
           this.model.last_name = customerDetail.user.last_name;
+          this.model.phone_number = customerDetail.user.phone_number;
           this.model.address = customerDetail.user.address;
           this.model.email = customerDetail.user.email;
           this.model.user_id = customerDetail.user.id;
           this.productInfo = customerDetail.product_infos[0] || {};
-          this.phoneNumber = this.model.user.phone_number;
         } catch (error) {
           const toast = this.toast();
           toast.error('Failed to load repair details. Please try again.', { timeout: 3000 });
@@ -237,16 +231,6 @@
           this.toast().error(`Error fetching user profile: ${error.response?.data?.message || error.message}`);
         }
       },
-      validatePhoneNumber(event) {
-        const input = event.target;
-        const value = input.value.replace(/\D/g, '');
-        if (value.length > 11) {
-          input.value = value.slice(0, 11);
-        } else {
-          input.value = value;
-        }
-        this.phoneNumber = input.value;
-      },
       async saveRepair() {
         try {
           const authStore = useAuthStore();
@@ -261,7 +245,7 @@
   
           const repairData = { 
           ...this.model, 
-          status: 'On-Going',
+          status: 'Pending',
           user_id: this.model.user_id
            };
   
@@ -280,7 +264,7 @@
           }
           const toast = this.toast();
           toast.success("Details saved successful", { timeout: 3000 })
-          setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
+          setTimeout(() => this.$router.push({ name: 'home' }), 1500);
         } catch (error) {
           const toast = this.toast();
           toast.error('Failed to save. There are missing details or an error occurred.', { timeout: 3000 });
@@ -297,7 +281,7 @@
           }
           const toast = this.toast();
           toast.success("Details updated successful", { timeout: 3000 })
-          setTimeout(() => this.$router.push({ name: 'repair-list' }), 1500);
+          setTimeout(() => this.$router.push({ name: 'home' }), 1500);
         } catch (error) {
           const toast = this.toast();
           toast.error('Failed to update. There are missing details.', { timeout: 3000 });
