@@ -11,20 +11,20 @@
                     <i :class="isDropdownOpen ? 'bx bx-x' : 'bx bx-menu'"></i>
                 </div>
             </div>
-    
+
             <div v-if="!isViewTerms" class="button-container" :class="{ open: isDropdownOpen }">
                 <router-link class="button" active-class="active" to="/home" @click="closeDropdown">
                 <span class="text">Home</span>
                 </router-link>
 
-                <a class="button" @click="openInquireModal">
+                <!-- <a class="button" @click="openInquireModal">
                     <span class="text">Ticket</span>
-                </a>
+                </a> -->
 
                 <router-link class="button" active-class="active" to="/user-history" @click="closeDropdown">
-                <span class="text">History</span>
+                <span class="text">Tickets</span>
                 </router-link>
-    
+
                 <div class="dropdown">
                     <button class="button">
                     <span> {{ store.user?.first_name || 'User' }} </span>
@@ -42,85 +42,94 @@
         <ProfileModal :isModalOpen="isProfileModalOpen" @closeModal="closeProfileModal" />
 
         <InquireModal :isModalOpen="isInquireModalOpen" @closeModal="closeInquireModal" />
-    
+
         <div v-if="isDropdownOpen && !isViewTerms" class="overlay" @click.stop="closeDropdown"></div>
     </div> 
-  </template>
+</template>
   
-  <script setup>
-  import { useAuthStore } from '../../stores/useAuthStore.js'
-  import router from '../../router'
-  import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
-  import axios from 'axios'
-  import { useToast } from "vue-toastification"
-  import { BASE_URL } from '../../helpers/baseUrl.js'
-  import { getHeaderConfig } from '../../helpers/headerConfig'
-  import { useRoute } from 'vue-router';
-  
-  const ProfileModal = defineAsyncComponent(() => import('../UserSide/Profile.vue'));
-  const InquireModal = defineAsyncComponent(() => import("../UserSide/ContactUs.vue"));
-  
-  const toast = useToast()
-  const store = useAuthStore()
-  const isDropdownOpen = ref(false);
-  const isProfileModalOpen = ref(false);
-  const isInquireModalOpen = ref(false);
-  const route = useRoute();
-  
-  const toggleDropdown = () => {
-    isDropdownOpen.value = !isDropdownOpen.value;
-  };
-  
-  const closeDropdown = () => {
-    isDropdownOpen.value = false;
-  };
-  
-    const openProfileModal = () => {
-    isProfileModalOpen.value = true;
-    };
-    const closeProfileModal = () => {
-    isProfileModalOpen.value = false;
-    };
+<script setup>
+import { useAuthStore } from '../../stores/useAuthStore.js'
+import router from '../../router'
+import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
+import axios from 'axios'
+import Swal from 'sweetalert2'
+import { BASE_URL } from '../../helpers/baseUrl.js'
+import { getHeaderConfig } from '../../helpers/headerConfig'
+import { useRoute } from 'vue-router';
 
-    const openInquireModal = () => {
-    isInquireModalOpen.value = true;
-    };
-    const closeInquireModal = () => {
-    isInquireModalOpen.value = false;
-    };
-  
-  const isViewTerms = computed(() => route.path === '/terms-and-conditions');
-  
-  const userLogout = async () => {
-      try {
-          await axios.post(`${BASE_URL}/user/logout`, {}, getHeaderConfig(store.access_token));
-          toast.success("Logout successfully", {
-              timeout: 3000
-          })
-          store.clearStoredData();
-          router.push('/');
-      } catch (error) {
-          console.log(error);
-      }
-  }
-  
-  const fetchCurrentUser = async () => {
+const ProfileModal = defineAsyncComponent(() => import('../UserSide/Profile.vue'));
+const InquireModal = defineAsyncComponent(() => import("../UserSide/ContactUs.vue"));
+
+const store = useAuthStore()
+const isDropdownOpen = ref(false);
+const isProfileModalOpen = ref(false);
+const isInquireModalOpen = ref(false);
+const route = useRoute();
+
+const toggleDropdown = () => {
+isDropdownOpen.value = !isDropdownOpen.value;
+};
+
+const closeDropdown = () => {
+isDropdownOpen.value = false;
+};
+
+const openProfileModal = () => {
+isProfileModalOpen.value = true;
+};
+const closeProfileModal = () => {
+isProfileModalOpen.value = false;
+};
+
+const openInquireModal = () => {
+isInquireModalOpen.value = true;
+};
+const closeInquireModal = () => {
+isInquireModalOpen.value = false;
+};
+
+const isViewTerms = computed(() => route.path === '/terms-and-conditions');
+
+const showToast = (icon, title) => {
+  Swal.fire({
+    toast: true,
+    position: "top-end",
+    icon: icon,
+    title: title,
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
+};
+
+const userLogout = async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/user`, getHeaderConfig(store.access_token));
-        store.setToken(response.data.currentToken); 
-        store.setUser(response.data.user);
+        await axios.post(`${BASE_URL}/user/logout`, {}, getHeaderConfig(store.access_token));
+        showToast("success", "Logout successfully")
+        store.clearStoredData();
+        router.push('/');
     } catch (error) {
-        if(error?.response?.status === 401) {
-            store.clearStoredData();
-        }
         console.log(error);
     }
 }
-  
-  onMounted(() => {
-      if(store.access_token) fetchCurrentUser()
-  })
-  </script>  
+
+const fetchCurrentUser = async () => {
+try {
+    const response = await axios.get(`${BASE_URL}/user`, getHeaderConfig(store.access_token));
+    store.setToken(response.data.currentToken); 
+    store.setUser(response.data.user);
+} catch (error) {
+    if(error?.response?.status === 401) {
+        store.clearStoredData();
+    }
+    console.log(error);
+}
+}
+
+onMounted(() => {
+    if(store.access_token) fetchCurrentUser()
+})
+</script>  
   
 <style lang="scss" scoped>
 header {

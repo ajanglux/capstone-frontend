@@ -1,40 +1,49 @@
 <template>
   <div class="content">
     <div class="container">
-      <div class="card-header">
+      <div class="card-header" v-if="userRole !== 0">
         <h2>{{ isEditing ? 'Client Details' : 'Add Repair' }}</h2>
+        <h2>Service: {{ model.description }}</h2>
+      </div>
+      <div class="card-header" v-else>
+        <h2>Service: {{ model.description }}</h2>
       </div>
       <div class="card-body">
 
         <!-- Customer Details -->
-        <div class="input-group mb-3">
+        <div class="input-group mb-3" v-if="userRole !== 0">
           <span class="input-group-text">First Name</span>
           <input v-model="model.first_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
         </div>
-        <div class="input-group mb-3">
+        <div class="input-group mb-3" v-if="userRole !== 0">
           <span class="input-group-text">Last Name</span>
           <input v-model="model.last_name" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
         </div>
-        <div class="input-group mb-3">
+        <div class="input-group mb-3" v-if="userRole !== 0">
           <span class="input-group-text">Tel. No.</span>
           <input v-model="phoneNumber" @input="validatePhoneNumber" type="text" class="form-control" :disabled="isEditing" />
         </div>
-        <div class="input-group mb-3">
+        <div class="input-group mb-3" v-if="userRole !== 0">
           <span class="input-group-text">Email</span>
           <input v-model="model.email" type="email" class="form-control" :disabled="isEditing" />
         </div>
-        <div class="input-group mb-4">
+        <div class="input-group mb-4" v-if="userRole !== 0">
           <span class="input-group-text">Address</span>
           <input v-model="model.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
         </div>
         <div class="input-group mb-4">
           <span class="input-group-text">Inquiry:</span>
-          <textarea v-model="model.description" class="form-control" :disabled="isEditing"></textarea>
+          <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isEditing"></textarea>
+        </div>
+
+        <div class="input-group mb-4">
+          <span class="input-group-text">Address ("optional address")</span>
+          <input v-model="productInfo.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
         </div>
 
         <div class="buttons">
           <button v-if="isEditing" @click="goBack" class="btn">Back</button>
-          <button v-if="isEditing" @click="setApprove" class="btn">Add to Repair</button>
+          <button v-if="isEditing && userRole !== 0" @click="setApprove" class="btn">Accept</button>
         </div>
       </div>
     </div>
@@ -67,6 +76,8 @@ export default {
         model: '',
         serial_number: '',
         purchase_date: '',
+        description_of_repair: '',
+        address: '',
       },
       isEditing: false,
       phoneNumber: '',
@@ -74,6 +85,9 @@ export default {
     };
   },
   mounted() {
+    const userData = useAuthStore();
+    this.userRole = userData.user ? userData.user.role : null; // Ensure userData is populated before accessing role
+
     if (this.id) {
       this.isEditing = true;
       this.getRepairDetails();

@@ -44,9 +44,9 @@
                       <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                         <option value="">Select</option>
                         <option value="view">View</option>
-                        <option value="Incomplete">Add to Repair</option>
+                        <option value="Accept">Accept</option>
+                        <option value="Unrepairable">Service Not Possible</option>
                         <option value="Responded">Respond</option>
-                        <option value="delete">Delete</option>
                       </select>
                     </div>
                   </div>
@@ -114,6 +114,8 @@ const selectedRepair = ref(null);
 const showCommentModal = ref(false);
 const commentText = ref('');
 const existingComment = ref('');
+const showAcceptDialog = ref(false);
+const selectedAcceptRepairId = ref(null);
 
 const openCommentModal = (repair) => {
   if (!repair || !repair.id) {
@@ -134,22 +136,27 @@ const submitComment = async () => {
   }
 
   try {
-    // Make sure you're sending the correct repair ID in the request
     if (selectedRepair.value && selectedRepair.value.id) {
       await axios.put(`${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`, 
         { comment: commentText.value },
         getHeaderConfig(authStore.access_token)
       );
 
-      toast.success(existingComment.value ? 'Comment updated successfully' : 'Comment added successfully');
-      selectedRepair.value.comment = commentText.value;  // Update local data
+      await axios.patch(`${BASE_URL}/customer-details/${selectedRepair.value.id}/status`, 
+        { status: 'Unrepairable' }, 
+        getHeaderConfig(authStore.access_token)
+      );
+
+      toast.success('Comment added & status updated.');
+      selectedRepair.value.comment = commentText.value;
+      selectedRepair.value.status = 'Unrepairable';
       showCommentModal.value = false;
+      fetchRepairs();
     } else {
       toast.error('Repair ID not found!');
     }
   } catch (error) {
-    console.error('Error updating comment:', error);
-    toast.error('Failed to update comment. Please try again.');
+    toast.error('Failed to update comment & status.');
   }
 };
 
@@ -216,7 +223,7 @@ const previousPage = () => {
 
 const handleActionChange = (repairId) => {
   const action = selectedActions.value[repairId];
-  if (action === 'Incomplete') {
+  if (action === 'Accept') {
     setApproved(repairId);
   } else if (action === 'Responded') {
     const repair = repairs.value.find(r => r.id === repairId);
@@ -225,8 +232,15 @@ const handleActionChange = (repairId) => {
     confirmDelete(repairId);
   } else if (action === 'view') {
     viewRepair(repairId);
+  } else if ( action === 'Unrepairable' ){
+    const repair = repairs.value.find(r => r.id === repairId);
+    if (repair) {
+      selectedRepair.value = repair;
+      showCommentModal.value = true;
+    }
   }
 };
+
 
 const setApproved = async (id) => {
   try {

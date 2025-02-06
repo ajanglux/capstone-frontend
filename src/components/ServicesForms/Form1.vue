@@ -10,7 +10,7 @@
 
         <!-- Customer Details -->
         <div class="whole">
-          <div class="left">
+          <div class="left" v-if="userRole !== 0">
             <div class="buttons">
               <h2>Customer Details</h2>
             </div>
@@ -41,13 +41,13 @@
             <div class="buttons">
               <h2>PRODUCT INFORMATION</h2>
             </div>
-            <div class="filters">
-              <select>
-                <option value="">Device Type</option>
-                <option value="">Laptop</option>
-                <option value="">Desktop</option>
-                <option value="">Phone</option>
-                <option value="">Tablet/Ipad</option>
+            <div>
+              <span class="input-group-text">Device Type</span>
+              <select v-model="productInfo.device_type">
+                <option value="Laptop">Laptop</option>
+                <option value="Desktop">Desktop</option>
+                <option value="Phone">Phone</option>
+                <option value="Tablet/Ipad">Tablet/Ipad</option>
               </select>
             </div>
             <div class="input-group mb-3">
@@ -96,9 +96,10 @@
         <div class="buttons">
           <h2>Device Issue Description</h2>
         </div>
+        <div><h4>Service: {{ model.description }}</h4></div>
         <div class="input-group mb-4">
           <span class="input-group-text"></span>
-          <textarea v-model="model.description" class="form-control" :disabled="isViewing"></textarea>
+          <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isViewing"></textarea>
         </div>
 
         <div class="buttons">
@@ -140,14 +141,17 @@ export default {
         phone_number: '',
         email: '',
         address: '',
+        description: '',
       },
       productInfo: {
+        device_type: 'Desktop', 
         brand: '',
         model: '',
         serial_number: '',
         purchase_date: '',
         documentation: '',
         warranty_status: '',
+        description_of_repair: '',
       },
       isEditing: false,
     };
@@ -164,11 +168,14 @@ export default {
     }
   },
   mounted() {
+    const userData = useAuthStore();
+    this.userRole = userData.user ? userData.user.role : null; // Ensure userData is populated before accessing role
+
     this.handleQueryParams();
     this.fetchUserProfile();
 
     if (this.$route.query.service) {
-    this.model.description = this.$route.query.service;
+      this.model.description = this.$route.query.service;
     }
     if (this.id) {
       this.isEditing = !this.isViewing;
@@ -208,6 +215,9 @@ export default {
         this.model.email = customerDetail.user.email;
         this.model.user_id = customerDetail.user.id;
         this.productInfo = customerDetail.product_infos[0] || {};
+
+        // Ensure device_type is set
+        this.productInfo.device_type = customerDetail.product_infos[0]?.device_type || '';
       } catch (error) {
         this.showToast("error", "Failed to load repair details. Please try again.")
       }
@@ -249,10 +259,10 @@ export default {
         }
 
         const repairData = { 
-        ...this.model, 
-        status: 'Pending',
-        user_id: this.model.user_id
-          };
+          ...this.model, 
+          status: 'Pending',
+          user_id: this.model.user_id
+        };
 
         const customerResponse = await axios.post(
           `${BASE_URL}/customer-details`,
@@ -263,105 +273,124 @@ export default {
         if (Object.values(this.productInfo).some(field => field)) {
           await axios.post(
             `${BASE_URL}/product-infos`,
-            { ...this.productInfo, customer_detail_id: customerResponse.data.data.id },
+            { 
+              ...this.productInfo, 
+              customer_detail_id: customerResponse.data.data.id,
+              device_type: this.productInfo.device_type, // <-- Added this
+              description_of_repair: this.productInfo.description_of_repair // <-- Added this
+            },
             getHeaderConfig(authStore.access_token)
           );
         }
-        this.showToast("success", "Details saved successful")
+        this.showToast("success", "Details saved successfully")
         setTimeout(() => this.$router.push({ name: 'home' }), 1500);
       } catch (error) {
         this.showToast("error", "Failed to save. There are missing details or an error occurred.");
       }
     },
+
     async updateRepair() {
       try {
         const authStore = useAuthStore();
         await axios.put(`${BASE_URL}/customer-details/${this.id}`, this.model, getHeaderConfig(authStore.access_token));
+
         if (this.productInfo.id) {
-          await axios.put(`${BASE_URL}/product-infos/${this.productInfo.id}`, this.productInfo, getHeaderConfig(authStore.access_token));
+          await axios.put(`${BASE_URL}/product-infos/${this.productInfo.id}`, 
+          { 
+            ...this.productInfo, 
+            device_type: this.productInfo.device_type // <-- Added this
+          }, 
+          getHeaderConfig(authStore.access_token));
         } else {
-          await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: this.id }, getHeaderConfig(authStore.access_token));
+          await axios.post(`${BASE_URL}/product-infos`, 
+          { 
+            ...this.productInfo, 
+            customer_detail_id: this.id,
+            device_type: this.productInfo.device_type // <-- Added this
+          }, 
+          getHeaderConfig(authStore.access_token));
         }
-        this.showToast("success", "Details updated successful")
+
+        this.showToast("success", "Details updated successfully")
         setTimeout(() => this.$router.push({ name: 'home' }), 1500);
       } catch (error) {
         this.showToast("error", "Failed to update. There are missing details.");
       }
     },
+
   },
 };
 </script>
   
-  <style lang="scss">
-  h2 {
-    text-transform: uppercase;
-  }
-    
-  .form-check-input {
-    width: 15px;
-    height: 15px;
-  }
+<style lang="scss">
+h2 {
+  text-transform: uppercase;
+}
   
-  .card-body {
-    .whole {
-      display: flex;
-      gap: 20px;
-  
-      .left {
-        width: 100%;
-      }
-  
-      .right {
-        width: 100%;
-      }
+.form-check-input {
+  width: 15px;
+  height: 15px;
+}
+
+.card-body {
+  .whole {
+    display: flex;
+    gap: 20px;
+
+    .left {
+      width: 100%;
     }
-  
-    .whole-checklist {
-      display: flex;
-      gap: 30px; 
-  
-      .checklist {
-        width: 100%;
-      }
-  
-      .checklist:nth-child(2),
-      .checklist:nth-child(3) {
-        padding-top: 57px;
-      }
+
+    .right {
+      width: 100%;
     }
+  }
+
+  .whole-checklist {
+    display: flex;
+    gap: 30px; 
+
     .checklist {
-      margin: 0;
-      .mb3 {
-  
-        input {
-          width: 15px;
-          height: 15px;
-          margin-left: 40px;
-          margin-top: 10px;
-        }
-      }
+      width: 100%;
     }
-  
-    .custom-checkboxes {
-      display: flex;
-      gap: 20px;
-      margin-top: 6px;
-      margin-bottom: 7px;
-      
-      .form-check {
-        display: inline-flex;
-        gap: 10px;
-  
-        .form-check-label {
-          width: auto;
-          left: 0;
-        }
-        .form-check-input {
-          height: 20px;
-          width: 20px;
-        }
+
+    .checklist:nth-child(2),
+    .checklist:nth-child(3) {
+      padding-top: 57px;
+    }
+  }
+  .checklist {
+    margin: 0;
+    .mb3 {
+
+      input {
+        width: 15px;
+        height: 15px;
+        margin-left: 40px;
+        margin-top: 10px;
       }
     }
   }
-  </style>
-  
+
+  .custom-checkboxes {
+    display: flex;
+    gap: 20px;
+    margin-top: 6px;
+    margin-bottom: 7px;
+    
+    .form-check {
+      display: inline-flex;
+      gap: 10px;
+
+      .form-check-label {
+        width: auto;
+        left: 0;
+      }
+      .form-check-input {
+        height: 20px;
+        width: 20px;
+      }
+    }
+  }
+}
+</style>

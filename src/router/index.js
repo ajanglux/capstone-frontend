@@ -73,7 +73,17 @@ const routes = [
       id: route.params.id ? Number(route.params.id) : null, 
       view: route.params.view === 'view' 
     }),
-    beforeEnter: [checkIfLogged, checkIfAdmin],
+    beforeEnter: [checkIfLogged],
+  },
+  {
+    path: "/user-form/:id?/:view?",
+    name: "user-form",
+    component: () => import('../components/UserSide/UserForm.vue'),
+    props: route => ({
+      id: route.params.id ? Number(route.params.id) : null, 
+      view: route.params.view === 'view' 
+    }),
+    beforeEnter: [checkIfLogged],
   },  
   {
     path: "/repair-history",
@@ -92,7 +102,14 @@ const routes = [
     name: "inquiries-view",
     component: () => import('../components/AdminSide/InquiriesView.vue'),
     props: route => ({ id: Number(route.params.id) }),
-    beforeEnter: [checkIfLogged, checkIfAdmin],
+    beforeEnter: [checkIfLogged],
+  },
+  {
+    path: "/user-inquiries-view/:id?",
+    name: "user-inquiries-view",
+    component: () => import('../components/UserSide/UserInquiriesView.vue'),
+    props: route => ({ id: Number(route.params.id) }),
+    beforeEnter: [checkIfLogged],
   },
   {
     path: "/responded-list",

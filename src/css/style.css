@@ -5,7 +5,7 @@
     --grey:#64748b;
     --table:#b9babe;
     --light:#f4f4f4;
-    --light2:#d7dbe4;
+    --light2:#D7DBE4;
     --redbtn:#912b2b;
 }
 
@@ -161,6 +161,7 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
+    /* background-color: var(--light2); */
 }
 
 .user-container {

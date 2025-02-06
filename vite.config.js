@@ -17,7 +17,7 @@ export default defineConfig({
         description: 'A repair management app',
         start_url: '/',
         display: 'standalone',
-        background_color: '#ffffff',
+        background_color: '#0C3C61FF',
         theme_color: '#0C3C61FF',
         icons: [
           {
@@ -32,7 +32,7 @@ export default defineConfig({
           },
         ],
       },
-      registerType: 'autoUpdate',
+      // registerType: 'autoUpdate',
     }),],
   server: {
     host: '0.0.0.0',

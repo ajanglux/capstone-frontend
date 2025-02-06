@@ -19,8 +19,14 @@
                             <p v-if="descriptionUpdatedAt" class="timestamp">Updated on: {{ formattedDescriptionUpdatedAt }}</p>
                         </div>
 
-                        <div class="admin-respond" v-if="status === 'Responded' || status === 'Incomplete'">
-                            <h4>Admin Respond</h4>
+                        <div class="admin-respond" v-if="status === 'Responded'">
+                            <h4>Admin Note:</h4>
+                            <p class="comment-box">{{ comment }}</p>
+                            <p v-if="adminCommentUpdatedAt" class="timestamp">Updated on: {{ formattedAdminCommentUpdatedAt }}</p>
+                        </div>
+
+                        <div class="admin-respond" v-if="status === 'Unrepairable'">
+                            <h4>Unrepairable (Admin Reason)</h4>
                             <p class="comment-box">{{ comment }}</p>
                             <p v-if="adminCommentUpdatedAt" class="timestamp">Updated on: {{ formattedAdminCommentUpdatedAt }}</p>
                         </div>
@@ -78,7 +84,7 @@
 
             <div class="card2">
                 <div class="content-container">
-                    <h1>Services</h1>
+                    <h1>Pick a Service</h1>
                     <div class="cards1">
                         <!-- Services -->
                         <div class="side-card">
@@ -112,7 +118,7 @@
 
                         <!-- More Services -->
                         <div class="side-card">
-                            <div class="card1"@click="goToContactUsForm2('Software and Hardware Installation')">
+                            <div class="card1"@click="goToContactForm1('Software and Hardware Installation')">
                                 
                                 <div class="img">
                                     <img src="../../assets/hardware-installation.jpg" alt="Service Image" class="img-thumbnail" />
@@ -530,35 +536,35 @@ const isActive = (checkStatus) => {
     .dropdown {
     position: relative;
     display: inline-block;
-  
-    .dropdown-content {
-      opacity: 0;
-      visibility: hidden;
-      position: absolute;
-      background-color: white;
-      width: 150px;
-      right: 0;
-      border-radius: 8px;
-      transform: translateY(-50px);
-      display: contents;
-      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-    }
-  }
-
-    .cards {
-    display: flex;
-    flex-direction:column;
-    position: unset;
     
-    .card {
-        height: 100vh;
-        position: unset;
-
-        .con-container {
-            text-align: center;
+    .dropdown-content {
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+        background-color: white;
+        width: 150px;
+        right: 0;
+        border-radius: 8px;
+        transform: translateY(-50px);
+        display: contents;
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
         }
     }
-}
+
+        .cards {
+        display: flex;
+        flex-direction:column;
+        position: unset;
+        
+        .card {
+            height: 100vh;
+            position: unset;
+
+            .con-container {
+                text-align: center;
+            }
+        }
+    }
 }
 
 </style>

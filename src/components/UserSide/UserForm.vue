@@ -1,0 +1,412 @@
+<template>
+    <div class="content">
+        <div class="container">
+            <div class="card-header">
+            <h2>Details</h2>
+            </div>
+            <div class="card-body">
+                <div class="whole">
+                    <div class="left" v-if="userRole !== 0">
+                        <div class="buttons">
+                            <h2>Customer Details</h2>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">First Name</span>
+                            <input v-model="model.first_name" type="text" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Last Name</span>
+                            <input v-model="model.last_name" type="text" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Tel. No.</span>
+                            <input v-model="phoneNumber" @input="validatePhoneNumber" type="text" class="form-control" disabled />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Email</span>
+                            <input v-model="model.email" type="email" class="form-control" disabled />
+                        </div>
+                        <div class="input-group mb-4">
+                            <span class="input-group-text">Address</span>
+                            <input v-model="model.address" type="text" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+                    </div>
+                    
+                    <div class="right">
+                        <div class="buttons">
+                            <h2>PRODUCT INFORMATION</h2>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Brand</span>
+                            <input v-model="productInfo.brand" type="text" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Model</span>
+                            <input v-model="productInfo.model" type="text" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Serial Number</span>
+                            <input
+                            v-model="productInfo.serial_number"
+                            @input="productInfo.serial_number = productInfo.serial_number.toUpperCase()"
+                            type="text"
+                            class="form-control"
+                            disabled
+                            />
+                        </div>
+  
+                        <div class="buttons">
+                            <h2>WARRANTY STATUS</h2>
+                        </div>
+                        <div class="custom-checkboxes">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="warranty" value="warranty" v-model="productInfo.warranty_status" disabled />
+                                <label class="form-check-label" for="warranty">Warranty</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="outOfWarranty" value="out_of_warranty" v-model="productInfo.warranty_status" disabled />
+                                <label class="form-check-label" for="outOfWarranty">Out Of Warranty</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" disabled />
+                                <label class="form-check-label" for="chargeable">Chargeable</label>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Purchase Date</span>
+                            <input v-model="productInfo.purchase_date" type="date" class="form-control" disabled/>
+                        </div>
+            
+                    </div>
+                </div>
+  
+                <div class="whole">
+                    <div class="left">
+                    </div>
+                </div>
+  
+                <div class="buttons">
+                    <h2>Issue Description</h2>
+                </div>
+                <div class="input-group mb-4">
+                    <span class="input-group-text"></span>
+                    <textarea v-model="model.description" class="form-control" disabled></textarea>
+                </div>
+        
+                <div class="whole-checklist">
+                    <div class="checkbox">
+                        <div class="buttons">
+                            <h2 class="small">Accessories Checklist</h2>
+                        </div>
+            
+                        <div class="accessory">
+                            <span class="input-group-text">AC Adapter</span>
+                            <input v-model="productInfo.ac_adapter" type="radio" id="ac_adapter" value="ac_adapter" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+            
+                        <div class="accessory">
+                            <span class="input-group-text">VGA Cable</span>
+                            <input v-model="productInfo.vga_cable" type="radio" id="vga_cable" value="vga_cable" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+            
+                        <div class="accessory">
+                            <span class="input-group-text">DVI Cable</span>
+                            <input v-model="productInfo.dvi_cable" type="radio" id="dvi_cable" value="dvi_cable" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+                    </div> 
+
+                    <div class="checkbox">
+                        <div class="accessory">
+                            <span class="input-group-text">Display Cable</span>
+                            <input v-model="productInfo.display_cable" type="radio" id="display_cable" value="display_cable" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+        
+                        <div class="accessory">
+                            <span class="input-group-text">Bag (PN)</span>
+                            <input v-model="productInfo.bag_pn" type="radio" id="bag" value="bag" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+            
+                        <div class="accessory">
+                            <span class="input-group-text">HDD</span>
+                            <input v-model="productInfo.hdd" type="radio" id="hdd" value="hdd" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+                    </div>
+        
+                    <div class="checklist">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">RAM Brand</span>
+                            <input v-model="productInfo.ram_brand" type="text" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+            
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">RAM Size (GB)</span>
+                            <input v-model="productInfo.ram_size_gb" type="text" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+            
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Power Cord Quantity</span>
+                            <input v-model="productInfo.power_cord_qty" type="text" class="form-control" disabled style="text-transform: capitalize;" />
+                        </div>
+                    </div>
+                </div>
+          
+                <div class="buttons">
+                    <h2>NOTE</h2>
+                </div>
+                <div class="input-group mb-3">
+                    <textarea v-model="productInfo.documentation" class="form-control" disabled></textarea>
+                </div>
+        
+                <div class="buttons">
+                    <router-link to="/user-history" class="btn btn-secondary">Cancel</router-link>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+  
+<script>
+import axios from 'axios';
+import { BASE_URL } from '../../helpers/baseUrl';
+import { getHeaderConfig } from '../../helpers/headerConfig';
+import { useAuthStore } from '../../stores/useAuthStore';
+import { useToast } from 'vue-toastification';
+
+export default {
+    name: 'UserForm',
+    props: {
+        id: {
+        type: Number,
+        default: null,
+        },
+        view: {
+        type: Boolean,
+        default: false,
+        }
+    },
+    data() {
+        return {
+        errorList: [],
+        model: {
+            user_id: '',
+            first_name: '',
+            last_name: '',
+            phone_number: '',
+            email: '',
+            address: '',
+            description: '',
+        },
+        productInfo: {
+            brand: '',
+            model: '',
+            serial_number: '',
+            purchase_date: '',
+            documentation: '',
+            warranty_status: '',
+            ac_adapter: '',
+            vga_cable: '',
+            dvi_cable: '',
+            display_cable: '',
+            bag_pn: '',
+            hdd: '',
+            ram_brand: '',
+            ram_size_gb: '',
+            power_cord_qty: '',
+        },
+        isEditing: false,
+        phoneNumber: '',
+        minDate: new Date().toISOString().split('T')[0],
+        };
+    },
+    computed: {
+        isViewing() {
+        return this.view;
+        }
+    },
+    watch: {
+        phoneNumber(value) {
+        this.model.phone_number = value;
+        },
+        isViewing(newValue) {
+        if (newValue) {
+        }
+        }
+    },
+    mounted() {
+        const userData = useAuthStore();
+        this.userRole = userData.user ? userData.user.role : null; // Ensure userData is populated before accessing role
+
+        this.handleQueryParams();
+        if (this.id) {
+        this.isEditing = !this.isViewing;
+        this.getRepairDetails();
+        }
+    },
+    methods: {
+        toast() {
+        return useToast();
+        },
+        handleQueryParams() {
+            const queryParams = this.$route.query;
+            if (queryParams.first_name) this.model.first_name = queryParams.first_name;
+            if (queryParams.last_name) this.model.last_name = queryParams.last_name;
+            if (queryParams.phone_number) this.phoneNumber = queryParams.phone_number;
+            if (queryParams.email) this.model.email = queryParams.email;
+            if (queryParams.address) this.model.address = queryParams.address;
+        },
+        async getRepairDetails() {
+            try {
+                const authStore = useAuthStore();
+                const response = await axios.get(`${BASE_URL}/customer-details/${this.id}/with-product-info`, getHeaderConfig(authStore.access_token));
+                const customerDetail = response.data;
+                this.model = customerDetail || {};
+                this.model.first_name = customerDetail.user.first_name;
+                this.model.last_name = customerDetail.user.last_name;
+                this.model.address = customerDetail.user.address;
+                this.model.email = customerDetail.user.email;
+                this.model.user_id = customerDetail.user.id;
+                this.productInfo = customerDetail.product_infos[0] || {};
+                this.phoneNumber = this.model.user.phone_number;
+            } catch (error) {
+                const toast = this.toast();
+                toast.error('Failed to load repair details. Please try again.', { timeout: 3000 });
+            }
+        },
+    },
+};
+</script>
+  
+<style lang="scss" scoped>
+.content {
+    padding: 110px 40px 40px 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 70%;
+}
+
+h2 {
+text-transform: uppercase;
+}
+
+.form-check-input {
+width: 15px;
+height: 15px;
+}
+
+.card-body {
+.whole {
+    display: flex;
+    gap: 20px;
+
+    .left {
+    width: 100%;
+    }
+
+    .right {
+    width: 100%;
+    }
+}
+
+.whole-checklist {
+    display: flex;
+    gap: 30px; 
+
+    .checklist {
+    width: 100%;
+    }
+
+    .checklist:nth-child(2),
+    .checklist:nth-child(3) {
+    padding-top: 57px;
+    }
+}
+.checklist {
+    margin: 0;
+    .mb3 {
+
+    input {
+        width: 15px;
+        height: 15px;
+        margin-left: 40px;
+        margin-top: 10px;
+    }
+    }
+}
+
+.custom-checkboxes {
+    display: flex;
+    gap: 20px;
+    margin-top: 6px;
+    margin-bottom: 7px;
+    
+    .form-check {
+    display: inline-flex;
+    gap: 10px;
+
+    .form-check-label {
+        width: auto;
+        left: 0;
+    }
+    .form-check-input {
+        height: 20px;
+        width: 20px;
+    }
+    }
+}
+}
+
+.whole-checklist {
+width: 100%;
+
+.checkbox {
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+    width: 100%;
+    padding-top: 3px;
+}
+
+.checkbox:nth-child(2) {
+    padding-top: 82px;
+}
+
+.accessory {
+    margin-bottom: 10px;
+    height: 50px;
+    width: 100%;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+    background-color: var(--light);
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+
+    &:hover {
+        background-color: var(--light2);
+    }
+
+    .input-group-text {
+        font-size: 14px;
+        color: black;
+        padding: 10px;
+    }
+
+    .form-control {
+        font-family: 'Poppins';
+        width: 20px;
+    }
+}
+
+.small {
+    font-size: 22px;
+}
+
+}
+</style>  

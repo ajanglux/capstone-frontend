@@ -105,7 +105,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue"
+import { ref, reactive, watch } from "vue"
 import router from '../../router'
 import { useAuthStore } from '../../stores/useAuthStore.js'
 import axios from 'axios'
@@ -145,6 +145,24 @@ const data = reactive({
   },
 })
 
+watch(() => data.user.first_name, (newVal) => {
+  if (newVal) {
+    data.user.first_name = newVal.charAt(0).toUpperCase() + newVal.slice(1);
+  }
+});
+
+watch(() => data.user.last_name, (newVal) => {
+  if (newVal) {
+    data.user.last_name = newVal.charAt(0).toUpperCase() + newVal.slice(1);
+  }
+});
+
+watch(() => data.user.address, (newVal) => {
+  if (newVal) {
+    data.user.address = newVal.charAt(0).toUpperCase() + newVal.slice(1);
+  }
+});
+
 const validatePhoneNumber = () => {
   data.user.phone_number = data.user.phone_number.replace(/\D/g, "").slice(0, 11);
   phoneError.value = data.user.phone_number.length !== 11;
@@ -162,12 +180,30 @@ const showToast = (icon, title) => {
   });
 };
 
+// Password validation logic
+const validatePassword = () => {
+  const password = data.user.password;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\d\s:]).+$/;
+
+  // Check password for required conditions
+  if (!passwordRegex.test(password)) {
+    showToast("error", "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+    return false;
+  }
+  return true;
+};
+
 const registerUser = async () => {
   data.loading = true
 
   validateTerms();
   if (termsError.value) {
     showToast("error", "You must agree to the terms and conditions.");
+    data.loading = false;
+    return;
+  }
+
+  if (!validatePassword()) {
     data.loading = false;
     return;
   }
@@ -194,9 +230,15 @@ const registerUser = async () => {
     const response = await axios.post(`${BASE_URL}/user/register`, data.user);
     data.loading = false;
 
-    showToast("success", response.data.message);
-    
-    router.push('/email-verification');
+    Swal.fire({
+      icon: 'success',
+      title: 'Registration successful PLEASE READ',
+      text: 'If you do not see the message in your inbox, check your spam folder and mark the email as "Not Spam" before verifying.',
+      confirmButtonColor: '#0C3C61FF',
+      confirmButtonText: 'Okay',
+    });
+
+    router.push('/login');
   } catch (error) {
     data.loading = false;
     if (error.response?.status === 422) {
@@ -206,6 +248,7 @@ const registerUser = async () => {
   }
 }
 </script>
+
 
 <style lang="scss" scoped>
 .container {
@@ -285,6 +328,11 @@ const registerUser = async () => {
   input:focus {
     box-shadow: 0 0 8px rgba(0, 123, 255, 0.25) !important;
     border-color: #007bff !important;
+  }
+
+  input, textarea {
+    font-size: 16px;
+    touch-action: manipulation;
   }
 
   .btn {

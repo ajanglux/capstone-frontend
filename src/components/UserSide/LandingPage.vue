@@ -28,8 +28,8 @@ export default {
 <style lang="scss" scoped>
 .landing-page {
   font-family: 'Poppins';
-  color: #fff;
-  background-color: var(--header);
+  color: var(--header);
+  background-color: var(--light2);
   height: auto;
   width: auto;
   min-height: 100vh;
@@ -43,7 +43,7 @@ export default {
   .title {
     margin-top: 8pc;
     font-size: 2.5em;
-    color: var(--light);
+    color: var(--header);
     margin-left: 70px;
 
     h2 { 

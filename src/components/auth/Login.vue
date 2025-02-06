@@ -254,6 +254,11 @@ onMounted(() => {
     border-color: #007bff !important;
   }
 
+  input, textarea {
+    font-size: 16px;
+    touch-action: manipulation;
+  }
+
   .btn {
     letter-spacing: 1px;
     padding: 12px;

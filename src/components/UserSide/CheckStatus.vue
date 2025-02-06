@@ -127,7 +127,7 @@ const isActive = (checkStatus) => {
 
 <style lang="scss" scoped>
 .background-container {
-  background: var(--header);
+  background: var(--light2);
   background-size: cover;
   width: 100vw;
   min-height: 100vh;
@@ -135,6 +135,9 @@ const isActive = (checkStatus) => {
   justify-content: center;
   // align-items: center;
   padding-bottom: 20px;
+}
+h2 {
+  color: var(--light2);
 }
 
 .con-container {
@@ -144,7 +147,7 @@ const isActive = (checkStatus) => {
 }
 
 .contact-info {
-  background: var(--light);
+  background: var(--header);
   padding: 30px;
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 13px;

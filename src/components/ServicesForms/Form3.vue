@@ -9,7 +9,7 @@
         <!-- details in the form if the networking, and CCTV installation -->
 
         <!-- Customer Details -->
-        <div class="whole">
+        <div class="whole" v-if="userRole !== 0">
           <div class="left">
             <div class="buttons">
               <h2>Customer Details</h2>
@@ -40,10 +40,17 @@
         <div class="buttons">
           <h2>Service Description</h2>
         </div>
+        <div><h4>Service: {{ model.description }}</h4></div>
         <div class="input-group mb-4">
           <span class="input-group-text"></span>
-          <textarea v-model="model.description" class="form-control" :disabled="isViewing"></textarea>
+          <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isViewing"></textarea>
         </div>
+
+        <!-- <div class="input-group mb-4">
+          <span class="input-group-text">Address (Optional)</span>
+          <input v-model="productInfo.address" type="text" class="form-control" :disabled="isEditing || isViewing" style="text-transform: capitalize;" />
+        </div> -->
+
 
         <div class="buttons">
           <button v-if="isEditing" @click="updateRepair()" type="button" class="btn btn-primary">Update</button>
@@ -92,6 +99,8 @@ export default {
         purchase_date: '',
         documentation: '',
         warranty_status: '',
+        description_of_repair: '',
+        address: '', // Add address field for optional address
       },
       isEditing: false,
     };
@@ -108,6 +117,8 @@ export default {
     }
   },
   mounted() {
+    const userData = useAuthStore();
+    this.userRole = userData.user ? userData.user.role : null; // Ensure userData is populated before accessing role
     this.handleQueryParams();
     this.fetchUserProfile();
 
@@ -185,18 +196,16 @@ export default {
       try {
         const authStore = useAuthStore();
 
-        const isProductInfoComplete = this.productInfo.brand && this.productInfo.model && this.productInfo.serial_number && this.productInfo.purchase_date;
-
-        if (!isProductInfoComplete) {
-          this.showToast("error", "Failed to save. Incomplete details.");
-          return;
-        }
-
         const repairData = { 
-        ...this.model, 
-        status: 'Pending',
-        user_id: this.model.user_id
-          };
+          ...this.model, 
+          status: 'Pending',
+          user_id: this.model.user_id
+        };
+
+        // Exclude empty address
+        if (!this.model.address || this.model.address.trim() === '') {
+          delete repairData.address;
+        }
 
         const customerResponse = await axios.post(
           `${BASE_URL}/customer-details`,
@@ -204,34 +213,73 @@ export default {
           getHeaderConfig(authStore.access_token)
         );
 
-        if (Object.values(this.productInfo).some(field => field)) {
+        const productData = { ...this.productInfo, customer_detail_id: customerResponse.data.data.id };
+
+        // Exclude empty address from product info
+        if (!this.productInfo.address || this.productInfo.address.trim() === '') {
+          delete productData.address;
+        }
+
+        if (Object.values(productData).some(field => field)) {
           await axios.post(
             `${BASE_URL}/product-infos`,
-            { ...this.productInfo, customer_detail_id: customerResponse.data.data.id },
+            productData,
             getHeaderConfig(authStore.access_token)
           );
         }
-        this.showToast("success", "Details saved successful")
+
+        this.showToast("success", "Details saved successfully");
         setTimeout(() => this.$router.push({ name: 'home' }), 1500);
       } catch (error) {
         this.showToast("error", "Failed to save. There are missing details or an error occurred.");
       }
     },
+
     async updateRepair() {
       try {
         const authStore = useAuthStore();
-        await axios.put(`${BASE_URL}/customer-details/${this.id}`, this.model, getHeaderConfig(authStore.access_token));
-        if (this.productInfo.id) {
-          await axios.put(`${BASE_URL}/product-infos/${this.productInfo.id}`, this.productInfo, getHeaderConfig(authStore.access_token));
-        } else {
-          await axios.post(`${BASE_URL}/product-infos`, { ...this.productInfo, customer_detail_id: this.id }, getHeaderConfig(authStore.access_token));
+
+        const updatedData = { ...this.model };
+
+        // Exclude empty address
+        if (!updatedData.address || updatedData.address.trim() === '') {
+          delete updatedData.address;
         }
-        this.showToast("success", "Details updated successful")
+
+        await axios.put(
+          `${BASE_URL}/customer-details/${this.id}`, 
+          updatedData, 
+          getHeaderConfig(authStore.access_token)
+        );
+
+        const productData = { ...this.productInfo, customer_detail_id: this.id };
+
+        // Exclude empty address from product info
+        if (!this.productInfo.address || this.productInfo.address.trim() === '') {
+          delete productData.address;
+        }
+
+        if (this.productInfo.id) {
+          await axios.put(
+            `${BASE_URL}/product-infos/${this.productInfo.id}`, 
+            productData, 
+            getHeaderConfig(authStore.access_token)
+          );
+        } else {
+          await axios.post(
+            `${BASE_URL}/product-infos`, 
+            productData, 
+            getHeaderConfig(authStore.access_token)
+          );
+        }
+
+        this.showToast("success", "Details updated successfully");
         setTimeout(() => this.$router.push({ name: 'home' }), 1500);
       } catch (error) {
         this.showToast("error", "Failed to update. There are missing details.");
       }
     },
+
   },
 };
 </script>

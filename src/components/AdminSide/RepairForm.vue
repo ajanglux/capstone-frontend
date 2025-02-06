@@ -8,7 +8,7 @@
 
         <!-- Customer Details -->
         <div class="whole">
-          <div class="left">
+          <div class="left" v-if="userRole !== 0">
             <div class="buttons">
               <h2>Customer Details</h2>
             </div>
@@ -91,9 +91,10 @@
         <div class="buttons">
               <h2>Device Issue Description</h2>
             </div>
+            <div><h4>Service: {{ model.description }}</h4></div>
             <div class="input-group mb-4">
               <span class="input-group-text"></span>
-              <textarea v-model="model.description" class="form-control" :disabled="isViewing"></textarea>
+              <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isViewing"></textarea>
             </div>
 
         <div class="whole-checklist">
@@ -159,7 +160,7 @@
           <textarea v-model="productInfo.documentation" class="form-control" :disabled="isViewing"></textarea>
         </div>
 
-        <div class="buttons">
+        <div class="buttons" v-if="userRole !== 0">
           <button v-if="isEditing" @click="updateRepair()" type="button" class="btn btn-primary">Update</button>
           <button v-else-if="!isViewing" @click="saveRepair()" type="button" class="btn btn-primary">{{ isEditing ? 'Update' : 'Submit' }}</button>
           <router-link to="/repair-list" class="btn btn-secondary">Cancel</router-link>
@@ -218,6 +219,7 @@ export default {
         ram_brand: '',
         ram_size_gb: '',
         power_cord_qty: '',
+        description_of_repair: '',
       },
       isEditing: false,
       phoneNumber: '',
@@ -239,7 +241,9 @@ export default {
     }
   },
   mounted() {
-    console.log('View prop in mounted:', this.view);
+    const userData = useAuthStore();
+    this.userRole = userData.user ? userData.user.role : null; // Ensure userData is populated before accessing role
+
     this.handleQueryParams();
     if (this.id) {
       this.isEditing = !this.isViewing;
@@ -263,6 +267,7 @@ export default {
         const authStore = useAuthStore();
         const response = await axios.get(`${BASE_URL}/customer-details/${this.id}/with-product-info`, getHeaderConfig(authStore.access_token));
         const customerDetail = response.data;
+        console.log(customerDetail.product_infos[0])
         this.model = customerDetail || {};
         this.model.first_name = customerDetail.user.first_name;
         this.model.last_name = customerDetail.user.last_name;
@@ -491,47 +496,45 @@ h2 {
   width: 100%;
 
   .checkbox {
-      display: flex;
-      flex-direction: column;
-      gap: 23px;
-      width: 100%;
-      padding-top: 3px;
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+    width: 100%;
+    padding-top: 3px;
   }
 
   .checkbox:nth-child(2) {
-      padding-top: 82px;
+    padding-top: 82px;
   }
 
   .accessory {
-      margin-bottom: 10px;
-      height: 50px;
-      width: 100%;
-      border-radius: 10px;
-      outline: none;
-      border: none;
+    margin-bottom: 10px;
+    height: 50px;
+    width: 100%;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+    background-color: var(--light);
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    
+    &:hover {
+      background-color: var(--light2);
+    }
+    
+    .input-group-text {
+      font-size: 14px;
+      color: black;
       padding: 10px;
-      transition: all 0.3s ease-in-out;
-      background-color: var(--light);
-      display: flex;
-      align-items: center;
-      flex-direction: row-reverse;
-      justify-content: flex-end;
-
-      &:hover {
-        background-color: var(--light2);
-      }
-
-      .input-group-text {
-          font-size: 14px;
-          color: black;
-          padding: 10px;
-      }
-
-      .form-control {
-          font-family: 'Poppins';
-          width: 20px;
-      }
+    }
+    .form-control {
+        font-family: 'Poppins';
+        width: 20px;
+    }
   }
-
 }
 </style>

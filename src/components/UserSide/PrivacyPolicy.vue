@@ -2,7 +2,7 @@
     <div class="terms">
         <div class="terms-content">
             <h1>Privacy Policy</h1>
-            <p>Welcome to techfixph.com, your trusted partner for all your device repair needs. By using our services, 
+            <p>Welcome to techfix.online, your trusted partner for all your device repair needs. By using our services, 
                 you agree to abide by the following Privacy Policy. Please read these terms carefully before proceeding.
             </p>
             <br>

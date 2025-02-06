@@ -52,8 +52,9 @@
                   <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                     <option value="">Select Action</option>
                     <option value="edit">Edit</option>
-                    <option value="Responded">Note</option>
-                    <option value="Cancelled" :disabled="repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'On-Going' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Cancel</option>
+                    <option value="Note">Note</option>
+                    <option value="">Print Statement</option>
+                    <!-- <option value="Cancelled" :disabled="repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'On-Going' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Cancel</option> -->
                   </select>
                 </div>
               </td>
@@ -61,17 +62,17 @@
                 <div class="custom-select">
                   <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                     <option value="">Select Status</option>
-                    <option value="Responded">Unrepairable</option>
+                    <option value="Unrepairable" :disabled="repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Unrepairable</option>
                     <option value="On-Going" :disabled="repair.status === 'On-Going' || repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">On-Going</option>
-                    <option value="Finished" :disabled="repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Cancelled' || repair.status === 'Incomplete'">Finished</option>
-                    <option value="Ready-for-Pickup" :disabled="repair.status === 'Ready-for-Pickup' || repair.status === 'cancelled' || repair.status === 'Incomplete'">Ready For Pickup</option>
-                    <option value="Completed" :disabled="repair.status === 'Incomplete'">Completed</option>
+                    <option value="Finished" :disabled="repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Cancelled' || repair.status === 'Completed'">Finished</option>
+                    <option value="Ready-for-Pickup" :disabled="repair.status === 'Ready-for-Pickup' || repair.status === 'Cancelled' || repair.status === 'Incomplete' || repair.status === 'On-Going'">Ready For Pickup</option>
+                    <option value="Completed" :disabled="repair.status === 'Incomplete' || repair.status === 'On-Going' || repair.status === 'Finished' ">Completed</option>
                   </select>
                 </div>
               </td>
             </tr>
             <tr v-if="paginatedRepairs.length === 0">
-              <td colspan="6"><strong>No repairs found.</strong></td>
+              <td colspan="7"><strong>No repairs found.</strong></td>
             </tr>
           </tbody>
         </table>
@@ -105,6 +106,17 @@
     </div>
   </div>
 
+  <div v-if="showNoteModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>{{ existingComment ? 'Edit Comment' : 'Add Comment' }}</h3>
+      <textarea v-model="commentText" placeholder="Enter your comment..."></textarea>
+      <div class="modal-actions">
+        <button @click="submitNote">{{ existingComment ? 'Update' : 'Submit' }}</button>
+        <button @click="showCommentModal = false">Cancel</button>
+      </div>
+    </div>
+  </div>
+
 </template>
 
 <script setup>
@@ -133,6 +145,7 @@ const itemsPerPage = ref(10);
 const toast = useToast();
 const selectedRepair = ref(null);
 const showCommentModal = ref(false);
+const showNoteModal = ref(false);
 const commentText = ref('');
 const existingComment = ref('');
 const isLoading = ref(false); // Added isLoading state
@@ -149,6 +162,18 @@ const openCommentModal = (repair) => {
   showCommentModal.value = true;
 };
 
+const openNoteModal = (repair) => {
+  if (!repair || !repair.id) {
+    toast.error('Invalid repair object!');
+    return;
+  }
+
+  selectedRepair.value = repair;
+  existingComment.value = repair.comment || '';  // Store existing comment if available
+  commentText.value = repair.comment || '';  // Populate the textarea with existing comment
+  showNoteModal.value = true;
+};
+
 const submitComment = async () => {
   if (!commentText.value.trim()) {
     toast.error('Comment cannot be empty.');
@@ -156,22 +181,52 @@ const submitComment = async () => {
   }
 
   try {
-    // Make sure you're sending the correct repair ID in the request
     if (selectedRepair.value && selectedRepair.value.id) {
       await axios.put(`${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`, 
         { comment: commentText.value },
         getHeaderConfig(authStore.access_token)
       );
 
-      toast.success(existingComment.value ? 'Comment updated successfully' : 'Comment added successfully');
-      selectedRepair.value.comment = commentText.value;  // Update local data
+      await axios.patch(`${BASE_URL}/customer-details/${selectedRepair.value.id}/status`, 
+        { status: 'Unrepairable' }, 
+        getHeaderConfig(authStore.access_token)
+      );
+
+      toast.success('Comment added & status updated.');
+      selectedRepair.value.comment = commentText.value;
+      selectedRepair.value.status = 'Unrepairable';
       showCommentModal.value = false;
+      fetchRepairs();
     } else {
       toast.error('Repair ID not found!');
     }
   } catch (error) {
-    console.error('Error updating comment:', error);
-    toast.error('Failed to update comment. Please try again.');
+    toast.error('Failed to update comment & status.');
+  }
+};
+
+const submitNote = async () => {
+  if (!commentText.value.trim()) {
+    toast.error('Comment cannot be empty.');
+    return;
+  }
+
+  try {
+    if (selectedRepair.value && selectedRepair.value.id) {
+      await axios.put(`${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`, 
+        { comment: commentText.value },
+        getHeaderConfig(authStore.access_token)
+      );
+
+      toast.success('Note Updated');
+      selectedRepair.value.comment = commentText.value;
+      showNoteModal.value = false;
+      fetchRepairs();
+    } else {
+      toast.error('Repair ID not found!');
+    }
+  } catch (error) {
+    toast.error('Failed to update comment & status.');
   }
 };
 
@@ -202,7 +257,7 @@ const filteredRepairs = computed(() => {
     let matchesStatus = true;
 
     if (selectedStatus.value === '') {
-      matchesStatus = repair.status === 'On-Going' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Incomplete' || repair.status === 'Responded';
+      matchesStatus = repair.status === 'On-Going' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Unrepairable' || repair.status === 'Responded';
     } else {
       matchesStatus = repair.status === selectedStatus.value;
     }
@@ -245,6 +300,15 @@ const handleActionChange = (repairId) => {
   } else if (action === 'Responded') {
     const repair = repairs.value.find(r => r.id === repairId);
     openCommentModal(repair);
+  } else if (action === 'Note') {
+    const repair = repairs.value.find(r => r.id === repairId);
+    openNoteModal(repair);
+  } else if ( action === 'Unrepairable' ){
+    const repair = repairs.value.find(r => r.id === repairId);
+    if (repair) {
+      selectedRepair.value = repair;
+      showCommentModal.value = true;
+    }
   } else {
     selectedRepairId.value = repairId;
     selectedStatusAction.value = action;

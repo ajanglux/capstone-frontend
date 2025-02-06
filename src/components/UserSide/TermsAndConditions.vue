@@ -2,7 +2,7 @@
     <div class="terms">
         <div class="terms-content">
             <h1>Terms and Conditions</h1>
-            <p>Welcome to our techfixph.com, your trusted partner for all your device repair needs. By using our services, 
+            <p>Welcome to our techfix.online, your trusted partner for all your device repair needs. By using our services, 
                 you agree to abide by the following terms and conditions. Please read these terms carefully before proceeding.
             </p>
         </div>

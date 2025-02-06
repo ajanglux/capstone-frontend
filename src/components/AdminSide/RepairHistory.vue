@@ -118,7 +118,7 @@
   
 const filteredRepairs = computed(() => {
     return repairs.value
-        .filter(repair => repair.status === 'Completed' || repair.status === 'Cancelled')
+        .filter(repair => repair.status === 'Completed' || repair.status === 'Cancelled' || repair.status === 'Unrepairable')
         .filter(repair => {
             if (!selectedFilterValue.value) return true;
             const repairDate = new Date(repair.created_at);
