@@ -5,7 +5,7 @@
     </div>
     <form @submit.prevent="resetPassword">
       <div class="form-group">
-        <label for="token" style="display: flex;">Enter Token</label>
+        <label for="token" style="display: flex;">Enter Code:</label>
         <input
           v-model="token"
           type="text"

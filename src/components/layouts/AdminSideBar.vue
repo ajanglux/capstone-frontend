@@ -28,7 +28,7 @@
 <style lang="scss">
 
 aside {
-    min-width: 250px;
+    min-width: 200px;
     background-color: var(--main);
     height: 100vh;
     display: block;

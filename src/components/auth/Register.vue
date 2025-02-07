@@ -232,8 +232,8 @@ const registerUser = async () => {
 
     Swal.fire({
       icon: 'success',
-      title: 'Registration successful PLEASE READ',
-      text: 'If you do not see the message in your inbox, check your spam folder and mark the email as "Not Spam" before verifying.',
+      title: 'Registration Successful',
+      html: '<strong>PLEASE READ:</strong> <br>If you do not see the message in your inbox, check your spam folder and mark the email as "Not Spam" before verifying.',
       confirmButtonColor: '#0C3C61FF',
       confirmButtonText: 'Okay',
     });

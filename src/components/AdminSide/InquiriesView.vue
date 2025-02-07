@@ -36,10 +36,10 @@
           <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isEditing"></textarea>
         </div>
 
-        <div class="input-group mb-4">
+        <!-- <div class="input-group mb-4">
           <span class="input-group-text">Address ("optional address")</span>
           <input v-model="productInfo.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
-        </div>
+        </div> -->
 
         <div class="buttons">
           <button v-if="isEditing" @click="goBack" class="btn">Back</button>
@@ -86,7 +86,7 @@ export default {
   },
   mounted() {
     const userData = useAuthStore();
-    this.userRole = userData.user ? userData.user.role : null; // Ensure userData is populated before accessing role
+    this.userRole = userData.user ? userData.user.role : null; 
 
     if (this.id) {
       this.isEditing = true;
@@ -119,7 +119,7 @@ export default {
     async setApprove() {
       try {
         const authStore = useAuthStore();
-        await axios.put(`${BASE_URL}/customer-details/${this.id}`, { status: 'Incomplete' }, getHeaderConfig(authStore.access_token));
+        await axios.put(`${BASE_URL}/customer-details/${this.id}`, { status: 'On-Going' }, getHeaderConfig(authStore.access_token));
         const toast = this.toast();
         toast.success("Status updated successful", { timeout: 3000 })
         setTimeout(() => this.$router.push({ name: 'inquiries' }), 1500);

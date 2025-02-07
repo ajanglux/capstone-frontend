@@ -21,7 +21,7 @@
           <div class="filters">
             <select v-model="selectedStatus">
               <option value="">All</option>
-              <option value="Incomplete">Incomplete</option>
+              <!-- <option value="Incomplete"></option> -->
               <option value="On-Going">On-going</option>
               <option value="Finished">Finished</option>
               <option value="Ready-for-Pickup">Ready</option>
@@ -52,8 +52,8 @@
                   <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                     <option value="">Select Action</option>
                     <option value="edit">Edit</option>
-                    <option value="Note">Note</option>
-                    <option value="">Print Statement</option>
+                    <option value="Note" title="Send Note for this User">Note</option>
+                    <option value="view">Print Statement</option>
                     <!-- <option value="Cancelled" :disabled="repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'On-Going' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Cancel</option> -->
                   </select>
                 </div>
@@ -62,11 +62,11 @@
                 <div class="custom-select">
                   <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                     <option value="">Select Status</option>
-                    <option value="Unrepairable" :disabled="repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Unrepairable</option>
-                    <option value="On-Going" :disabled="repair.status === 'On-Going' || repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">On-Going</option>
-                    <option value="Finished" :disabled="repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Cancelled' || repair.status === 'Completed'">Finished</option>
-                    <option value="Ready-for-Pickup" :disabled="repair.status === 'Ready-for-Pickup' || repair.status === 'Cancelled' || repair.status === 'Incomplete' || repair.status === 'On-Going'">Ready For Pickup</option>
-                    <option value="Completed" :disabled="repair.status === 'Incomplete' || repair.status === 'On-Going' || repair.status === 'Finished' ">Completed</option>
+                    <option value="Unrepairable" :disabled="repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Unrepairable</option>
+                    <option value="On-Going" :disabled="repair.status === 'On-Going' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">On-Going</option>
+                    <option value="Finished" :disabled="repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Unrepairable' || repair.status === 'Completed'">Finished</option>
+                    <option value="Ready-for-Pickup" :disabled="repair.status === 'Ready-for-Pickup' || repair.status === 'Unrepairable' || repair.status === 'Incomplete' || repair.status === 'On-Going'">Ready For Pickup</option>
+                    <option value="Completed" :disabled="repair.status === 'Unrepairable' || repair.status === 'On-Going' || repair.status === 'Finished' ">Completed</option>
                   </select>
                 </div>
               </td>
@@ -112,7 +112,7 @@
       <textarea v-model="commentText" placeholder="Enter your comment..."></textarea>
       <div class="modal-actions">
         <button @click="submitNote">{{ existingComment ? 'Update' : 'Submit' }}</button>
-        <button @click="showCommentModal = false">Cancel</button>
+        <button @click="showNoteModal = false">Cancel</button>
       </div>
     </div>
   </div>
@@ -148,7 +148,7 @@ const showCommentModal = ref(false);
 const showNoteModal = ref(false);
 const commentText = ref('');
 const existingComment = ref('');
-const isLoading = ref(false); // Added isLoading state
+const isLoading = ref(false);
 
 const openCommentModal = (repair) => {
   if (!repair || !repair.id) {
@@ -157,8 +157,8 @@ const openCommentModal = (repair) => {
   }
 
   selectedRepair.value = repair;
-  existingComment.value = repair.comment || '';  // Store existing comment if available
-  commentText.value = repair.comment || '';  // Populate the textarea with existing comment
+  existingComment.value = repair.comment || ''; 
+  commentText.value = repair.comment || ''; 
   showCommentModal.value = true;
 };
 
@@ -169,8 +169,8 @@ const openNoteModal = (repair) => {
   }
 
   selectedRepair.value = repair;
-  existingComment.value = repair.comment || '';  // Store existing comment if available
-  commentText.value = repair.comment || '';  // Populate the textarea with existing comment
+  existingComment.value = repair.comment || '';  
+  commentText.value = repair.comment || '';  
   showNoteModal.value = true;
 };
 
@@ -231,7 +231,7 @@ const submitNote = async () => {
 };
 
 const fetchRepairs = async () => {
-  isLoading.value = true; // Start loading
+  isLoading.value = true;
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
     repairs.value = response.data.data.map(repair => ({
@@ -239,7 +239,12 @@ const fetchRepairs = async () => {
       user: repair.user || { first_name: 'N/A', last_name: 'N/A' }
     }));
 
-    repairs.value.sort((a, b) => new Date(a.status_updated_at) - new Date(b.status_updated_at));
+    repairs.value.sort((a, b) => {
+      const aDate = a.on_going_updated_at ? new Date(a.on_going_updated_at) : new Date(0); 
+      const bDate = b.on_going_updated_at ? new Date(b.on_going_updated_at) : new Date(0); 
+
+      return aDate - bDate; 
+    });
 
     repairs.value.forEach(repair => {
       selectedActions.value[repair.id] = '';
@@ -248,7 +253,7 @@ const fetchRepairs = async () => {
     console.error('Error fetching repairs:', error);
     errors.value = error.response?.data?.message || 'Error fetching repairs';
   } finally {
-    isLoading.value = false; // Stop loading
+    isLoading.value = false;
   }
 };
 
@@ -257,7 +262,7 @@ const filteredRepairs = computed(() => {
     let matchesStatus = true;
 
     if (selectedStatus.value === '') {
-      matchesStatus = repair.status === 'On-Going' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' || repair.status === 'Unrepairable' || repair.status === 'Responded';
+      matchesStatus = repair.status === 'On-Going' || repair.status === 'Finished' || repair.status === 'Ready-for-Pickup' ;
     } else {
       matchesStatus = repair.status === selectedStatus.value;
     }
@@ -303,6 +308,8 @@ const handleActionChange = (repairId) => {
   } else if (action === 'Note') {
     const repair = repairs.value.find(r => r.id === repairId);
     openNoteModal(repair);
+  } else if (action === 'view') {
+    router.push({ name: 'repair-form', params: { id: repairId, view: 'view' } });
   } else if ( action === 'Unrepairable' ){
     const repair = repairs.value.find(r => r.id === repairId);
     if (repair) {

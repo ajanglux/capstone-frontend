@@ -138,7 +138,7 @@ const goToContactUs = (serviceTitle) => {
 .content-container {
   display: flex;
   flex-direction: column;
-  background: var(--light2);
+  background: var(--header);
   min-height: 100vh;
   width: 100vw;
 
@@ -146,7 +146,7 @@ const goToContactUs = (serviceTitle) => {
     font-family: 'Poppins';
     font-size: 3.5em;
     margin: 100px 0 18px 40px;
-    color: var(--header);
+    color: var(--light);
   }
 
   .error {
@@ -177,7 +177,7 @@ const goToContactUs = (serviceTitle) => {
       transition: all 0.3s ease-in-out;
       display: flex;
       flex-direction: column;
-      background-color: var(--header);
+      background-color: var(--main-hover);
       border-radius: 20px;
       cursor: pointer;
 

@@ -1,7 +1,7 @@
 <template>
     <div class="['content', { 'content-expanded': !isSidebarVisible }]">
         <div class="cards">
-            <div class="card">
+            <div class="code-card">
                 <div class="con-container">
                     <div class="contact-info">
                         <h2>Status update</h2>
@@ -19,7 +19,7 @@
                             <p v-if="descriptionUpdatedAt" class="timestamp">Updated on: {{ formattedDescriptionUpdatedAt }}</p>
                         </div>
 
-                        <div class="admin-respond" v-if="status === 'Responded'">
+                        <div class="admin-respond" v-if="status === 'Responded' || status === 'On-Going' || status === 'Finished' || status === 'Ready-for-Pickup' || status === 'Completed'">
                             <h4>Admin Note:</h4>
                             <p class="comment-box">{{ comment }}</p>
                             <p v-if="adminCommentUpdatedAt" class="timestamp">Updated on: {{ formattedAdminCommentUpdatedAt }}</p>
@@ -77,12 +77,11 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
 
-            <div class="card2">
+            <div class="service-card">
                 <div class="content-container">
                     <h1>Pick a Service</h1>
                     <div class="cards1">
@@ -335,7 +334,7 @@ const isActive = (checkStatus) => {
     padding-right: 2.3pc;
     position: relative;
     
-    .card {
+    .code-card {
         padding: 50px;
         background-color: var(--header);
         color: var(--light2);
@@ -344,7 +343,7 @@ const isActive = (checkStatus) => {
         display: flex;
         flex-direction: column;
         flex-basis: 50%;
-        height: 100vh;
+        height: 120vh;
 
         position: sticky;
         top: 6pc;
@@ -435,7 +434,7 @@ const isActive = (checkStatus) => {
         }
 
     }
-    .card2 {
+    .service-card {
         flex: 1;
         padding: 25px;
         color: var(--light2);
@@ -521,16 +520,39 @@ const isActive = (checkStatus) => {
 
 @media (max-width: 500px) {
     .cards {
-    display: flex;
-    flex-direction:column;
-    position: unset;
-    
-    .card {
-        height: 100vh;
+        display: flex;
+        flex-direction:column;
         position: unset;
+        
+        .card {
+            height: 100vh;
+            position: unset;
 
+        }
+        .service-card {
+            .cards1 {
+                padding: 0 30px;
+                .card1 {
+                    .img {
+                        img {
+                        height: 260px;
+                        }
+                    }
+
+                    .info {
+                        h2 {
+                        font-size: 18px;
+                        padding-bottom: 5px;
+                        }
+
+                        p {
+                        font-size: 13px;
+                        }
+                    }
+                }
+            }
+        }
     }
-}
 }
 @media (max-width: 700px) {
     .dropdown {

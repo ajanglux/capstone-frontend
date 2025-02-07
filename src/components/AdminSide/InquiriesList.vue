@@ -68,7 +68,12 @@
       </div>
     </div>
 
-    <ConfirmationDialog :show="showDeleteDialog" @close="showDeleteDialog = false" @confirm="deleteRepair"/>
+    <ConfirmationDialog
+      :show="showConfirmationDialog"
+      @close="showConfirmationDialog = false"
+      @confirm="confirmStatusChange"
+      :message="confirmationMessage"
+    />
   </div>
 
   <div v-if="showCommentModal" class="modal-overlay" @click.self="showCommentModal = false">
@@ -83,6 +88,17 @@
       <div class="modal-actions">
         <button class="submit" @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
         <button class="cancel" @click="showCommentModal = false">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="showRespondModal" class="modal-overlay" @click.self="showRespondModal = false">
+    <div class="modal-content">
+      <h3>{{ existingComment ? 'Edit Comment' : 'Add Comment' }}</h3>
+      <textarea v-model="commentText" placeholder="Enter your comment..."></textarea>
+      <div class="modal-actions">
+        <button class="submit" @click="submitRespond">{{ existingComment ? 'Update' : 'Submit' }}</button>
+        <button class="cancel" @click="showRespondModal = false">Cancel</button>
       </div>
     </div>
   </div>
@@ -103,7 +119,8 @@ const authStore = useAuthStore();
 const router = useRouter();
 const repairs = ref([]);
 const errors = ref(null);
-const showDeleteDialog = ref(false);
+const showConfirmationDialog = ref(false);
+const confirmationMessage = ref('');
 const selectedRepairId = ref(null);
 const selectedActions = ref({});
 const searchQuery = ref('');
@@ -112,10 +129,11 @@ const itemsPerPage = ref(10);
 const toast = useToast()
 const selectedRepair = ref(null);
 const showCommentModal = ref(false);
+const showRespondModal = ref(false);
 const commentText = ref('');
 const existingComment = ref('');
-const showAcceptDialog = ref(false);
-const selectedAcceptRepairId = ref(null);
+const selectedStatusAction = ref(false);
+const isLoading = ref(false); 
 
 const openCommentModal = (repair) => {
   if (!repair || !repair.id) {
@@ -124,8 +142,8 @@ const openCommentModal = (repair) => {
   }
 
   selectedRepair.value = repair;
-  existingComment.value = repair.comment || '';  // Store existing comment if available
-  commentText.value = repair.comment || '';  // Populate the textarea with existing comment
+  existingComment.value = repair.comment || ''; 
+  commentText.value = repair.comment || ''; 
   showCommentModal.value = true;
 };
 
@@ -160,16 +178,59 @@ const submitComment = async () => {
   }
 };
 
+const openRespondModal = (repair) => {
+  if (!repair || !repair.id) {
+    toast.error('Invalid repair object!');
+    return;
+  }
+
+  selectedRepair.value = repair;
+  existingComment.value = repair.comment || ''; 
+  commentText.value = repair.comment || '';
+  showRespondModal.value = true;
+};
+
+const submitRespond = async () => {
+  if (!commentText.value.trim()) {
+    toast.error('Comment cannot be empty.');
+    return;
+  }
+
+  try {
+    if (selectedRepair.value && selectedRepair.value.id) {
+      await axios.put(`${BASE_URL}/customer-details/comment/${selectedRepair.value.id}`, 
+        { comment: commentText.value },
+        getHeaderConfig(authStore.access_token)
+      );
+
+      await axios.patch(`${BASE_URL}/customer-details/${selectedRepair.value.id}/status`, 
+        { status: 'Responded' }, 
+        getHeaderConfig(authStore.access_token)
+      );
+
+      toast.success('Comment added & status updated.');
+      selectedRepair.value.comment = commentText.value;
+      selectedRepair.value.status = 'Responded';
+      showCommentModal.value = false;
+      fetchRepairs();
+    } else {
+      toast.error('Repair ID not found!');
+    }
+  } catch (error) {
+    toast.error('Failed to update comment & status.');
+  }
+};
+
 const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
     repairs.value = response.data.data.map(repair => ({
       ...repair,
       user: repair.user || { first_name: 'N/A', last_name: 'N/A', email: 'N/A', phone_number: 'N/A', address: 'N/A' },
-      description: repair.description || 'No description available' // Add description
+      description: repair.description || 'No description available'
     }));
 
-    repairs.value.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    repairs.value.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     repairs.value.forEach(repair => {
       selectedActions.value[repair.id] = '';
@@ -223,11 +284,12 @@ const previousPage = () => {
 
 const handleActionChange = (repairId) => {
   const action = selectedActions.value[repairId];
-  if (action === 'Accept') {
-    setApproved(repairId);
-  } else if (action === 'Responded') {
+  if (action === 'Responded') {
     const repair = repairs.value.find(r => r.id === repairId);
-    openCommentModal(repair);
+    if (repair) {
+      selectedRepair.value = repair;
+      showCommentModal.value = true;
+    }
   } else if (action === 'delete') {
     confirmDelete(repairId);
   } else if (action === 'view') {
@@ -238,48 +300,42 @@ const handleActionChange = (repairId) => {
       selectedRepair.value = repair;
       showCommentModal.value = true;
     }
+  } else {
+    selectedRepairId.value = repairId;
+    selectedStatusAction.value = action;
+    confirmationMessage.value = `Are you sure you want to mark this repair as ${action}?`;
+    showConfirmationDialog.value = true;
   }
 };
 
+const confirmStatusChange = () => {
+  if (selectedStatusAction.value === 'Accept') {
+    markAsAccept(selectedRepairId.value);
+  }
+  showConfirmationDialog.value = false;
+};
 
-const setApproved = async (id) => {
+const updateStatus = async (id, status) => {
+  isLoading.value = true; // Start loading
   try {
-    await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'On-Going' }, getHeaderConfig(authStore.access_token));
+    await axios.patch(`${BASE_URL}/customer-details/${id}/status`, { status }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
-    toast.success("Status update successful", { timeout: 3000 })
+    toast.success("Status updated successfully", { timeout: 3000 });
   } catch (error) {
-    toast.error('Error updating status. Please try again.', { timeout: 3000 });
+    console.error(`Error updating repair status to ${status}:`, error);
+    const errorMessage = error.response?.data?.message || `Error updating repair status to ${status}`;
+    toast.error(errorMessage, { timeout: 4700 });
+  } finally {
+    isLoading.value = false; // Stop loading
   }
 };
 
-// const setResponded = async (id) => {
-//   try {
-//     await axios.put(`${BASE_URL}/customer-details/${id}`, { status: 'Responded' }, getHeaderConfig(authStore.access_token));
-//     fetchRepairs();
-//     toast.success("Status update successful", { timeout: 3000 })
-//   } catch (error) {
-//     toast.error('Error updating status. Please try again.', { timeout: 3000 });
-//   }
-// };
+const markAsAccept = (id) => {
+  updateStatus(id, 'On-Going');
+};
 
 const viewRepair = (id) => {
   router.push({ name: 'inquiries-view', params: { id } });
-};
-
-const deleteRepair = async () => {
-  try {
-    await axios.delete(`${BASE_URL}/customer-details/${selectedRepairId.value}`, getHeaderConfig(authStore.access_token));
-    fetchRepairs();
-    showDeleteDialog.value = false;
-    toast.success("Deleted successful", { timeout: 3000 })
-  } catch (error) {
-    toast.error('Error deleting details. Please try again.', { timeout: 3000 });
-  }
-};
-
-const confirmDelete = (id) => {
-  selectedRepairId.value = id;
-  showDeleteDialog.value = true;
 };
 
 onMounted(() => {

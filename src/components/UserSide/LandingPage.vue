@@ -29,7 +29,7 @@ export default {
 .landing-page {
   font-family: 'Poppins';
   color: var(--header);
-  background-color: var(--light2);
+  background-color: var(--header);
   height: auto;
   width: auto;
   min-height: 100vh;
@@ -43,7 +43,7 @@ export default {
   .title {
     margin-top: 8pc;
     font-size: 2.5em;
-    color: var(--header);
+    color: var(--light);
     margin-left: 70px;
 
     h2 { 

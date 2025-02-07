@@ -31,7 +31,7 @@ body.sidebar-hidden .content {
 }
 
 .content {
-    padding: 40px 40px 40px 290px; /* Default padding when sidebar is visible */
+    padding: 40px 40px 40px 260px; /* Default padding when sidebar is visible */
     transition: padding-left 0.3s ease;
 }
 

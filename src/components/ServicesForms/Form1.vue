@@ -46,8 +46,6 @@
               <select v-model="productInfo.device_type">
                 <option value="Laptop">Laptop</option>
                 <option value="Desktop">Desktop</option>
-                <option value="Phone">Phone</option>
-                <option value="Tablet/Ipad">Tablet/Ipad</option>
               </select>
             </div>
             <div class="input-group mb-3">
@@ -391,6 +389,17 @@ h2 {
         width: 20px;
       }
     }
+  }
+  select {
+    font-family: 'Poppins';
+    width: 110px;
+    height: 30px;
+    padding-left: 5px;
+    outline: none;
+    border: 1px solid var(--header);
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-left: 5px
   }
 }
 </style>
