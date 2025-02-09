@@ -1,55 +1,57 @@
 <template>
-  <div class="container">
-    <div class="login-card-wrapper">
-      <div class="login-card">
-        <div class="header">
-          <h3>LOGIN</h3>
-        </div>
-        <div class="card-body">
-          <form @submit.prevent="userAuth">
-            <div class="form-group mb-3">
-              <input
-                type="text"
-                v-model="data.user.email"
-                placeholder="Email"
-                class="form-control rounded-0"
-                required
-              />
+  <div class="login-container">
+    <Transition name="slide-in" appear>
+      <div class="login-card-wrapper">
+        <div class="login-card">
+          <div class="header">
+            <h3>LOGIN</h3>
+          </div>
+          <div class="card-body">
+            <form @submit.prevent="userAuth">
+              <div class="form-group mb-3">
+                <input
+                  type="text"
+                  v-model="data.user.email"
+                  placeholder="Email"
+                  class="form-control rounded-0"
+                  required
+                />
+              </div>
+              <div class="form-group mb-3 position-relative">
+                <input 
+                  :type="passwordVisible ? 'text' : 'password'" 
+                  v-model="data.user.password"
+                  placeholder="Password" 
+                  class="form-control rounded-0"
+                  required>
+                <i 
+                id="show-hide"
+                  class="bx" 
+                  :class="passwordVisible ? 'bx-show' : 'bx-hide'" 
+                  @click="togglePasswordVisibility" 
+                  ></i>
+              </div>
+              <div class="forgot">
+                <p><router-link class="primary" aria-current="page" to="/forgot-password"> Forgot Password? </router-link> </p>
+              </div>
+              <div class="form-group mb-3 text-center">
+                <Spinner v-if="data.loading" />
+                <button v-else type="submit" class="btn">
+                  Login
+                </button>
+              </div>
+            </form>
+            <div class="down">
+              <p> Create an account? <router-link class="primary" aria-current="page" to="/register"> Register </router-link> </p>
+              <router-link class="secondary" to="/">Go Back</router-link>
             </div>
-            <div class="form-group mb-3 position-relative">
-              <input 
-                :type="passwordVisible ? 'text' : 'password'" 
-                v-model="data.user.password"
-                placeholder="Password" 
-                class="form-control rounded-0"
-                required>
-              <i 
-              id="show-hide"
-                class="bx" 
-                :class="passwordVisible ? 'bx-show' : 'bx-hide'" 
-                @click="togglePasswordVisibility" 
-                ></i>
-            </div>
-            <div class="forgot">
-              <p><router-link class="primary" aria-current="page" to="/forgot-password"> Forgot Password? </router-link> </p>
-            </div>
-            <div class="form-group mb-3 text-center">
-              <Spinner v-if="data.loading" />
-              <button v-else type="submit" class="btn">
-                Login
-              </button>
-            </div>
-          </form>
-          <div class="down">
-            <p> Create an account? <router-link class="primary" aria-current="page" to="/register"> Register </router-link> </p>
-            <router-link class="secondary" to="/">Go Back</router-link>
           </div>
         </div>
+        <div class="logo">
+          <img src="/src/assets/techfix.png" >
+        </div>
       </div>
-      <div class="logo">
-        <img src="/src/assets/techfix.png" >
-      </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
@@ -161,29 +163,24 @@ onMounted(() => {
 
 
 <style lang="scss" scoped>
-.container {
+.login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background-color: rgb(12, 68, 110);
-  padding: 30px;
+  height: 100vh;
 }
 
 .login-card-wrapper {
   display: flex;
-  border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-  width: 60%;
+  flex-direction: row-reverse;
+  width: 100%;
 }
 
 .login-card {
-  width: 100%;
+  flex-basis: 50%;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  background-color: var(--light);
-  padding: 60px;
+  padding: 0 130px;
   align-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
@@ -212,7 +209,7 @@ onMounted(() => {
 
   #show-hide {
     position: absolute;
-    margin-top: 18px;
+    margin-top: 14px;
     right: 15px;
   }
 
@@ -220,7 +217,9 @@ onMounted(() => {
     padding: 12px;
     font-size: 15px;
     border-radius: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 22px;
+    width: 100%;
+    border: 1px solid var(--header);
   }
 
   .header h3 {
@@ -240,7 +239,7 @@ onMounted(() => {
   input {
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--header);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
@@ -278,16 +277,32 @@ onMounted(() => {
 }
 
 .logo {
-  width: 100%;
-  height: auto;
+  flex-basis: 90%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: var(--main);
-  align-content: space-evenly;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-right-radius: 12%;
+  border-bottom-right-radius: 12%;
 
   img {
-    width: 100%;
+    width: 70%;
   }
+}
+
+.slide-in-enter-active {
+  transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+
+.slide-in-enter-from {
+  transform: translateX(-100px); 
+  opacity: 0;
+}
+
+.slide-in-enter-to {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 @media (max-width: 500px) {
@@ -304,6 +319,7 @@ onMounted(() => {
 
 .login-card {
   padding: 30px 30px 20px 30px;
+  flex-basis: 100%;
 
   .header h3 {
     font-size: 30px;

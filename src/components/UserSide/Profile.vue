@@ -21,7 +21,7 @@
         <div class="input-group">
           <div class="form-field">
             <label for="email">Email</label>
-            <input v-model="userProfile.email" type="email" id="email" placeholder="Email" required />
+            <input v-model="userProfile.email" type="email" id="email" placeholder="Email" required disabled />
           </div>
           <div class="form-field">
             <label for="phone">Phone</label>
@@ -37,7 +37,10 @@
         </div>
 
         <div class="button">
-          <button type="submit" class="btn btn-primary">Update Profile</button>
+          <p>
+            <router-link class="btn btn-primary" to="">Change Email</router-link>
+          </p>
+          <button type="submit" class="btn btn-primary" :disabled="isProfileUnchanged">Update Profile</button>
         </div>
       </form>
     </div>
@@ -45,13 +48,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { defineProps, defineEmits } from 'vue';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 const userProfile = ref({
   first_name: '',
@@ -61,9 +64,10 @@ const userProfile = ref({
   address: ''
 });
 
+const originalProfile = ref({});
+
 const authStore = useAuthStore();
 const token = authStore.access_token;
-const isUpdating = ref(false);
 
 defineProps({
   isModalOpen: {
@@ -93,23 +97,28 @@ const fetchUserProfile = async () => {
     const headers = getHeaderConfig(token);
     const response = await axios.get(`${BASE_URL}/user/profile`, headers);
     userProfile.value = response.data.user;
+
+    originalProfile.value = { ...response.data.user };
   } catch (error) {
-    showToast("error", "Error fetching user profile:");
+    showToast("error", "Error fetching user profile");
   }
 };
 
 const updateProfile = async () => {
-  isUpdating.value = true;
   try {
     const headers = getHeaderConfig(token);
     await axios.put(`${BASE_URL}/user/profile`, userProfile.value, headers);
-    showToast("success", "Updated Successful")
+    showToast("success", "Updated Successfully");
+
+    originalProfile.value = { ...userProfile.value };
   } catch (error) {
-    showToast("error", "Error updating profile:");
-  } finally {
-    isUpdating.value = false;
+    showToast("error", "Error updating profile");
   }
 };
+
+const isProfileUnchanged = computed(() => {
+  return JSON.stringify(userProfile.value) === JSON.stringify(originalProfile.value);
+});
 
 const validatePhoneNumber = () => {
   userProfile.value.phone_number = userProfile.value.phone_number
@@ -119,6 +128,7 @@ const validatePhoneNumber = () => {
 
 onMounted(fetchUserProfile);
 </script>
+
   
 <style scoped>
 .modal-overlay {

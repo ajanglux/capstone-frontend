@@ -107,7 +107,7 @@
       }
   
       .nav-link:hover {
-        background-color: pink;
+        background-color: var(--main);
         border-radius: 8px;
       }
     }

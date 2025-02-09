@@ -1,6 +1,6 @@
 <template>
 <div class="landing-page">
-    <header>
+    <header :class="{ 'hide-header': isHeaderHidden }">
         <div class="header-top">
             <div class="left-side">
                 <img class="app-logo" src="/src/assets/techfix-no.png" alt="TechFix Logo" />
@@ -31,12 +31,15 @@
     <div v-if="isDropdownOpen && !isViewTerms" class="overlay" @click.stop="closeDropdown"></div>
 </div> 
 </template>
+
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const isDropdownOpen = ref(false);
 const route = useRoute();
+const isHeaderHidden = ref(false);
+let lastScrollY = window.scrollY;
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
@@ -47,6 +50,20 @@ const closeDropdown = () => {
 };
 
 const isViewTerms = computed(() => route.path === '/terms-and-conditions');
+
+const handleScroll = () => {
+  const currentScrollY = window.scrollY;
+  isHeaderHidden.value = currentScrollY > lastScrollY;
+  lastScrollY = currentScrollY;
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -63,6 +80,7 @@ header {
     align-items: center;
     padding: 18px;
     font-size: 1em;
+    transition: transform 0.3s ease-in-out;
 
     .header-top {
         display: flex;
@@ -94,6 +112,11 @@ header {
         color: white;
         cursor: pointer;
     }
+}
+
+.hide-header {
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
 }
 
 .button-container {

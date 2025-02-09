@@ -4,7 +4,7 @@
     --header: #0C3C61FF;
     --grey:#64748b;
     --table:#b9babe;
-    --light:#f4f4f4;
+    --light:#ECEDEF;
     --light2:#D7DBE4;
     --redbtn:#912b2b;
 }
@@ -49,7 +49,6 @@ button {
 }
 
 .app {
-    display:flex;
     /* main {
         flex: 1 1 0;
         padding: 2rem;

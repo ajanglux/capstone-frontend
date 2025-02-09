@@ -95,7 +95,7 @@ export default {
         // Close the loading SweetAlert if an error occurs
         Swal.close();
 
-        message.value = error.response?.data.error || "An error occurred";
+        message.value = error.response?.data.error || "No Email Found";
         messageClass.value = "error";
         showToast("error", message.value);
       }
@@ -119,7 +119,7 @@ export default {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: rgb(12, 68, 110);
+  background-color: var(--light);
   padding: 30px;
 }
 
@@ -131,17 +131,14 @@ export default {
 // }
 
 .login-card {
-  width: 100%;
-  border-radius: 10px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  background-color: var(--light);
-  padding: 60px;
-  // align-content: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  // justify-content: center;
-  // text-align: center;
+  // width: 100%;
+  // border-radius: 10px;
+  // box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  // background-color: var(--light);
+  // padding: 60px;
+  // transition: transform 0.3s ease, box-shadow 0.3s ease;
+  // display: flex;
+  // flex-direction: column;
 
   .forgot {
     padding: 0;
@@ -154,6 +151,16 @@ export default {
 
       &:hover {
         text-decoration: underline;
+      }
+    }
+
+    .secondary {
+      text-decoration: none;
+      color: var(--header);
+
+      &:hover {
+        text-decoration: underline;
+        color:var(--header);
       }
     }
   }
@@ -188,7 +195,7 @@ export default {
   }
 
   label {
-    color: var(--main);
+    color: var(--header);
     font-size: 14px;
     padding-bottom: 10px;
   }
@@ -198,7 +205,7 @@ export default {
     font-size: 50px;
     letter-spacing: 0.5px;
     margin-bottom: 40px;
-    color: var(--main);
+    color: var(--header);
     text-align: center;
     font-family: 'Poppins';
   }
@@ -236,7 +243,7 @@ export default {
     font-size: 14px;
     border-radius: 10px;
     background-color: var(--main);
-    color: white;
+    color: var(--light);
     width: 20%;
     transition: background-color 0.3s ease, transform 0.2s ease;
     border: none;
@@ -265,6 +272,16 @@ export default {
   padding-left: 30px;
   border-radius: 10px;
   width: 400px;
+}
+
+@media (max-width: 550px) {
+  .login-card .header h3{
+    font-size: 30px;
+  }
+
+  .login-card .btn{
+    width: 28%;
+  }
 }
 </style>
   

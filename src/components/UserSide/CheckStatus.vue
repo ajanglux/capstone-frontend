@@ -16,39 +16,40 @@
 
         <div v-if="status">
           <div class="timeline-container">
-            <div class="timeline-item" :class="{ active: isActive('On-Going') }">
+            <!-- Show message if no updates exist -->
+            <div v-if="!onGoingUpdatedAt && !finishedUpdatedAt && !finishedStatusAvailable && !readyForPickupUpdatedAt && !completedUpdatedAt">
+              <p class="no-updates-message">No updates yet, please wait for the admin's response.</p>
+            </div>
+
+            <div class="timeline-item" v-else :class="{ active: isActive('On-Going') }">
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Device Received</p>
                 <p v-if="onGoingUpdatedAt">Updated on: {{ formattedOnGoingUpdatedAt }} <br>Your repair status is: On-going</p>
-                <p v-else>Not Yet available</p>
               </div>
             </div>
 
-            <div class="timeline-item" :class="{ active: isActive('Finished') }">
+            <div class="timeline-item" v-if="finishedUpdatedAt || finishedStatusAvailable" :class="{ active: isActive('Finished') }">
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Repair Finished</p>
-                <p v-if="finishedUpdatedAt || finishedStatusAvailable">Updated on: {{ formattedFinishedUpdatedAt }}: <br>Your device has been successfully repaired.</p>
-                <p v-else>Not Yet available</p>
+                <p>Updated on: {{ formattedFinishedUpdatedAt }} <br>Your device has been successfully repaired.</p>
               </div>
             </div>
 
-            <div class="timeline-item" :class="{ active: isActive('Ready-for-Pickup') }">
+            <div class="timeline-item" v-if="readyForPickupUpdatedAt" :class="{ active: isActive('Ready-for-Pickup') }">
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Ready for Pickup</p>
-                <p v-if="readyForPickupUpdatedAt">Updated on: {{ formattedReadyForPickupUpdatedAt }}: <br>Our shop is open from 9 AM to 5 PM.<br> You can pick up your device from our shop at any time now.</p>
-                <p v-else>Not Yet available</p>
+                <p>Updated on: {{ formattedReadyForPickupUpdatedAt }} <br>Our shop is open from 9 AM to 5 PM.<br>You can pick up your device from our shop at any time now.</p>
               </div>
             </div>
 
-            <div class="timeline-item" :class="{ active: isActive('Completed') }">
+            <div class="timeline-item" v-if="completedUpdatedAt" :class="{ active: isActive('Completed') }">
               <div class="timeline-dot"></div>
               <div class="timeline-content">
                 <p class="timeline-location">Repair Completed</p>
-                <p v-if="completedUpdatedAt">Updated on: {{ formattedCompletedUpdatedAt }}: <br>The device has been successfully returned, and the process is now complete.</p>
-                <p v-else>Not Yet available</p>
+                <p>Updated on: {{ formattedCompletedUpdatedAt }} <br>The device has been successfully returned, and the process is now complete.</p>
               </div>
             </div>
           </div>
@@ -57,6 +58,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed } from 'vue';
@@ -137,7 +139,7 @@ const isActive = (checkStatus) => {
   padding-bottom: 20px;
 }
 h2 {
-  color: var(--header);
+  color: #333;
 }
 
 .con-container {
@@ -151,7 +153,7 @@ h2 {
   padding: 30px;
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 13px;
-  // height: 35pc;
+  margin-top: 40px;
 
   button {
     background-color: var(--main);

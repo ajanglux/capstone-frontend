@@ -110,7 +110,7 @@ export default {
     width: 100%;
     flex: 1;
     padding: 20px;
-    border-radius: 5px;
+    // border-radius: 5px;
     background-color: var(--grey);
     color: var(--light2);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -137,24 +137,11 @@ export default {
   gap: 15px;
   width: 100%;
 
-  .pie-chart {
-    background-color: var(--light2);
-    padding: 30px;
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-
-    .pie {
-      width: 50%;
-      margin-inline: auto;
-    }
-  }
-
   .bar-chart {
     background-color: var(--light2);
     padding: 30px 100px;
     width: 100%;
-    border-radius: 10px;
+    // border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 
     .bar {

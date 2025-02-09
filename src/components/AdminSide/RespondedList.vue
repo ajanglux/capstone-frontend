@@ -25,7 +25,7 @@
               <th>Address</th>
               <th>Description</th>
               <th>Status</th>
-              <th>Actions</th>
+              <!-- <th>Actions</th> -->
             </tr>
           </thead>
           <tbody>
@@ -37,7 +37,7 @@
               <td>{{ repair.user?.address }}</td>
               <td>{{ repair.description }}</td>
               <td>{{ repair.status || 'PENDING' }}</td>
-              <td class="actions">
+              <!-- <td class="actions">
                 <button @click="openRespondModal(repair)"
                 title="Unrepairable">
                   <i class='bx bxs-x-circle'></i>
@@ -48,10 +48,10 @@
                   title="On-Going">
                   <i class="bx bx-show"></i>
                 </button>
-              </td>
+              </td> -->
             </tr>
             <tr v-if="paginatedRepairs.length === 0">
-              <td colspan="8"><strong>No Responded found.</strong></td>
+              <td colspan="7"><strong>No Responded found.</strong></td>
             </tr>
           </tbody>
         </table>

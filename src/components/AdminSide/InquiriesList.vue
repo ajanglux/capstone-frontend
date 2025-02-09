@@ -4,9 +4,6 @@
       <div class="card-header">
         <h2>LIST OF INQUIRIES</h2>
         <div class="left-card">
-          <router-link class="button" to="/responded-list">
-            <span class="text"><i class='bx bx-history'></i>Responded</span>
-          </router-link>
         </div>
       </div>
       <div class="table-body">
@@ -46,7 +43,7 @@
                         <option value="view">View</option>
                         <option value="Accept">Accept</option>
                         <option value="Unrepairable">Service Not Possible</option>
-                        <option value="Responded">Respond</option>
+                        <!-- <option value="Responded">Respond</option> -->
                       </select>
                     </div>
                   </div>
@@ -288,7 +285,7 @@ const handleActionChange = (repairId) => {
     const repair = repairs.value.find(r => r.id === repairId);
     if (repair) {
       selectedRepair.value = repair;
-      showCommentModal.value = true;
+      showRespondModal.value = true;
     }
   } else if (action === 'delete') {
     confirmDelete(repairId);

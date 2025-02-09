@@ -60,8 +60,9 @@
                   <button 
                     class="btn"
                       @click="confirmStatusChange(repair)"
-                    v-if="repair.status === 'Unrepairable'">
-                    Update to On-Going
+                    v-if="repair.status === 'Unrepairable'"
+                    title="Update to On-Going">
+                    <i class='bx bx-cog'></i>
                   </button>
                 </td>
               </tr>

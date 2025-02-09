@@ -18,6 +18,14 @@
                 <i class='bx bx-list-ul'></i>
                 <span class="text">Inquiries</span>
             </router-link>
+            <!-- <router-link class="button" to="/responded-list">
+                <i class='bx bx-history'></i>
+                <span class="text">Responded</span>
+            </router-link> -->
+            <router-link class="button" to="/repair-history">
+                <i class='bx bx-history'></i>
+                <span class="text">History</span>
+          </router-link>
         </div>
     </aside>
 </template>
@@ -74,8 +82,8 @@ aside {
             text-decoration: none;
             padding: 15px 20px;
             transition: all 0.3s ease-in-out;
-            border-top-left-radius: 50px;
-            border-bottom-left-radius: 50px;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
         }
 
         .button:hover {

@@ -2,34 +2,11 @@
     <div class="content">
         <div class="container">
             <div class="card-header">
-            <h2>Details</h2>
+                <h2>Service: {{ model.description }}</h2>
             </div>
             <div class="card-body">
                 <div class="whole">
                     <div class="left" v-if="userRole !== 0">
-                        <div class="buttons">
-                            <h2>Customer Details</h2>
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">First Name</span>
-                            <input v-model="model.first_name" type="text" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Last Name</span>
-                            <input v-model="model.last_name" type="text" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Tel. No.</span>
-                            <input v-model="phoneNumber" @input="validatePhoneNumber" type="text" class="form-control" disabled />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Email</span>
-                            <input v-model="model.email" type="email" class="form-control" disabled />
-                        </div>
-                        <div class="input-group mb-4">
-                            <span class="input-group-text">Address</span>
-                            <input v-model="model.address" type="text" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
                     </div>
                     
                     <div class="right">
@@ -90,64 +67,7 @@
                 </div>
                 <div class="input-group mb-4">
                     <span class="input-group-text"></span>
-                    <textarea v-model="model.description" class="form-control" disabled></textarea>
-                </div>
-        
-                <div class="whole-checklist">
-                    <div class="checkbox">
-                        <div class="buttons">
-                            <h2 class="small">Accessories Checklist</h2>
-                        </div>
-            
-                        <div class="accessory">
-                            <span class="input-group-text">AC Adapter</span>
-                            <input v-model="productInfo.ac_adapter" type="radio" id="ac_adapter" value="ac_adapter" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-            
-                        <div class="accessory">
-                            <span class="input-group-text">VGA Cable</span>
-                            <input v-model="productInfo.vga_cable" type="radio" id="vga_cable" value="vga_cable" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-            
-                        <div class="accessory">
-                            <span class="input-group-text">DVI Cable</span>
-                            <input v-model="productInfo.dvi_cable" type="radio" id="dvi_cable" value="dvi_cable" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-                    </div> 
-
-                    <div class="checkbox">
-                        <div class="accessory">
-                            <span class="input-group-text">Display Cable</span>
-                            <input v-model="productInfo.display_cable" type="radio" id="display_cable" value="display_cable" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-        
-                        <div class="accessory">
-                            <span class="input-group-text">Bag (PN)</span>
-                            <input v-model="productInfo.bag_pn" type="radio" id="bag" value="bag" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-            
-                        <div class="accessory">
-                            <span class="input-group-text">HDD</span>
-                            <input v-model="productInfo.hdd" type="radio" id="hdd" value="hdd" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-                    </div>
-        
-                    <div class="checklist">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">RAM Brand</span>
-                            <input v-model="productInfo.ram_brand" type="text" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-            
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">RAM Size (GB)</span>
-                            <input v-model="productInfo.ram_size_gb" type="text" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-            
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Power Cord Quantity</span>
-                            <input v-model="productInfo.power_cord_qty" type="text" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-                    </div>
+                    <textarea v-model="productInfo.description_of_repair" class="form-control" disabled></textarea>
                 </div>
           
                 <div class="buttons">
@@ -288,125 +208,160 @@ export default {
 }
 
 h2 {
-text-transform: uppercase;
+    text-transform: uppercase;
 }
 
 .form-check-input {
-width: 15px;
-height: 15px;
+    width: 15px;
+    height: 15px;
 }
 
 .card-body {
-.whole {
-    display: flex;
-    gap: 20px;
+    .whole {
+        display: flex;
+        gap: 20px;
 
-    .left {
-    width: 100%;
+        .left {
+        width: 100%;
+        }
+
+        .right {
+        width: 100%;
+        }
     }
 
-    .right {
-    width: 100%;
+    .whole-checklist {
+        display: flex;
+        gap: 30px; 
+
+        .checklist {
+        width: 100%;
+        }
+
+        .checklist:nth-child(2),
+        .checklist:nth-child(3) {
+        padding-top: 57px;
+        }
     }
-}
-
-.whole-checklist {
-    display: flex;
-    gap: 30px; 
-
     .checklist {
+        margin: 0;
+        .mb3 {
+
+        input {
+            width: 15px;
+            height: 15px;
+            margin-left: 40px;
+            margin-top: 10px;
+        }
+        }
+    }
+
+    .custom-checkboxes {
+        display: flex;
+        gap: 20px;
+        margin-top: 6px;
+        margin-bottom: 7px;
+        
+        .form-check {
+        display: inline-flex;
+        gap: 10px;
+
+        .form-check-label {
+            width: auto;
+            left: 0;
+        }
+        .form-check-input {
+            height: 20px;
+            width: 20px;
+        }
+        }
+    }
+    }
+
+    .whole-checklist {
     width: 100%;
+
+    .checkbox {
+        display: flex;
+        flex-direction: column;
+        gap: 23px;
+        width: 100%;
+        padding-top: 3px;
     }
 
-    .checklist:nth-child(2),
-    .checklist:nth-child(3) {
-    padding-top: 57px;
-    }
-}
-.checklist {
-    margin: 0;
-    .mb3 {
-
-    input {
-        width: 15px;
-        height: 15px;
-        margin-left: 40px;
-        margin-top: 10px;
-    }
-    }
-}
-
-.custom-checkboxes {
-    display: flex;
-    gap: 20px;
-    margin-top: 6px;
-    margin-bottom: 7px;
-    
-    .form-check {
-    display: inline-flex;
-    gap: 10px;
-
-    .form-check-label {
-        width: auto;
-        left: 0;
-    }
-    .form-check-input {
-        height: 20px;
-        width: 20px;
-    }
-    }
-}
-}
-
-.whole-checklist {
-width: 100%;
-
-.checkbox {
-    display: flex;
-    flex-direction: column;
-    gap: 23px;
-    width: 100%;
-    padding-top: 3px;
-}
-
-.checkbox:nth-child(2) {
-    padding-top: 82px;
-}
-
-.accessory {
-    margin-bottom: 10px;
-    height: 50px;
-    width: 100%;
-    border-radius: 10px;
-    outline: none;
-    border: none;
-    padding: 10px;
-    transition: all 0.3s ease-in-out;
-    background-color: var(--light);
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-
-    &:hover {
-        background-color: var(--light2);
+    .checkbox:nth-child(2) {
+        padding-top: 82px;
     }
 
-    .input-group-text {
-        font-size: 14px;
-        color: black;
+    .accessory {
+        margin-bottom: 10px;
+        height: 50px;
+        width: 100%;
+        border-radius: 10px;
+        outline: none;
+        border: none;
         padding: 10px;
+        transition: all 0.3s ease-in-out;
+        background-color: var(--light);
+        display: flex;
+        align-items: center;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+
+        &:hover {
+            background-color: var(--light2);
+        }
+
+        .input-group-text {
+            font-size: 14px;
+            color: black;
+            padding: 10px;
+        }
+
+        .form-control {
+            font-family: 'Poppins';
+            width: 20px;
+        }
     }
 
-    .form-control {
-        font-family: 'Poppins';
-        width: 20px;
+    .small {
+        font-size: 22px;
     }
 }
 
-.small {
-    font-size: 22px;
+@media (max-width: 1020px) {
+    .container{
+        width: 90%;
+    }
 }
 
+@media (max-width: 665px) {
+    .container{
+        width: 95%;
+    }
+}
+
+@media (max-width: 560px) {
+    .container{
+        width: 100%;
+    }
+    .card-body .whole-checklist{
+        display: flex;
+        flex-direction: column;
+        .checkbox {
+            padding-top: 0px;
+        }
+    }
+
+    .card-body .whole-checklist .checklist:nth-child(3) {
+        padding-top: 0px;
+    }
+}
+
+@media (max-width: 520px) {
+    .card-body .custom-checkboxes[data-v-2926ddd2][data-v-2926ddd2] {
+        display: flex;
+        flex-direction: column;
+    }
 }
 </style>  

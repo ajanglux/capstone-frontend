@@ -31,6 +31,7 @@
                     </button>
                     <div class="dropdown-content">
                     <a class="nav-link" @click="openProfileModal" style="cursor: pointer">Profile</a>
+                    <a class="nav-link" @click="openChangePassword" style="cursor: pointer">Change Password</a>
                     <router-link to="#" class="nav-link" @click="userLogout" style="cursor: pointer">
                         <i class="bi bi-box-arrow-left"></i> Logout
                     </router-link>
@@ -41,7 +42,7 @@
 
         <ProfileModal :isModalOpen="isProfileModalOpen" @closeModal="closeProfileModal" />
 
-        <InquireModal :isModalOpen="isInquireModalOpen" @closeModal="closeInquireModal" />
+        <ChangePasswordModal :isModalOpen="isChangePasswordModalOpen" @closeModal="closeChangePasswordModal" />
 
         <div v-if="isDropdownOpen && !isViewTerms" class="overlay" @click.stop="closeDropdown"></div>
     </div> 
@@ -58,34 +59,34 @@ import { getHeaderConfig } from '../../helpers/headerConfig'
 import { useRoute } from 'vue-router';
 
 const ProfileModal = defineAsyncComponent(() => import('../UserSide/Profile.vue'));
-const InquireModal = defineAsyncComponent(() => import("../UserSide/ContactUs.vue"));
+const ChangePasswordModal = defineAsyncComponent(() => import("../auth/ChangePassword.vue"));
 
 const store = useAuthStore()
 const isDropdownOpen = ref(false);
 const isProfileModalOpen = ref(false);
-const isInquireModalOpen = ref(false);
+const isChangePasswordModalOpen = ref(false);
 const route = useRoute();
 
 const toggleDropdown = () => {
-isDropdownOpen.value = !isDropdownOpen.value;
+    isDropdownOpen.value = !isDropdownOpen.value;
 };
 
 const closeDropdown = () => {
-isDropdownOpen.value = false;
+    isDropdownOpen.value = false;
 };
 
 const openProfileModal = () => {
-isProfileModalOpen.value = true;
+    isProfileModalOpen.value = true;
 };
 const closeProfileModal = () => {
-isProfileModalOpen.value = false;
+    isProfileModalOpen.value = false;
 };
 
-const openInquireModal = () => {
-isInquireModalOpen.value = true;
+const openChangePassword = () => {
+    isChangePasswordModalOpen.value = true;
 };
-const closeInquireModal = () => {
-isInquireModalOpen.value = false;
+const closeChangePasswordModal = () => {
+    isChangePasswordModalOpen.value = false;
 };
 
 const isViewTerms = computed(() => route.path === '/terms-and-conditions');

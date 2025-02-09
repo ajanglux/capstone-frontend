@@ -4,7 +4,7 @@
             <div class="code-card">
                 <div class="con-container">
                     <div class="contact-info">
-                        <h2>Status update</h2>
+                        <h3>Your Code: {{ code }}</h3>
                         <div v-if="isLoading">
                             <p>Loading status...</p>
                         </div>
@@ -19,10 +19,14 @@
                             <p v-if="descriptionUpdatedAt" class="timestamp">Updated on: {{ formattedDescriptionUpdatedAt }}</p>
                         </div>
 
-                        <div class="admin-respond" v-if="status === 'Responded' || status === 'On-Going' || status === 'Finished' || status === 'Ready-for-Pickup' || status === 'Completed'">
+                        <div 
+                        class="admin-respond" 
+                        v-if="comment && status !== 'Unrepairable'">
                             <h4>Admin Note:</h4>
                             <p class="comment-box">{{ comment }}</p>
-                            <p v-if="adminCommentUpdatedAt" class="timestamp">Updated on: {{ formattedAdminCommentUpdatedAt }}</p>
+                            <p v-if="adminCommentUpdatedAt" class="timestamp">
+                                Updated on: {{ formattedAdminCommentUpdatedAt }}
+                            </p>
                         </div>
 
                         <div class="admin-respond" v-if="status === 'Unrepairable'">
@@ -35,43 +39,43 @@
                             <div v-if="statusUpdateVisible">
                                 <div class="timeline-container">
                                     <div class="code">
-                                        <h3>Code: {{ code }}</h3>
-                                        <!-- <p>Save our code for status checking without logging in.</p> -->
+                                        <h2>Status Update</h2>
                                     </div>
 
-                                    <div class="timeline-item" :class="{ active: isActive('On-Going') }">
+                                    <!-- Show message if no status updates exist -->
+                                    <div v-if="!onGoingUpdatedAt && !finishedUpdatedAt && !finishedStatusAvailable && !readyForPickupUpdatedAt && !completedUpdatedAt">
+                                        <p class="no-updates-message">No updates yet, please wait for the admin's response.</p>
+                                    </div>
+
+                                    <div class="timeline-item" v-if="onGoingUpdatedAt" :class="{ active: isActive('On-Going') }">
                                         <div class="timeline-dot"></div>
                                         <div class="timeline-content">
                                             <p class="timeline-location">Device Received</p>
-                                            <p v-if="onGoingUpdatedAt">Updated on: {{ formattedOnGoingUpdatedAt }} <br>Your repair status is: On-going</p>
-                                            <p v-else>Not Yet available</p>
+                                            <p>Updated on: {{ formattedOnGoingUpdatedAt }} <br>Your repair status is: On-going</p>
                                         </div>
                                     </div>
 
-                                    <div class="timeline-item" :class="{ active: isActive('Finished') }">
+                                    <div class="timeline-item" v-if="finishedUpdatedAt || finishedStatusAvailable" :class="{ active: isActive('Finished') }">
                                         <div class="timeline-dot"></div>
                                         <div class="timeline-content">
                                             <p class="timeline-location">Repair Finished</p>
-                                            <p v-if="finishedUpdatedAt || finishedStatusAvailable">Updated on: {{ formattedFinishedUpdatedAt }} <br>Your device has been successfully repaired.</p>
-                                            <p v-else>Not Yet available</p>
+                                            <p>Updated on: {{ formattedFinishedUpdatedAt }} <br>Your device has been successfully repaired.</p>
                                         </div>
                                     </div>
 
-                                    <div class="timeline-item" :class="{ active: isActive('Ready-for-Pickup') }">
+                                    <div class="timeline-item" v-if="readyForPickupUpdatedAt" :class="{ active: isActive('Ready-for-Pickup') }">
                                         <div class="timeline-dot"></div>
                                         <div class="timeline-content">
                                             <p class="timeline-location">Ready for Pickup</p>
-                                            <p v-if="readyForPickupUpdatedAt">Updated on: {{ formattedReadyForPickupUpdatedAt }} <br>Our shop is open from 9 AM to 5 PM.<br>You can pick up your device from our shop at any time now.</p>
-                                            <p v-else>Not Yet available</p>
+                                            <p>Updated on: {{ formattedReadyForPickupUpdatedAt }} <br>Our shop is open from 9 AM to 5 PM.<br>You can pick up your device from our shop at any time now.</p>
                                         </div>
                                     </div>
 
-                                    <div class="timeline-item" :class="{ active: isActive('Completed') }">
+                                    <div class="timeline-item" v-if="completedUpdatedAt" :class="{ active: isActive('Completed') }">
                                         <div class="timeline-dot"></div>
                                         <div class="timeline-content">
                                             <p class="timeline-location">Repair Completed</p>
-                                            <p v-if="completedUpdatedAt">Updated on: {{ formattedCompletedUpdatedAt }} <br>The device has been successfully returned, and the process is now complete.</p>
-                                            <p v-else>Not Yet available</p>
+                                            <p>Updated on: {{ formattedCompletedUpdatedAt }} <br>The device has been successfully returned, and the process is now complete.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -86,94 +90,116 @@
                     <h1>Pick a Service</h1>
                     <div class="cards1">
                         <!-- Services -->
-                        <div class="side-card">
-                            <div class="card1"
-                                @click="goToContactForm1('Computer Service & Repair')"
-                                >
+
+                        <div class="line-card">
+                            <div class="card1">
                                 <div class="img">
                                     <img src="../../assets/computer-repair.jpg" alt="Service Image" class="img-thumbnail" />
-                                </div>
-                                <div class="info">
-                                    <h2>Computer Service & Repair</h2>
-                                    <p>
-                                    Expert computer service and repair to fix hardware, software, and performance issues
-                                    quickly and efficiently.
-                                    </p>
+                                    <div class="overlay">
+                                        <h2>Computer Service & Repair</h2>
+                                        <p>
+                                            Expert computer service and repair to fix hardware, software, and performance issues quickly and efficiently.
+                                        </p>
+                                        <div class="buttons">
+                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
+                                            <button @click="goToContactForm1('Computer Service & Repair')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
 
-
-                            <div class="card1" @click="goToContactForm1('Free: Check up for Laptop & Desktop')">
-                                
+                        <div class="side-card">
+                            <div class="card1">
                                 <div class="img">
                                     <img src="../../assets/Laptop-check.jpg" alt="Service Image" class="img-thumbnail" />
-                                </div>
-                                <div class="info">
-                                    <h2>Free: Check up for Laptop & Desktop</h2>
-                                    <p>Get a free check-up for your laptop or desktop to ensure optimal performance and catch potential issues early.</p>
+                                    <div class="overlay">
+                                        <h2>Free: Check up for Laptop & Desktop</h2>
+                                        <p>Get a free check-up for your laptop or desktop to ensure optimal performance and catch potential issues early.</p>
+                                        <div class="buttons">
+                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
+                                            <button @click="goToContactForm1('Free: Check up for Laptop & Desktop')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- More Services -->
-                        <div class="side-card">
-                            <div class="card1"@click="goToContactForm1('Software and Hardware Installation')">
-                                
+                            <div class="card1">
                                 <div class="img">
                                     <img src="../../assets/hardware-installation.jpg" alt="Service Image" class="img-thumbnail" />
-                                </div>
-                                <div class="info">
-                                    <h2>Software and Hardware Installation</h2>
-                                    <p>Professional software and hardware installation services to ensure your devices are set up and running smoothly.</p>
-                                </div>
-                            </div>
-
-                            <div class="card1" @click="goToContactForm1('Reformat & Reprogram')">
-                               
-                                <div class="img">
-                                    <img src="../../assets/reset.jpg" alt="Service Image" class="img-thumbnail" />
-                                </div>
-                                <div class="info">
-                                    <h2>Reformat & Reprogram</h2>
-                                    <p>Reliable reformat and reprogram services to restore your system’s performance and resolve software issues.</p>
+                                    <div class="overlay">
+                                        <h2>Software and Hardware Installation</h2>
+                                        <p>Professional software and hardware installation services to ensure your devices are set up and running smoothly.</p>
+                                        <div class="buttons">
+                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
+                                            <button @click="goToContactForm1('Software and Hardware Installation')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="side-card">
-                            <div class="card1" @click="goToContactForm1('Remove Viruses and Malware')">
-                               
-                               <div class="img">
-                                   <img src="../../assets/remove-viruses.jpg" alt="Service Image" class="img-thumbnail" />
-                               </div>
-                               <div class="info">
-                                   <h2>Remove Viruses and Malware</h2>
-                                   <p>Effective virus and malware removal to protect your device and restore its security and performance.</p>
-                               </div>
-                           </div>
-
-                           <div class="card1" @click="goToContactUsForm3('Networking')">
-                               
-                               <div class="img">
-                                   <img src="../../assets/networking.jpg" alt="Service Image" class="img-thumbnail" />
-                               </div>
-                               <div class="info">
-                                   <h2>Networking</h2>
-                                   <p>Expert networking solutions for seamless connectivity, setup, and troubleshooting of your home or office network.</p>
-                               </div>
-                           </div>
                         </div>
 
                         <!-- More Services -->
-                        <div class="line-card">
-                            <div class="card1" @click="goToContactUsForm3('CCTV Installation')">
-                                
+                        <div class="side-card">
+                            
+                            <div class="card1">
+                                <div class="img">
+                                    <img src="../../assets/reset.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <div class="overlay">
+                                        <h2>Reformat & Reprogram</h2>
+                                        <p>Reliable reformat and reprogram services to restore your system’s performance and resolve software issues.</p>
+                                        <div class="buttons">
+                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
+                                            <button @click="goToContactForm1('Reformat & Reprogram')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card1">
+                                <div class="img">
+                                    <img src="../../assets/remove-viruses.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <div class="overlay">
+                                        <h2>Remove Viruses and Malware</h2>
+                                        <p>Effective virus and malware removal to protect your device and restore its security and performance.</p>
+                                        <div class="buttons">
+                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
+                                            <button @click="goToContactForm1('Remove Viruses and Malware')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="side-card">
+
+                            <div class="card1">
+                                <div class="img">
+                                    <img src="../../assets/networking.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <div class="overlay">
+                                        <h2>Networking</h2>
+                                        <p>Expert networking solutions for seamless connectivity, setup, and troubleshooting of your home or office network.</p>
+                                        <div class="buttons">
+                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
+                                            <button @click="goToContactUsForm3('Networking')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card1">
                                 <div class="img">
                                     <img src="../../assets/cctv.jpg" alt="Service Image" class="img-thumbnail" />
-                                </div>
-                                <div class="info">
-                                    <h2>CCTV Installation</h2>
-                                    <p>Enhancing security with professional setup of surveillance systems for homes and businesses.</p>
+                                    <div class="overlay">
+                                        <h2>CCTV Installation</h2>
+                                        <p>Enhancing security with professional setup of surveillance systems for homes and businesses.</p>
+                                        <div class="buttons">
+                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
+                                            <button @click="goToContactUsForm3('CCTV Installation')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -335,17 +361,16 @@ const isActive = (checkStatus) => {
     position: relative;
     
     .code-card {
-        padding: 50px;
+        padding: 60px 26px;
         background-color: var(--header);
         color: var(--light2);
-        border-radius: 20px;
+        border-radius: 5px;
         transition: all 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
-        flex-basis: 50%;
-        height: 120vh;
-
-        position: sticky;
+        flex-basis: 30%;
+        /* height: 120vh; */
+        /* position: sticky; */
         top: 6pc;
         z-index: 10;
 
@@ -358,6 +383,16 @@ const isActive = (checkStatus) => {
 
         .contact-info {
             width: 100%;
+
+            h3 {
+                margin-bottom: 20px;
+                font-size: 19px;
+            }
+
+            h2 {
+                margin-bottom: 15px;
+                font-size: 19px;
+            }
 
             button {
                 background-color: var(--main);
@@ -386,7 +421,6 @@ const isActive = (checkStatus) => {
             }
 
             .code {
-                padding-bottom: 20px;
 
                 p {
                     font-size: 12px;
@@ -404,7 +438,7 @@ const isActive = (checkStatus) => {
                 display: flex;
                 align-items: center;
                 position: relative;
-                padding-left: 40px;
+                padding-left: 35px;
                 margin-bottom: 20px;
 
                 &.active .timeline-dot {
@@ -413,8 +447,8 @@ const isActive = (checkStatus) => {
             }
 
             .timeline-dot {
-                width: 20px;
-                height: 20px;
+                width: 17px;
+                height: 17px;
                 border-radius: 50%;
                 background-color: #ccc;
                 position: absolute;
@@ -423,13 +457,20 @@ const isActive = (checkStatus) => {
 
             .timeline-content {
                 p {
-                margin: 0;
+                    margin: 0;
+                    font-size: 14px;
                 }
 
                 .timeline-location {
-                font-weight: bold;
-                font-size: 18px;
+                    font-weight: bold;
+                    font-size: 18px;
                 }
+            }
+        }
+
+        .user-inqui {
+            h4 {
+                font-size: 19px;
             }
         }
 
@@ -443,7 +484,7 @@ const isActive = (checkStatus) => {
         flex-direction: column;
         flex-basis: 100%;
         background-color: var(--header);
-        border-radius: 20px;
+        border-radius: 5px;
 
         flex-grow: 1;
         padding: 20px;
@@ -466,11 +507,63 @@ const isActive = (checkStatus) => {
             flex-direction: column;
             background-color: var(--header);
             border-radius: 20px;
-            cursor: pointer;
+            /* cursor: pointer; */
+
+            position: relative; /* Needed for positioning the overlay */
+            overflow: hidden; /* Ensures the overlay is contained within the card */
+            border-radius: 10px;
+
+            .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6); /* Semi-transparent overlay */
+                color: white;
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                z-index: 1; /* Ensure overlay is above the image */
+                border-radius: 8px;
+
+                h2 {
+                    font-size: 24px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+
+                p {
+                    font-size: 16px;
+                    line-height: 1.5;
+                }
+
+                .buttons {
+                    display: flex;
+                    gap: 10px; /* Spacing between buttons */
+
+                    button {
+                        padding: 10px 20px;
+                        background-color: var(--header);
+                        border: none;
+                        color: white;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease-in-out;
+                        margin-top: 18px;
+
+                        button:hover {
+                            background-color: var(--main-hover);
+                        }
+                    }
+                }
+            }
+
 
             &:hover {
                 background-color: var(--main-hover);
-                border-radius: 20px;
+                border-radius: 5px;
             }
 
             .img {
@@ -478,6 +571,8 @@ const isActive = (checkStatus) => {
                 justify-content: center;
                 width: 100%;
                 margin-bottom: 10px;
+
+                position: relative;
 
                 img {
                 width: 100%;
@@ -507,53 +602,17 @@ const isActive = (checkStatus) => {
 
     .comment-box {
         background-color: #f3f3f3;
-        padding: 15px;
+        padding: 13px;
         border-radius: 5px;
         margin-top: 10px;
         font-style: italic;
-        font-size: 16px;
+        font-size: 14px;
         color: #333;
         max-width: 100%;
         word-wrap: break-word;
     }
 }
 
-@media (max-width: 500px) {
-    .cards {
-        display: flex;
-        flex-direction:column;
-        position: unset;
-        
-        .card {
-            height: 100vh;
-            position: unset;
-
-        }
-        .service-card {
-            .cards1 {
-                padding: 0 30px;
-                .card1 {
-                    .img {
-                        img {
-                        height: 260px;
-                        }
-                    }
-
-                    .info {
-                        h2 {
-                        font-size: 18px;
-                        padding-bottom: 5px;
-                        }
-
-                        p {
-                        font-size: 13px;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 @media (max-width: 700px) {
     .dropdown {
     position: relative;
@@ -589,4 +648,44 @@ const isActive = (checkStatus) => {
     }
 }
 
+@media (max-width: 500px) {
+    .cards {
+        display: flex;
+        flex-direction:column;
+        position: unset;
+        
+        .card {
+            height: 100vh;
+            position: unset;
+
+        }
+        .service-card {
+            .side-card {
+                display: flex;
+                flex-direction: column;
+            }
+        
+            .cards1 {
+                .card1 {
+                    .img {
+                        img {
+                        height: 260px;
+                        }
+                    }
+
+                    .info {
+                        h2 {
+                        font-size: 18px;
+                        padding-bottom: 5px;
+                        }
+
+                        p {
+                        font-size: 13px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 </style>

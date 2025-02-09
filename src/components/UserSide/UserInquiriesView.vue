@@ -36,10 +36,10 @@
                 <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isEditing"></textarea>
                 </div>
 
-                <div class="input-group mb-4">
-                <span class="input-group-text">Address ("optional address")</span>
-                <input v-model="productInfo.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
-                </div>
+                <!-- <div class="input-group mb-4">
+                    <span class="input-group-text">Address ("optional address")</span>
+                    <input v-model="productInfo.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
+                </div> -->
 
                 <div class="buttons">
                     <router-link to="/user-history" class="btn btn-secondary">Back</router-link>

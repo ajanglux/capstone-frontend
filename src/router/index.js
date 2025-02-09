@@ -52,6 +52,13 @@ const routes = [
     beforeEnter: [checkIfNotLogged],
   },
 
+  {
+    path: '/change-password',
+    name: 'change-password',
+    component: () => import('../components/auth/ChangePassword.vue'),
+    beforeEnter: [checkIfLogged, checkIfUser],
+  },
+
   // ADMIN
   {
     path: "/admin-dashboard",

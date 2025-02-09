@@ -4,9 +4,6 @@
       <div class="card-header">
         <h2>LIST OF REPAIRS</h2>
         <div class="left-card">
-          <router-link class="button" to="/repair-history">
-            <span class="text"><i class='bx bx-history'></i>History</span>
-          </router-link>
           <router-link class="button" to="/repair-form">
             <span class="text"><i class='bx bxs-plus-square'></i> ADD REPAIR INFO</span>
           </router-link>
@@ -100,8 +97,8 @@
       <h3>{{ existingComment ? 'Edit Comment' : 'Add Comment' }}</h3>
       <textarea v-model="commentText" placeholder="Enter your comment..."></textarea>
       <div class="modal-actions">
-        <button @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
-        <button @click="showCommentModal = false">Cancel</button>
+        <button class="submit" @click="submitComment">{{ existingComment ? 'Update' : 'Submit' }}</button>
+        <button class="cancel" @click="showCommentModal = false">Cancel</button>
       </div>
     </div>
   </div>
@@ -111,8 +108,8 @@
       <h3>{{ existingComment ? 'Edit Comment' : 'Add Comment' }}</h3>
       <textarea v-model="commentText" placeholder="Enter your comment..."></textarea>
       <div class="modal-actions">
-        <button @click="submitNote">{{ existingComment ? 'Update' : 'Submit' }}</button>
-        <button @click="showNoteModal = false">Cancel</button>
+        <button class="submit" @click="submitNote">{{ existingComment ? 'Update' : 'Submit' }}</button>
+        <button class="cancel" @click="showNoteModal = false">Cancel</button>
       </div>
     </div>
   </div>
@@ -478,7 +475,7 @@ textarea {
 }
 
 button {
-  color: var(--main);
+  color: var(--light);
   border: none;
   padding: 5px 15px;
   border-radius: 5px;

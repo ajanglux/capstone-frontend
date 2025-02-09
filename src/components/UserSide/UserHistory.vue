@@ -1,98 +1,50 @@
 <template>
   <div class="content">
-    <div class="container">
+
       <div class="card-header">
-        <h3>History</h3>
+        <h1>History</h1>
         <div v-if="isLoading">Loading...</div>
       </div>
-      <div class="table-body">
-        <div class="table-header">
-          <div class="searchbar">
-            <i class="bx bx-search"></i>
-            <input type="text" placeholder="Search..." v-model="searchQuery" />
-          </div>
-        </div>
+
 
         <div v-if="errors" class="alert alert-danger">
           <strong>{{ errors }}</strong>
         </div>
 
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Code</th>
-              <th>Date & Time</th>
-              <th>Description</th>
-              <th>Status</th>
-              <th>View</th>
-              <!-- <th v-if="showCancelledColumn">Note</th> -->
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
-              <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
-              <td>{{ repair?.code || 'N/A' }}</td>
-              <td>{{ formatDate(repair.created_at) }}</td>
-              <td>{{ repair.description || 'No description available' }}</td>
-              <td>
-                <span :class="statusClass(repair.status)">
-                  {{ repair.status || 'Pending' }}
-                </span>
-              </td>
-              <td>
-                <button 
-                  v-if="repair.status.toLowerCase()" 
-                  @click="openNoteModal(repair.comment)" 
-                  class="btn-note"
-                  title="View note from admin"
-                >
-                <i class='bx bx-note'></i>
+        <div class="cards-container">
+          <div v-for="(repair, index) in paginatedRepairs" :key="repair.id" class="card">
+            <div class="card-body">
+              <h4>{{ repair?.code || 'N/A' }}</h4>
+              <p>{{ formatDate(repair.created_at) }}</p>
+              <p><strong>Description:</strong> {{ repair.description || 'No description available' }}</p>
+              <p><span :class="statusClass(repair.status)">{{ repair.status || 'Pending' }}</span></p>
+              <div class="card-actions">
+                <button v-if="repair.status.toLowerCase()" @click="openNoteModal(repair.comment)" class="btn-note" title="View note from admin">
+                  <i class='bx bxs-notepad'></i>
                 </button>
-
-                <button 
-                  class="btn-note"
-                  @click="confirmStatusChange(repair)"
-                  :disabled="repair.status === 'On-Going' || status === 'Finished' || status === 'Ready-for-Pickup' || status === 'Completed' || status === 'Unrepairable'"
-                  title="Cancel Repair Request"
-                >
-                <i class='bx bxs-x-circle'></i>
+                <button class="btn-note" @click="confirmStatusChange(repair, 'Cancelled')" :disabled="['Cancelled', 'On-Going', 'Finished', 'Ready-for-Pickup', 'Completed', 'Unrepairable', 'Responded'].includes(repair.status)" title="Cancel Repair Request">
+                  <i class='bx bxs-x-circle'></i>
                 </button>
-
-                <button 
-                @click="viewRepair(repair)" class="btn btn-note"
-                title="View Details"
-                >
+                <button class="btn-note" @click="confirmStatusChange(repair, 'Pending')" :disabled="['On-Going', 'Finished', 'Ready-for-Pickup', 'Completed', 'Pending', 'Unrepairable'].includes(repair.status)" title="Re-Inquire Repair Request">
+                  <i class='bx bxs-time'></i>
+                </button>
+                <button @click="viewRepair(repair)" class="btn btn-note" title="View Details">
                   <i class="bx bx-show"></i>
                 </button>
-              </td>
-              <!-- <td v-if="repair.status.toLowerCase() === 'cancelled'">
-                <button @click="openNoteModal(repair.comment)" class="btn btn-note">
-                  <i class="bx bx-message-square-detail"></i> View Note
-                </button>
-              </td> -->
-            </tr>
-            <tr v-if="paginatedRepairs.length === 0">
-              <td colspan="7"><strong>No records found.</strong></td>
-            </tr>
-          </tbody>
-        </table>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <!-- <div class="pagination-controls">
-          <span class="page-indicator">
-            Page {{ currentPage }} of {{ totalPages }}
-          </span>
-          <button @click="previousPage" :disabled="currentPage === 1" class="prev-btn">Previous</button>
-          <button @click="nextPage" :disabled="currentPage === totalPages" class="next-btn">Next</button>
-        </div> -->
-      </div>
-    </div>
+        <div v-if="paginatedRepairs.length === 0" class="no-records">
+          <strong>No records found.</strong>
+        </div>
   </div>
 
   <ConfirmationDialog
     :show="showConfirmationDialog"
     @close="showConfirmationDialog = false"
-    @confirm="updateStatusToOnGoing"
+    @confirm="updateStatus"
     :message="confirmationMessage"
   />
 
@@ -128,6 +80,8 @@ const itemsPerPage = ref(10);
 const showNoteModal = ref(false);
 const selectedNote = ref("");
 
+const selectedStatusAction = ref('');
+
 const selectedRepair = ref(null);
 const showConfirmationDialog = ref(false);
 const confirmationMessage = ref('');
@@ -161,25 +115,33 @@ const fetchRepairs = async () => {
   }
 };
 
-const confirmStatusChange = (repair) => {
-  confirmationMessage.value = `Are you sure you want to update the status of this repair to On-Going?`;
-  showConfirmationDialog.value = true;
+const confirmStatusChange = (repair, status) => {
   selectedRepair.value = repair;
+  selectedStatusAction.value = status;
+  confirmationMessage.value = `Are you sure you want to update the status of this repair to ${status}?`;
+  showConfirmationDialog.value = true;
 };
 
-const updateStatusToOnGoing = async () => {
+const updateStatus = async () => {
   if (!selectedRepair.value) return;
 
   isLoading.value = true;
   try {
-    await axios.patch(`${BASE_URL}/customer-details/${selectedRepair.value.id}/status`, { status: 'Cancelled' }, getHeaderConfig(authStore.access_token));
-    
-    const repair = repairs.value.find(r => r.id === selectedRepair.value.id);
-    if (repair) repair.status = 'Cancelled';
+    const response = await axios.patch(
+      `${BASE_URL}/customer-details/${selectedRepair.value.id}/status`,
+      { status: selectedStatusAction.value }, // Ensure correct payload
+      getHeaderConfig(authStore.access_token)
+    );
 
-    showToast("success", "Cancelled successfully");
+    // Update the status in the local list
+    const repair = repairs.value.find(r => r.id === selectedRepair.value.id);
+    if (repair) {
+      repair.status = selectedStatusAction.value;
+    }
+
+    showToast("success", `${selectedStatusAction.value} successfully`);
   } catch (error) {
-    console.error(`Error updating repair status to Cancelled:`, error);
+    console.error(`Error updating repair status to ${selectedStatusAction.value}:`, error);
     const errorMessage = error.response?.data?.message || 'Error updating repair status';
     showToast("error", errorMessage);
   } finally {
@@ -219,23 +181,6 @@ const paginatedRepairs = computed(() => {
   return filteredRepairs.value.slice(start, start + itemsPerPage.value);
 });
 
-// Total Pages
-const totalPages = computed(() => {
-  return Math.ceil(filteredRepairs.value.length / itemsPerPage.value);
-});
-
-// Navigate Pages
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
-};
-
-const previousPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
-};
 
 const viewRepair = (repair) => {
   const description = repair.description.toLowerCase();
@@ -275,10 +220,40 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .content {
-    padding: 110px 40px 40px 40px;
+  padding: 110px 40px 40px 40px;
 }
 
-.table-body {
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.card {
+  background: var(--header);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  text-align: left;
+
+  h4 {
+    color: var(--light);
+    // margin-bottom: 10px;
+  }
+
+  p {
+    color: var(--light);
+    margin-top: 10px;
+  }
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
   margin-top: 10px;
 }
 
@@ -289,6 +264,7 @@ onMounted(() => {
   font-weight: bold;
   display: inline-block;
   text-transform: uppercase;
+  margin-top: 5px;
 }
 
 .badge-pending {
@@ -302,7 +278,7 @@ onMounted(() => {
 }
 
 .badge-progress {
-  background-color: var(--header);
+  background-color: black;
   color: white;
 }
 
@@ -328,14 +304,10 @@ onMounted(() => {
 }
 
 .btn-note:disabled {
-  background-color: #ccc; /* Gray out the background */
-  color: #666; /* Lighter text color */
-  cursor: not-allowed; /* Show not-allowed cursor */
-  opacity: 0.6; /* Reduce opacity */
-}
-
-.btn-note {
-  background-color: var(--header);
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .btn-note:hover {
@@ -364,14 +336,9 @@ onMounted(() => {
 
   button {
     color: white;
-  }
-  .modal-actions {
-    padding: 6px;
-    border-radius: 10px;
-    background-color: var(--main);
-    color: white;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    border: none;
+    background-color: var(--header);
+    padding: 10px;
+    border-radius: 5px;
   }
 }
 

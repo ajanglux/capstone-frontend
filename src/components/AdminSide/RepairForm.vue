@@ -94,7 +94,7 @@
             <div><h4>Service: {{ model.description }}</h4></div>
             <div class="input-group mb-4">
               <span class="input-group-text"></span>
-              <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isViewing"></textarea>
+              <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isViewing || isEditing"></textarea>
             </div>
 
         <div class="whole-checklist">

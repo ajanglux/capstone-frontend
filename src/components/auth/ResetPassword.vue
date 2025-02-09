@@ -11,7 +11,7 @@
           type="text"
           id="token"
           class="form-control"
-          placeholder="Enter Token"
+          placeholder="Enter Code"
           required
         />
       </div>

@@ -1,106 +1,108 @@
 <template>
-  <div class="container">
-    <div class="signup-card-wrapper">
-      <div class="signup-card">
-        <div class="header">
-          <h3>Register</h3>
-        </div>
-        <div class="card-body">
-          <form @submit.prevent="registerUser">
-            <div class="form-group mb-3">
-              <input 
-                type="text" 
-                v-model="data.user.first_name"
-                placeholder="First Name" 
-                class="form-control rounded-0"
-                required>
-            </div>
-            <div class="form-group mb-3">
-              <input 
-                type="text" 
-                v-model="data.user.last_name"
-                placeholder="Last Name" 
-                class="form-control rounded-0"
-                required>
-            </div>
-            <div class="form-group mb-3">
-              <input 
-                type="text" 
-                v-model="data.user.phone_number"
-                @input="validatePhoneNumber"
-                placeholder="Phone Number" 
-                class="form-control rounded-0"
-                required>
-            </div>
-            <div class="form-group mb-3">
-              <input 
-                type="text" 
-                v-model="data.user.address"
-                placeholder="Address" 
-                class="form-control rounded-0"
-                required>
-            </div>
-            <div class="form-group mb-3">
-              <input 
-                type="email" 
-                v-model="data.user.email"
-                placeholder="Email" 
-                class="form-control rounded-0"
-                required>
-            </div>
-            <div class="form-group mb-3 position-relative">
-              <input 
-                :type="passwordVisible ? 'text' : 'password'" 
-                v-model="data.user.password"
-                placeholder="Password" 
-                class="form-control rounded-0"
-                required>
-              <i 
-              id="show-hide"
-                class="bx" 
-                :class="passwordVisible ? 'bx-show' : 'bx-hide'" 
-                @click="togglePasswordVisibility" 
-                ></i>
-            </div>
-            <div class="form-group mb-3 position-relative">
-              <input 
-                :type="confirmPasswordVisible ? 'text' : 'password'" 
-                v-model="data.user.password_confirmation"
-                placeholder="Confirm Password" 
-                class="form-control rounded-0"
-                required>
-              <i 
-              id="show-hide"
-                class="bx" 
-                :class="confirmPasswordVisible ? 'bx-show' : 'bx-hide'" 
-                @click="toggleConfirmPasswordVisibility" 
-                ></i>
-            </div>
-
-            <div class="terms-checkbox">
-              <input type="checkbox" v-model="isTermsChecked" id="termsCheckbox" @input="validateTerms" />
-                <p> I agree to the <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer"> Terms and Conditions </a> &
-                  <a href="/privacy-policy" target="_blank" rel="noopener noreferrer"> Privacy Policy </a>
-                </p>
-            </div>
-
-            <div class="form-group mb-3 text-center">
-              <Spinner v-if="data.loading" />
-              <button v-else type="submit" class="btn btn-dark btn-sm rounded-0 w-100">
-                Submit
-              </button> <br>
-              <div class="down">
-                <p> Already have an account?  <router-link class="primary" to="/login">Login</router-link></p>
-                <router-link class="secondary" to="/">Go Back</router-link>
+  <div class="signup-container">
+    <Transition name="slide-in" appear>
+      <div class="signup-card-wrapper">
+        <div class="signup-card">
+          <div class="header">
+            <h3>Register</h3>
+          </div>
+          <div class="card-body">
+            <form @submit.prevent="registerUser">
+              <div class="form-group mb-3">
+                <input 
+                  type="text" 
+                  v-model="data.user.first_name"
+                  placeholder="First Name" 
+                  class="form-control rounded-0"
+                  required>
               </div>
-            </div>
-          </form>
+              <div class="form-group mb-3">
+                <input 
+                  type="text" 
+                  v-model="data.user.last_name"
+                  placeholder="Last Name" 
+                  class="form-control rounded-0"
+                  required>
+              </div>
+              <div class="form-group mb-3">
+                <input 
+                  type="text" 
+                  v-model="data.user.phone_number"
+                  @input="validatePhoneNumber"
+                  placeholder="Phone Number" 
+                  class="form-control rounded-0"
+                  required>
+              </div>
+              <div class="form-group mb-3">
+                <input 
+                  type="text" 
+                  v-model="data.user.address"
+                  placeholder="Address" 
+                  class="form-control rounded-0"
+                  required>
+              </div>
+              <div class="form-group mb-3">
+                <input 
+                  type="email" 
+                  v-model="data.user.email"
+                  placeholder="Email" 
+                  class="form-control rounded-0"
+                  required>
+              </div>
+              <div class="form-group mb-3 position-relative">
+                <input 
+                  :type="passwordVisible ? 'text' : 'password'" 
+                  v-model="data.user.password"
+                  placeholder="Password" 
+                  class="form-control rounded-0"
+                  required>
+                <i 
+                id="show-hide"
+                  class="bx" 
+                  :class="passwordVisible ? 'bx-show' : 'bx-hide'" 
+                  @click="togglePasswordVisibility" 
+                  ></i>
+              </div>
+              <div class="form-group mb-3 position-relative">
+                <input 
+                  :type="confirmPasswordVisible ? 'text' : 'password'" 
+                  v-model="data.user.password_confirmation"
+                  placeholder="Confirm Password" 
+                  class="form-control rounded-0"
+                  required>
+                <i 
+                id="show-hide"
+                  class="bx" 
+                  :class="confirmPasswordVisible ? 'bx-show' : 'bx-hide'" 
+                  @click="toggleConfirmPasswordVisibility" 
+                  ></i>
+              </div>
+
+              <div class="terms-checkbox">
+                <input type="checkbox" v-model="isTermsChecked" id="termsCheckbox" @input="validateTerms" />
+                  <p> I agree to the <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer"> Terms and Conditions </a> &
+                    <a href="/privacy-policy" target="_blank" rel="noopener noreferrer"> Privacy Policy </a>
+                  </p>
+              </div>
+
+              <div class="form-group mb-3 text-center">
+                <Spinner v-if="data.loading" />
+                <button v-else type="submit" class="btn btn-dark btn-sm rounded-0 w-100">
+                  Submit
+                </button> <br>
+                <div class="down">
+                  <p> Already have an account?  <router-link class="primary" to="/login">Login</router-link></p>
+                  <router-link class="secondary" to="/">Go Back</router-link>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+          <div class="logo">
+            <img src="/src/assets/techfix.png" >
+          </div>
       </div>
-      <div class="logo">
-        <img src="/src/assets/techfix.png" >
-      </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
@@ -180,12 +182,10 @@ const showToast = (icon, title) => {
   });
 };
 
-// Password validation logic
 const validatePassword = () => {
   const password = data.user.password;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\d\s:]).+$/;
 
-  // Check password for required conditions
   if (!passwordRegex.test(password)) {
     showToast("error", "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
     return false;
@@ -251,29 +251,24 @@ const registerUser = async () => {
 
 
 <style lang="scss" scoped>
-.container {
+.signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background-color: rgb(12, 68, 110);
-  padding: 30px;
+  height: 100vh;
 }
 
 .signup-card-wrapper {
   display: flex;
-  border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-  width: 60%;
+  flex-direction: row;
+  width: 100%;
 }
 
 .signup-card {
-  width: 100%;
+  flex-basis: 50%;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  background-color: var(--light);
-  padding: 30px 60px 20px 60px;
+  padding: 0 130px;
   align-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
@@ -287,15 +282,17 @@ const registerUser = async () => {
 
   #show-hide {
     position: absolute;
-    margin-top: 18px;
+    margin-top: 14px;
     right: 15px;
   }
 
   .form-control {
-    padding: 5px 13px;
-    font-size: 14px;
+    padding: 12px;
+    font-size: 15px;
     border-radius: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+    border: 1px solid var(--header);
   }
 
   .header h3 {
@@ -306,6 +303,7 @@ const registerUser = async () => {
     color: var(--main);
     text-align: center;
     font-family: 'Poppins';
+    
   }
 
   .text-center {
@@ -316,7 +314,7 @@ const registerUser = async () => {
   input {
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--header);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
@@ -359,6 +357,8 @@ const registerUser = async () => {
 
     input[type="checkbox"] {
       width: 15px;
+      margin-top: 13px;
+      margin-right: 5px;
     }
 
     input[type="checkbox"]:checked {
@@ -385,89 +385,118 @@ const registerUser = async () => {
 }
 
 .logo {
-  width: 100%;
-  height: auto;
+  flex-basis: 90%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: var(--main);
-  align-content: space-evenly;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-left-radius: 12%;
+  border-bottom-left-radius: 12%;
 
   img {
-    width: 100%;
+    width: 70%;
   }
 }
+
+.slide-in-enter-active {
+  transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+
+.slide-in-enter-from {
+  transform: translateX(100px); /* Start from the right */
+  opacity: 0;
+}
+
+.slide-in-enter-to {
+  transform: translateX(0); /* Move to normal position */
+  opacity: 1;
+}
+
 
 @media (max-width: 500px) {
   .container {
-  padding: 10px;
-}
-  .signup-card-wrapper {
-  display: flex;
-  flex-direction: row;
-  border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-  width: 80%;
-}
-
-.signup-card {
-  padding: 30px 30px 20px 30px;
-
-  .header h3 {
-    font-size: 30px;
+    padding: 10px;
   }
-
-
-  .btn {
-    letter-spacing: 1px;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 50px;
-    background-color: var(--main);
-    color: white;
-    width: 50%;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    border: none;
-  }
-
-  .btn:hover {
-    background-color: var(--main-hover);
-    transform: translateY(-2px);
-  }
-
-  .terms-checkbox {
+    .signup-card-wrapper {
     display: flex;
-    padding-bottom: 10px;
-    margin-top: -15px;
+    flex-direction: row;
+    border-radius: 12px;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    width: 80%;
+  }
 
-    input[type="checkbox"] {
-      width: 15px;
+  .signup-card {
+    padding: 30px 30px 20px 30px;
+    flex-basis: 100%;
+
+    .header h3 {
+      font-size: 30px;
     }
 
-    input[type="checkbox"]:checked {
-      accent-color: var(--header);
+
+    .btn {
+      letter-spacing: 1px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 50px;
+      background-color: var(--main);
+      color: white;
+      width: 50%;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      border: none;
     }
 
-    p {
-      font-size: 12px;
-      color: black;
-      margin-top: 15.5px;
-      padding-left: 3px;
+    .btn:hover {
+      background-color: var(--main-hover);
+      transform: translateY(-2px);
     }
 
-    a {
-      font-size: 12px;
-      color: var(--header);
+    .terms-checkbox {
+      display: flex;
+      padding-bottom: 10px;
+      margin-top: -15px;
 
-      &:hover {
-        text-decoration: underline;
+      input[type="checkbox"] {
+        width: 20px;
+      }
+
+      input[type="checkbox"]:checked {
+        accent-color: var(--header);
+      }
+
+      p {
+        font-size: 12px;
+        color: black;
+        margin-top: 15.5px;
+        padding-left: 3px;
+      }
+
+      a {
+        font-size: 12px;
+        color: var(--header);
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }
-  
+  .logo {
+    display: none;
+  }
 }
 
-.logo {
-  display: none;
-}
+@media (max-width: 400px) {
+  .signup-card {
+    padding: 0px 28px 0px 29px;
+    flex-basis: 100%;
+  }
+
+  .down {
+    padding-top: 11px;
+    padding-bottom: 12px;
+  }
+
 }
 </style>

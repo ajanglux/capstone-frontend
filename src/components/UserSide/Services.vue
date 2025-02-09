@@ -138,7 +138,7 @@ const goToContactUs = (serviceTitle) => {
 .content-container {
   display: flex;
   flex-direction: column;
-  background: var(--header);
+  background: var(--light);
   min-height: 100vh;
   width: 100vw;
 
@@ -146,7 +146,8 @@ const goToContactUs = (serviceTitle) => {
     font-family: 'Poppins';
     font-size: 3.5em;
     margin: 100px 0 18px 40px;
-    color: var(--light);
+    color: var(--header);
+    font-weight: 800;
   }
 
   .error {
@@ -172,18 +173,20 @@ const goToContactUs = (serviceTitle) => {
   // .line-card {
     .card {
       flex: 1;
-      padding: 25px;
+      // padding: 31px;
       color: var(--light2);
       transition: all 0.3s ease-in-out;
       display: flex;
       flex-direction: column;
       background-color: var(--main-hover);
-      border-radius: 20px;
+      // border-radius: 20px;
       cursor: pointer;
+      box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 
       &:hover {
         background-color: var(--main);
-        border-radius: 20px;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+        // border-radius: 20px;
       }
 
       .img {
@@ -198,17 +201,27 @@ const goToContactUs = (serviceTitle) => {
           object-fit: cover;
           object-position: center;
           align-content: center;
-          border-radius: 10px;
+          // border-radius: 10px;
+
+          // &:hover {
+          //   border-radius: 20px;
+          // }
         }
       }
 
       .info {
         h2 {
           font-size: 20px;
+          margin-left: 17px;
+          margin-top: 15px
         }
 
         p {
           font-size: 15px;
+          margin-left: 18px;
+          margin-bottom: 23px;
+          margin-right: 6px;
+          margin-top: 11px;
         }
       }
     // }
@@ -286,7 +299,6 @@ const goToContactUs = (serviceTitle) => {
     h1 {
       font-size: 2.5em;
       margin: 90px 0 18px 40px;
-      color: var(--light);
     }
   }
   .cards {
