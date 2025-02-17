@@ -48,7 +48,7 @@
                 <div class="custom-select">
                   <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                     <option value="">Select Action</option>
-                    <option value="edit">Edit</option>
+                    <option value="edit">Modify</option>
                     <option value="Note" title="Send Note for this User">Note</option>
                     <option value="view">Print Statement</option>
                     <!-- <option value="Cancelled" :disabled="repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'On-Going' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Cancel</option> -->

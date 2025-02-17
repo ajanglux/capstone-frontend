@@ -156,50 +156,60 @@ try {
 }
 };
 
-
 const filteredRepairs = computed(() => {
   return repairs.value
-      .filter(repair => repair.status === 'Completed' || repair.status === 'Cancelled' || repair.status === 'Unrepairable')
-      .filter(repair => {
-          if (!selectedFilterValue.value) return true;
-          
-          const repairDate = new Date(repair.created_at);
-          const filterValue = new Date(selectedFilterValue.value);
+    .filter(repair => ['Completed', 'Cancelled', 'Unrepairable'].includes(repair.status))
+    .filter(repair => {
+      if (!selectedFilterValue.value) return true;
 
-          if (filterType.value === 'daily') {
-              return repairDate.toDateString() === filterValue.toDateString();
-          } else if (filterType.value === 'weekly') {
-              const weekStart = new Date(filterValue);
-              weekStart.setDate(filterValue.getDate() - filterValue.getDay()); // Set to the start of the week (Sunday)
+      const repairDate = new Date(repair.created_at);
+      const filterValue = new Date(selectedFilterValue.value);
 
-              const weekEnd = new Date(weekStart);
-              weekEnd.setDate(weekStart.getDate() + 6); // Set to the end of the week (Saturday)
+      if (filterType.value === 'daily') {
+        return repairDate.toDateString() === filterValue.toDateString();
+      } else if (filterType.value === 'weekly') {
+        // Ensure selected date is treated as the start of the week (Monday)
+        const weekStart = new Date(filterValue);
+        weekStart.setDate(weekStart.getDate() - (weekStart.getDay() === 0 ? 6 : weekStart.getDay() - 1)); // Move to Monday
 
-              return repairDate >= weekStart && repairDate <= weekEnd;
-          } else if (filterType.value === 'monthly') {
-              return (
-                  repairDate.getFullYear() === filterValue.getFullYear() &&
-                  repairDate.getMonth() === filterValue.getMonth()
-              );
-          }
-          return false;
-      })
-      .filter(repair => {
-          const searchText = searchQuery.value.toLowerCase();
-          const fullName = `${repair.user?.first_name || ''} ${repair.user?.last_name || ''}`.toLowerCase().trim();
-          return (
-              repair.code?.toLowerCase().includes(searchText) ||
-              fullName.includes(searchText)
-          );
-      })
-      .sort((a, b) => new Date(b.status_updated_at) - new Date(a.status_updated_at));
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6); // Move to Sunday
+
+        console.log(`Filtering Weekly: ${weekStart.toDateString()} - ${weekEnd.toDateString()}`);
+        console.log(`Repair Date: ${repairDate.toDateString()}`);
+
+        return repairDate >= weekStart && repairDate <= weekEnd;
+      } else if (filterType.value === 'monthly') {
+        return (
+          repairDate.getFullYear() === filterValue.getFullYear() &&
+          repairDate.getMonth() === filterValue.getMonth()
+        );
+      }
+      return false;
+    })
+    .filter(repair => {
+      const searchText = searchQuery.value.toLowerCase();
+      const fullName = `${repair.user?.first_name || ''} ${repair.user?.last_name || ''}`.toLowerCase().trim();
+      return (
+        repair.code?.toLowerCase().includes(searchText) ||
+        fullName.includes(searchText)
+      );
+    })
+    .sort((a, b) => new Date(b.status_updated_at) - new Date(a.status_updated_at));
 });
 
+
 const generateReport = async () => {
+  if (filteredRepairs.value.length === 0) {
+    toast.warning("No records found for the selected period", { timeout: 3000 });
+    return;
+  }
+
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet(`${filterType.value.charAt(0).toUpperCase() + filterType.value.slice(1)} Report`);
 
-  worksheet.addRow([`TECHFIX ${filterType.value.charAt(0).toUpperCase() + filterType.value.slice(1)} Report`]).font = { bold: true, size: 26 };
+  worksheet.addRow([`TECHFIX ${filterType.value.charAt(0).toUpperCase() + filterType.value.slice(1)} Report`]).font = { bold: true, size: 20 };
+  worksheet.addRow([]);
   worksheet.addRow(['Date Completed', 'Client', 'Status']).font = { bold: true };
 
   filteredRepairs.value.forEach((repair) => {
@@ -210,18 +220,32 @@ const generateReport = async () => {
     ]);
   });
 
-  worksheet.getColumn(1).width = 17; // Date Completed
-  worksheet.getColumn(2).width = 20; // Client
-  worksheet.getColumn(3).width = 10; // Status
+  worksheet.columns.forEach(column => {
+    column.width = 20; 
+  });
 
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   const link = document.createElement('a');
+  
+  let fileName = `${filterType.value.charAt(0).toUpperCase() + filterType.value.slice(1)}-Report`;
+
+  if (filterType.value === 'weekly') {
+    const startOfWeek = new Date(selectedFilterValue.value);
+    startOfWeek.setDate(startOfWeek.getDate() - (startOfWeek.getDay() === 0 ? 6 : startOfWeek.getDay() - 1)); // Adjust to Monday
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // End of the week (Sunday)
+    fileName += `-${formatDate(startOfWeek)}_to_${formatDate(endOfWeek)}`;
+  } else {
+    fileName += `-${selectedFilterValue.value}`;
+  }
+
   link.href = URL.createObjectURL(blob);
-  link.setAttribute('download', `${filterType.value.charAt(0).toUpperCase() + filterType.value.slice(1)}-Report-${selectedFilterValue.value}.xlsx`);
+  link.setAttribute('download', `${fileName}.xlsx`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  toast.success("Report generated successfully!", { timeout: 3000 });
 };
 
 const formatDate = (dateString) => {

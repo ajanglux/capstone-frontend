@@ -31,15 +31,19 @@
 
         <div class="input-group">
           <div class="form-field">
+            <label for="address">Age</label>
+            <input v-model="userProfile.age" type="text" id="age" placeholder="Street, City, State, ZIP Code" required />
+          </div>
+          <div class="form-field">
             <label for="address">Address</label>
             <input v-model="userProfile.address" type="text" id="address" placeholder="Street, City, State, ZIP Code" required />
           </div>
         </div>
 
         <div class="button">
-          <p>
+          <!-- <p>
             <router-link class="btn btn-primary" to="">Change Email</router-link>
-          </p>
+          </p> -->
           <button type="submit" class="btn btn-primary" :disabled="isProfileUnchanged">Update Profile</button>
         </div>
       </form>
@@ -59,6 +63,7 @@ import Swal from 'sweetalert2';
 const userProfile = ref({
   first_name: '',
   last_name: '',
+  age: '',
   email: '',
   phone_number: '',
   address: ''

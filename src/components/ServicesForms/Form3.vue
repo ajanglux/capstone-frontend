@@ -38,9 +38,9 @@
         </div>
 
         <div class="buttons">
-          <h2>Service Description</h2>
+          <h2>Service: {{ model.description }}</h2>
         </div>
-        <div><h4>Service: {{ model.description }}</h4></div>
+        <div><h3>Other Description</h3></div>
         <div class="input-group mb-4">
           <span class="input-group-text"></span>
           <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isViewing"></textarea>

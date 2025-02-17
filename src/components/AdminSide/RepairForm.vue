@@ -57,7 +57,7 @@
                 :disabled="isViewing"
               />
             </div>
-
+<!-- 
             <div class="buttons">
               <h2>WARRANTY STATUS</h2>
             </div>
@@ -74,7 +74,8 @@
                 <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" :disabled="isViewing" />
                 <label class="form-check-label" for="chargeable">Chargeable</label>
               </div>
-            </div>
+            </div> -->
+
             <div class="input-group mb-3">
               <span class="input-group-text">Purchase Date</span>
               <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isViewing"/>
@@ -105,33 +106,49 @@
 
             <div class="accessory">
               <span class="input-group-text">AC Adapter</span>
-              <input v-model="productInfo.ac_adapter" type="radio" id="ac_adapter" value="ac_adapter" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input 
+                v-model="productInfo.ac_adapter" 
+                type="checkbox" 
+                id="ac_adapter" 
+                class="form-control" 
+                :disabled="isViewing"
+                true-value="yes" 
+                false-value="no"
+              />
+              <!-- <label for="ac_adapter">
+                <span v-if="productInfo.ac_adapter === 'yes'">✔️</span>
+              </label> -->
             </div>
 
             <div class="accessory">
               <span class="input-group-text">VGA Cable</span>
-              <input v-model="productInfo.vga_cable" type="radio" id="vga_cable" value="vga_cable" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.vga_cable" type="checkbox" id="vga_cable" value="vga_cable" class="form-control" :disabled="isViewing" true-value="yes" 
+              false-value="no" />
             </div>
 
             <div class="accessory">
               <span class="input-group-text">DVI Cable</span>
-              <input v-model="productInfo.dvi_cable" type="radio" id="dvi_cable" value="dvi_cable" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.dvi_cable" type="checkbox" id="dvi_cable" value="dvi_cable" class="form-control" :disabled="isViewing" true-value="yes" 
+              false-value="no" />
             </div>
           </div> 
           <div class="checkbox">
             <div class="accessory">
               <span class="input-group-text">Display Cable</span>
-              <input v-model="productInfo.display_cable" type="radio" id="display_cable" value="display_cable" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.display_cable" type="checkbox" id="display_cable" value="display_cable" class="form-control" :disabled="isViewing" true-value="yes" 
+              false-value="no" />
             </div>
 
             <div class="accessory">
               <span class="input-group-text">Bag (PN)</span>
-              <input v-model="productInfo.bag_pn" type="radio" id="bag" value="bag" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.bag_pn" type="checkbox" id="bag" value="bag" class="form-control" :disabled="isViewing" true-value="yes" 
+              false-value="no" />
             </div>
 
             <div class="accessory">
               <span class="input-group-text">HDD</span>
-              <input v-model="productInfo.hdd" type="radio" id="hdd" value="hdd" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              <input v-model="productInfo.hdd" type="checkbox" id="hdd" value="hdd" class="form-control" :disabled="isViewing" true-value="yes" 
+              false-value="no" />
             </div>
           </div>
 

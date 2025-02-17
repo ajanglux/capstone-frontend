@@ -118,43 +118,45 @@ const verifyEmailToken = async () => {
 };
 
 const userAuth = async () => {
-  data.loading = true
+  data.loading = true;
 
   try {
-    const response = await axios.post(`${BASE_URL}/user/login`, data.user)
-    data.loading = false
+    const response = await axios.post(`${BASE_URL}/user/login`, data.user);
+    data.loading = false;
 
     if (response.data.error) {
-      showToast("error", response.data.error)
+      showToast("error", response.data.error);
     } else {
-      const user = response.data.user
-      const token = response.data.currentToken
+      const user = response.data.user;
+      const token = response.data.currentToken;
 
-      if (user.role === 0) { 
-        store.setToken(token)
-        store.setUser(user)
-        showToast("success", response.data.message)
-        router.push('/home')
+      if (user.role === 0) {
+        store.setToken(token);
+        store.setUser(user);
+        showToast("success", response.data.message);
+        router.push("/home");
       } else {
-        showToast("error", "Access Denied")
-        store.clearToken()
-        store.clearUser()
+        showToast("error", "Access Denied");
+        store.clearToken();
+        store.clearUser();
       }
     }
   } catch (error) {
-    data.loading = false
+    data.loading = false;
 
-    if (error.response?.status === 422) {
-      store.setErrors(error.response.data.errors)
+    if (error.response?.status === 404) {
+      showToast("error", "No account found with this email.");
     } else if (error.response?.status === 401) {
-      showToast("error", "Incorrect password. Please try again.")
+      showToast("error", "Incorrect password. Please try again.");
+    } else if (error.response?.status === 422) {
+      store.setErrors(error.response.data.errors);
     } else {
-      showToast("error", "An unexpected error occurred. Please try again.")
+      showToast("error", "An unexpected error occurred. Please try again.");
     }
 
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 onMounted(() => {
   verifyEmailToken()

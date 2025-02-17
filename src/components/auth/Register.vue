@@ -27,6 +27,14 @@
               <div class="form-group mb-3">
                 <input 
                   type="text" 
+                  v-model="data.user.age"
+                  placeholder="Age" 
+                  class="form-control rounded-0"
+                  required>
+              </div>
+              <div class="form-group mb-3">
+                <input 
+                  type="text" 
                   v-model="data.user.phone_number"
                   @input="validatePhoneNumber"
                   placeholder="Phone Number" 
@@ -79,7 +87,7 @@
               </div>
 
               <div class="terms-checkbox">
-                <input type="checkbox" v-model="isTermsChecked" id="termsCheckbox" @input="validateTerms" />
+                <input type="checkbox" v-model="isTermsChecked" id="termsCheckbox" @input="validateTerms" required />
                   <p> I agree to the <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer"> Terms and Conditions </a> &
                     <a href="/privacy-policy" target="_blank" rel="noopener noreferrer"> Privacy Policy </a>
                   </p>
@@ -139,6 +147,7 @@ const data = reactive({
   user: {
       first_name: '',
       last_name: '',
+      age: '',
       phone_number: '',
       address: '',
       email: '',
@@ -196,12 +205,12 @@ const validatePassword = () => {
 const registerUser = async () => {
   data.loading = true
 
-  validateTerms();
-  if (termsError.value) {
-    showToast("error", "You must agree to the terms and conditions.");
-    data.loading = false;
-    return;
-  }
+  // validateTerms();
+  // if (termsError.value) {
+  //   showToast("error", "You must agree to the terms and conditions.");
+  //   data.loading = false;
+  //   return;
+  // }
 
   if (!validatePassword()) {
     data.loading = false;

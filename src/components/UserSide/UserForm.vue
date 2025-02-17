@@ -32,7 +32,7 @@
                             />
                         </div>
   
-                        <div class="buttons">
+                        <!-- <div class="buttons">
                             <h2>WARRANTY STATUS</h2>
                         </div>
                         <div class="custom-checkboxes">
@@ -48,7 +48,8 @@
                                 <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" disabled />
                                 <label class="form-check-label" for="chargeable">Chargeable</label>
                             </div>
-                        </div>
+                        </div> -->
+
                         <div class="input-group mb-3">
                             <span class="input-group-text">Purchase Date</span>
                             <input v-model="productInfo.purchase_date" type="date" class="form-control" disabled/>

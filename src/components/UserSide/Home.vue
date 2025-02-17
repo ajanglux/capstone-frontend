@@ -94,15 +94,13 @@
                         <div class="line-card">
                             <div class="card1">
                                 <div class="img">
-                                    <img src="../../assets/computer-repair.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <img src="../../assets/Laptop-check.jpg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
-                                        <h2>Computer Service & Repair</h2>
-                                        <p>
-                                            Expert computer service and repair to fix hardware, software, and performance issues quickly and efficiently.
-                                        </p>
+                                        <h2>Free: Check up for Laptop & Desktop</h2>
+                                        <p>Get a free check-up for your laptop or desktop to ensure optimal performance and catch potential issues early.</p>
                                         <div class="buttons">
                                             <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
-                                            <button @click="goToContactForm1('Computer Service & Repair')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
+                                            <!-- <button @click="goToContactForm1('Free: Check up for Laptop & Desktop')"><i class='bx bxs-edit-alt'></i> Inquire Now</button> -->
                                         </div>
                                     </div>
                                 </div>
@@ -112,13 +110,15 @@
                         <div class="side-card">
                             <div class="card1">
                                 <div class="img">
-                                    <img src="../../assets/Laptop-check.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <img src="../../assets/computer-repair.jpg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
-                                        <h2>Free: Check up for Laptop & Desktop</h2>
-                                        <p>Get a free check-up for your laptop or desktop to ensure optimal performance and catch potential issues early.</p>
+                                        <h2 class="h2-1">Computer Repair</h2>
+                                        <p class="p1">
+                                            Expert computer service and repair to fix hardware, software, and performance issues quickly and efficiently.
+                                        </p>
                                         <div class="buttons">
                                             <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
-                                            <button @click="goToContactForm1('Free: Check up for Laptop & Desktop')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
+                                            <button @click="goToContactForm1('Computer Repair')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
                                         </div>
                                     </div>
                                 </div>
@@ -128,8 +128,8 @@
                                 <div class="img">
                                     <img src="../../assets/hardware-installation.jpg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
-                                        <h2>Software and Hardware Installation</h2>
-                                        <p>Professional software and hardware installation services to ensure your devices are set up and running smoothly.</p>
+                                        <h2 class="h2-1">Software and Hardware Installation</h2>
+                                        <p class="p1">Professional software and hardware installation services to ensure your devices are set up and running smoothly.</p>
                                         <div class="buttons">
                                             <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactForm1('Software and Hardware Installation')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
@@ -147,8 +147,8 @@
                                 <div class="img">
                                     <img src="../../assets/reset.jpg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
-                                        <h2>Reformat & Reprogram</h2>
-                                        <p>Reliable reformat and reprogram services to restore your system’s performance and resolve software issues.</p>
+                                        <h2 class="h2-1">Reformat & Reprogram</h2>
+                                        <p class="p1">Reliable reformat and reprogram services to restore your system’s performance and resolve software issues.</p>
                                         <div class="buttons">
                                             <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactForm1('Reformat & Reprogram')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
@@ -161,8 +161,8 @@
                                 <div class="img">
                                     <img src="../../assets/remove-viruses.jpg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
-                                        <h2>Remove Viruses and Malware</h2>
-                                        <p>Effective virus and malware removal to protect your device and restore its security and performance.</p>
+                                        <h2 class="h2-1">Remove Viruses and Malware</h2>
+                                        <p class="p1">Effective virus and malware removal to protect your device and restore its security and performance.</p>
                                         <div class="buttons">
                                             <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactForm1('Remove Viruses and Malware')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
@@ -179,8 +179,8 @@
                                 <div class="img">
                                     <img src="../../assets/networking.jpg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
-                                        <h2>Networking</h2>
-                                        <p>Expert networking solutions for seamless connectivity, setup, and troubleshooting of your home or office network.</p>
+                                        <h2 class="h2-1">Networking</h2>
+                                        <p class="p1">Expert networking solutions for seamless connectivity, setup, and troubleshooting of your home or office network.</p>
                                         <div class="buttons">
                                             <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactUsForm3('Networking')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
@@ -193,8 +193,8 @@
                                 <div class="img">
                                     <img src="../../assets/cctv.jpg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
-                                        <h2>CCTV Installation</h2>
-                                        <p>Enhancing security with professional setup of surveillance systems for homes and businesses.</p>
+                                        <h2 class="h2-1">CCTV Installation</h2>
+                                        <p class="p1">Enhancing security with professional setup of surveillance systems for homes and businesses.</p>
                                         <div class="buttons">
                                             <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactUsForm3('CCTV Installation')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
@@ -205,11 +205,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <InquireModal
-                    :isModalOpen="isInquireModalOpen"
-                    :serviceTitle="selectedService"
-                    @closeModal="closeInquireModal"
-                    /> -->
             </div>
         </div>
     </div>
@@ -354,7 +349,7 @@ const isActive = (checkStatus) => {
     margin-bottom: 2pc;
     gap: 30px;
     width: 100%;
-    align-items: stretch;
+    /* align-items: stretch; */
     transition: all 0.5s ease;
     margin-left: 20px;
     padding-right: 2.3pc;
@@ -369,9 +364,10 @@ const isActive = (checkStatus) => {
         display: flex;
         flex-direction: column;
         flex-basis: 30%;
-        /* height: 120vh; */
-        /* position: sticky; */
-        top: 6pc;
+        min-height: 83vh;
+        height: 100%;
+        position: sticky;
+        top: 6.4pc;
         z-index: 10;
 
         .con-container {
@@ -477,35 +473,40 @@ const isActive = (checkStatus) => {
     }
     .service-card {
         flex: 1;
-        padding: 25px;
         color: var(--light2);
         transition: all 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
+        gap: 15px;
         flex-basis: 100%;
-        background-color: var(--header);
         border-radius: 5px;
 
         flex-grow: 1;
-        padding: 20px;
+        padding: 0 20px;
 
         .side-card {
             display: flex;
+            gap: 20px;
+        }
+
+        .cards1 {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         h1 {
             margin-bottom: 4px;
             margin-top: 2px;
+            color: var(--header);
         }
 
         .card1 {
             flex: 1;
-            padding: 25px;
             color: var(--light2);
             transition: all 0.3s ease-in-out;
             display: flex;
             flex-direction: column;
-            background-color: var(--header);
             border-radius: 20px;
             /* cursor: pointer; */
 
@@ -534,8 +535,19 @@ const isActive = (checkStatus) => {
                     margin-bottom: 10px;
                 }
 
+                .h2-1 {
+                    font-size: 18px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+
                 p {
                     font-size: 16px;
+                    line-height: 1.5;
+                }
+
+                .p1 {
+                    font-size: 12px;
                     line-height: 1.5;
                 }
 
@@ -562,7 +574,7 @@ const isActive = (checkStatus) => {
 
 
             &:hover {
-                background-color: var(--main-hover);
+                /* background-color: var(--main-hover); */
                 border-radius: 5px;
             }
 
@@ -614,6 +626,13 @@ const isActive = (checkStatus) => {
 }
 
 @media (max-width: 700px) {
+    .cards {
+        .code-card {
+            position: unset;
+            height: auto;
+            min-height: auto;
+        }
+    }
     .dropdown {
     position: relative;
     display: inline-block;

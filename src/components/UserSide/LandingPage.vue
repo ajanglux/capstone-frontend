@@ -421,8 +421,9 @@ export default {
       margin-top: 2pc;
 
       h2 { 
-        width: 770px;
+        width: 661px;
         text-align: center;
+        margin-top: 0px;
       }
 
       p {
@@ -433,10 +434,10 @@ export default {
 
     .side-image {
       order: 1;
-      width: 100%;
+      width: 50%;
       height: auto;
       margin-top: 13vh;
-      margin-left: 0;
+      margin-left: 201px;
       margin-right: 0;
     }
   }
@@ -467,9 +468,13 @@ export default {
     margin-bottom: 0px;
     .title {
       h2 { 
-        width: 602px;
+        width: 496px;
         text-align: center;
       }
+    }
+    .side-image {
+      width: 60%;
+      margin-left: 137px;
     }
   }
   .footer-logo {
@@ -509,8 +514,8 @@ export default {
 
 @media (max-width: 500px) {
   .top-section {
-    display: flex;
-    flex-direction: column;
+    // display: flex;
+    // flex-direction: column;
   
     .title {
       order: 2;
@@ -520,8 +525,7 @@ export default {
       margin-bottom: 3pc;
 
       h2 { 
-        width: 350px;
-        text-align: center;
+        width: 411px;
       }
 
       p {
@@ -531,12 +535,7 @@ export default {
     }
 
     .side-image {
-      order: 1;
-      width: 100%;
-      height: auto;
-      margin-top: 13vh;
-      margin-left: 0;
-      margin-right: 0;
+      margin-left: 116px;
     }
   }
   .footer {
@@ -552,12 +551,30 @@ export default {
     align-items: center;
     flex-direction: column-reverse;
     padding-bottom: 20px;
+  }
 }
+
+@media (max-width: 450px) {
+  .top-section {
+    .title {
+      h2 { 
+        width: 347px;
+      }
+    }
+    .side-image {
+      margin-left: 100px;
+    }
+  }
 }
 
 @media (max-width: 400px) {
   .top-section .title h2 {
     width: 313px;
+  }
+
+  .top-section .side-image {
+    margin-left: 86px;
+    margin-top: 17vh;
   }
 
   .start {

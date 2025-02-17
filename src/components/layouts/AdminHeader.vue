@@ -108,6 +108,7 @@
   
       .nav-link:hover {
         background-color: var(--main);
+        color: white;
         border-radius: 8px;
       }
     }

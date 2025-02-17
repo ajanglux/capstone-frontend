@@ -13,16 +13,37 @@
             </div>
 
             <div v-if="!isViewTerms" class="button-container" :class="{ open: isDropdownOpen }">
+
                 <router-link class="button" active-class="active" to="/home" @click="closeDropdown">
-                <span class="text">Home</span>
+                    <span class="text">Home</span>
                 </router-link>
+
+                <div class="dropdown">
+                    <button class="button">
+                    <span> Computer Services </span>
+                    </button>
+                    <div class="dropdown-content">
+
+                        <a class="nav-link" @click="goToContactForm1('Computer Repair')" style="cursor: pointer">Computer Repair</a>
+
+                        <a class="nav-link" @click="goToContactForm1('Software and Hardware Installation')" style="cursor: pointer">Software and Hardware Installation</a>
+
+                        <a class="nav-link" @click="goToContactForm1('Reformat & Reprogram')" style="cursor: pointer">Reformat & Reprogram</a>
+
+                        <a class="nav-link" @click="goToContactForm1('Remove Viruses and Malware')" style="cursor: pointer">Remove Viruses and Malware</a>
+
+                        <a class="nav-link" @click="goToContactUsForm3('Networking')" style="cursor: pointer">Networking</a>
+
+                        <a class="nav-link" @click="goToContactUsForm3('CCTV Installation')" style="cursor: pointer">CCTV Installation</a>
+                    </div>
+                </div>
 
                 <!-- <a class="button" @click="openInquireModal">
                     <span class="text">Ticket</span>
                 </a> -->
 
                 <router-link class="button" active-class="active" to="/user-history" @click="closeDropdown">
-                <span class="text">Tickets</span>
+                  <span class="text">Tickets</span>
                 </router-link>
 
                 <div class="dropdown">
@@ -66,6 +87,20 @@ const isDropdownOpen = ref(false);
 const isProfileModalOpen = ref(false);
 const isChangePasswordModalOpen = ref(false);
 const route = useRoute();
+
+const goToContactForm1 = (serviceTitle) => {
+    router.push({
+        name: 'form-1',
+        query: { service: serviceTitle },
+    });
+};
+
+const goToContactUsForm3 = (serviceTitle) => {
+    router.push({
+        name: 'form-3', 
+        query: { service: serviceTitle },
+    });
+};
 
 const toggleDropdown = () => {
     isDropdownOpen.value = !isDropdownOpen.value;
