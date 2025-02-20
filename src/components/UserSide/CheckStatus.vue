@@ -15,7 +15,15 @@
         </div>
 
         <div v-if="status">
-          <div class="timeline-container">
+
+          <!-- Show only the Cancelled or Unrepairable message, and hide the timeline -->
+          <div v-if="status === 'Cancelled' || status === 'Unrepairable'" class="status-message">
+            <p v-if="status === 'Cancelled'">Repair Cancelled.</p>
+            <p v-if="status === 'Unrepairable'">Unrepairable Repair.</p>
+          </div>
+
+          <!-- Show the timeline ONLY if status is not Cancelled or Unrepairable -->
+          <div v-else class="timeline-container">
             <!-- Show message if no updates exist -->
             <div v-if="!onGoingUpdatedAt && !finishedUpdatedAt && !finishedStatusAvailable && !readyForPickupUpdatedAt && !completedUpdatedAt">
               <p class="no-updates-message">No updates yet, please wait for the admin's response.</p>

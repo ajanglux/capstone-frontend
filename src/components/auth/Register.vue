@@ -25,12 +25,15 @@
                   required>
               </div>
               <div class="form-group mb-3">
+                <label>Birthdate</label>
                 <input 
-                  type="text" 
-                  v-model="data.user.age"
-                  placeholder="Age" 
+                  type="date" 
+                  v-model="data.user.birthday"
+                  placeholder="Birthday" 
                   class="form-control rounded-0"
+                  title="Birthday"
                   required>
+                <p v-if="birthdayError" class="text-danger">{{ birthdayError }}</p>
               </div>
               <div class="form-group mb-3">
                 <input 
@@ -70,6 +73,7 @@
                   :class="passwordVisible ? 'bx-show' : 'bx-hide'" 
                   @click="togglePasswordVisibility" 
                   ></i>
+                  <p v-if="passwordError" class="text-danger">{{ passwordError }}</p>
               </div>
               <div class="form-group mb-3 position-relative">
                 <input 
@@ -93,7 +97,7 @@
                   </p>
               </div>
 
-              <div class="form-group mb-3 text-center">
+              <div class="text-center">
                 <Spinner v-if="data.loading" />
                 <button v-else type="submit" class="btn btn-dark btn-sm rounded-0 w-100">
                   Submit
@@ -115,7 +119,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch } from "vue"
+import { ref, reactive, watch, computed } from "vue"
 import router from '../../router'
 import { useAuthStore } from '../../stores/useAuthStore.js'
 import axios from 'axios'
@@ -127,8 +131,11 @@ const store = useAuthStore()
 const isTermsChecked = ref(false);
 const termsError = ref(false);
 const phoneError = ref(false);
+const passwordError = ref("");
 const passwordVisible = ref(false); 
 const confirmPasswordVisible = ref(false);
+const ageError = ref("");
+const birthdayError = ref("");
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
@@ -147,7 +154,7 @@ const data = reactive({
   user: {
       first_name: '',
       last_name: '',
-      age: '',
+      birthday: '',
       phone_number: '',
       address: '',
       email: '',
@@ -155,6 +162,42 @@ const data = reactive({
       password_confirmation:''
   },
 })
+
+// Validate Birthday (Age Restriction)
+const computedAge = computed(() => {
+  if (!data.user.birthday) return null;
+
+  const birthDate = new Date(data.user.birthday);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  
+  return age;
+});
+
+const validateBirthday = () => {
+  if (!data.user.birthday) {
+    birthdayError.value = "Please enter your birthday.";
+    return false;
+  }
+
+  const age = computedAge.value;
+
+  if (age < 11) {
+    birthdayError.value = "Users below 11 years old are not allowed to register.";
+    return false;
+  } else if (age >= 12 && age <= 17) {
+    birthdayError.value = "Please use a parent's email to register.";
+  } else {
+    birthdayError.value = "";
+  }
+
+  return true;
+};
 
 watch(() => data.user.first_name, (newVal) => {
   if (newVal) {
@@ -171,6 +214,34 @@ watch(() => data.user.last_name, (newVal) => {
 watch(() => data.user.address, (newVal) => {
   if (newVal) {
     data.user.address = newVal.charAt(0).toUpperCase() + newVal.slice(1);
+  }
+});
+
+watch(() => data.user.age, (newAge) => {
+  const age = parseInt(newAge, 10);
+
+  if (isNaN(age) || age < 1) {
+    ageError.value = "Please enter a valid age.";
+  } else if (age <= 16) {
+    ageError.value = "Users who are 11 years old or younger are not allowed to register.";
+  } else if (age >= 12 && age <= 17) {
+    ageError.value = "Children aged 12 to 17 are advised to use their parent's email..";
+  } else {
+    ageError.value = "";
+  }
+});
+
+watch(() => data.user.password, (newPassword) => {
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\d\s:]).+$/;
+
+  if (!newPassword) {
+    passwordError.value = "Password is required.";
+  } else if (newPassword.length < 8) {
+    passwordError.value = "Password must be at least 8 characters long.";
+  } else if (!passwordRegex.test(newPassword)) {
+    passwordError.value = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+  } else {
+    passwordError.value = "";
   }
 });
 
@@ -203,13 +274,29 @@ const validatePassword = () => {
 };
 
 const registerUser = async () => {
-  data.loading = true
+  data.loading = true;
 
-  // validateTerms();
-  // if (termsError.value) {
-  //   showToast("error", "You must agree to the terms and conditions.");
+  if (!validateBirthday()) {
+    data.loading = false;
+    return;
+  }
+
+  // const age = parseInt(data.user.age, 10);
+
+  // if (isNaN(age) || age < 1) {
+  //   showToast("error", "Please enter a valid age.");
   //   data.loading = false;
   //   return;
+  // }
+
+  // if (age <= 11) {
+  //   showToast("error", "Users who are 11 years old or younger are not allowed to register.");
+  //   data.loading = false;
+  //   return;
+  // }
+
+  // if (age >= 12 && age <= 17) {
+  //   showToast("info", "Please use a parent's email to register.");
   // }
 
   if (!validatePassword()) {
@@ -255,7 +342,8 @@ const registerUser = async () => {
     }
     console.log(error);
   }
-}
+};
+
 </script>
 
 
@@ -264,12 +352,12 @@ const registerUser = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
 
 .signup-card-wrapper {
   display: flex;
   flex-direction: row;
+  align-self: stretch;
   width: 100%;
 }
 
@@ -277,7 +365,7 @@ const registerUser = async () => {
   flex-basis: 50%;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  padding: 0 130px;
+  padding: 30px 130px;
   align-content: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
@@ -321,6 +409,7 @@ const registerUser = async () => {
   }
 
   input {
+    font-family: "Poppins";
     padding: 10px;
     border-radius: 8px;
     border: 1px solid var(--header);
@@ -391,11 +480,20 @@ const registerUser = async () => {
     }
   }
   
+  .text-danger {
+    color: red;
+    font-size: 12px;
+  }
+}
+
+label {
+  font-size: 10px;
+  color: #353535;
 }
 
 .logo {
   flex-basis: 90%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;

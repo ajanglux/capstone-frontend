@@ -40,7 +40,7 @@
                     <div class="select-icon">
                       <select v-model="selectedActions[repair.id]" @change="handleActionChange(repair.id)">
                         <option value="">Select</option>
-                        <option value="view">View</option>
+                        <option value="view">View Details</option>
                         <option value="Accept">Accept</option>
                         <option value="Unrepairable">Service Not Possible</option>
                         <!-- <option value="Responded">Respond</option> -->

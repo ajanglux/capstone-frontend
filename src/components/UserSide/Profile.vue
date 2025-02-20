@@ -31,8 +31,12 @@
 
         <div class="input-group">
           <div class="form-field">
+            <label for="address">Birhday</label>
+            <input v-model="userProfile.birthday" type="text" id="birthday" placeholder="Street, City, State, ZIP Code" required />
+          </div>
+          <div class="form-field">
             <label for="address">Age</label>
-            <input v-model="userProfile.age" type="text" id="age" placeholder="Street, City, State, ZIP Code" required />
+            <input v-model="userProfile.age" type="text" id="age" placeholder="Street, City, State, ZIP Code" required disabled/>
           </div>
           <div class="form-field">
             <label for="address">Address</label>
@@ -63,6 +67,7 @@ import Swal from 'sweetalert2';
 const userProfile = ref({
   first_name: '',
   last_name: '',
+  birthday: '',
   age: '',
   email: '',
   phone_number: '',

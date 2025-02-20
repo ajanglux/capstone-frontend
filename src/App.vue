@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <div class="app">
-      <template v-if="!isRegisterPage && !isAdminLoginPage && !isLoginPage && !isForgotPass && !isResetPass && !isForm1 && !isForm2 && !isForm3 ">
+      <template v-if="!isRegisterPage && !isAdminLoginPage && !isLoginPage && !isForgotPass && !isResetPass ">
         <template v-if="isAdmin">
           <AdminSidebar />
           <div class="headerAndContent">
@@ -77,15 +77,15 @@ export default {
     isResetPass() {
       return this.$route.path === '/reset-password';
     },
-    isForm1() {
-      return this.$route.path === '/form-1';
-    },
-    isForm2() {
-      return this.$route.path === '/form-2';
-    },
-    isForm3() {
-      return this.$route.path === '/form-3';
-    },
+    // isForm1() {
+    //   return this.$route.path === '/form-1';
+    // },
+    // isForm2() {
+    //   return this.$route.path === '/form-2';
+    // },
+    // isForm3() {
+    //   return this.$route.path === '/form-3';
+    // },
 
 
     // ADMIN

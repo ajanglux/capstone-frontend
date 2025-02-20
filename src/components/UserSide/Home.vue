@@ -15,6 +15,12 @@
 
                         <div class="user-inqui">
                             <h4>Your Inquiry:</h4>
+                            <!-- <router-link to="/user" class="button" style="cursor: pointer" title="View Details">
+                                <i class="bx bx-show"></i>
+                            </router-link> -->
+                            <button v-for="repair in repairs" :key="repair.id" @click="viewRepair(repair)">
+                                <i class="bx bx-show"></i>
+                            </button>
                             <p class="comment-box">{{ description }}</p>
                             <p v-if="descriptionUpdatedAt" class="timestamp">Updated on: {{ formattedDescriptionUpdatedAt }}</p>
                         </div>
@@ -42,45 +48,53 @@
                                         <h2>Status Update</h2>
                                     </div>
 
-                                    <!-- Show message if no status updates exist -->
-                                    <div v-if="!onGoingUpdatedAt && !finishedUpdatedAt && !finishedStatusAvailable && !readyForPickupUpdatedAt && !completedUpdatedAt">
-                                        <p class="no-updates-message">No updates yet, please wait for the admin's response.</p>
+                                    <div v-if="status === 'Cancelled' || status === 'Unrepairable'" class="status-message">
+                                        <p v-if="status === 'Cancelled'">Repair Cancelled.</p>
+                                        <!-- <p v-if="status === 'Unrepairable'">Repair is Unrepairable.</p> -->
                                     </div>
 
-                                    <div class="timeline-item" v-if="onGoingUpdatedAt" :class="{ active: isActive('On-Going') }">
-                                        <div class="timeline-dot"></div>
-                                        <div class="timeline-content">
-                                            <p class="timeline-location">Device Received</p>
-                                            <p>Updated on: {{ formattedOnGoingUpdatedAt }} <br>Your repair status is: On-going</p>
+                                    <div v-else>
+                                        <!-- Show message if no status updates exist -->
+                                        <div v-if="!onGoingUpdatedAt && !finishedUpdatedAt && !finishedStatusAvailable && !readyForPickupUpdatedAt && !completedUpdatedAt">
+                                            <p class="no-updates-message">No updates yet, please wait for the admin's response.</p>
                                         </div>
-                                    </div>
 
-                                    <div class="timeline-item" v-if="finishedUpdatedAt || finishedStatusAvailable" :class="{ active: isActive('Finished') }">
-                                        <div class="timeline-dot"></div>
-                                        <div class="timeline-content">
-                                            <p class="timeline-location">Repair Finished</p>
-                                            <p>Updated on: {{ formattedFinishedUpdatedAt }} <br>Your device has been successfully repaired.</p>
+                                        <div class="timeline-item" v-if="onGoingUpdatedAt" :class="{ active: isActive('On-Going') }">
+                                            <div class="timeline-dot"></div>
+                                            <div class="timeline-content">
+                                                <p class="timeline-location">Device Received</p>
+                                                <p>Updated on: {{ formattedOnGoingUpdatedAt }} <br>Your repair status is: On-going</p>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="timeline-item" v-if="readyForPickupUpdatedAt" :class="{ active: isActive('Ready-for-Pickup') }">
-                                        <div class="timeline-dot"></div>
-                                        <div class="timeline-content">
-                                            <p class="timeline-location">Ready for Pickup</p>
-                                            <p>Updated on: {{ formattedReadyForPickupUpdatedAt }} <br>Our shop is open from 9 AM to 5 PM.<br>You can pick up your device from our shop at any time now.</p>
+                                        <div class="timeline-item" v-if="finishedUpdatedAt || finishedStatusAvailable" :class="{ active: isActive('Finished') }">
+                                            <div class="timeline-dot"></div>
+                                            <div class="timeline-content">
+                                                <p class="timeline-location">Repair Finished</p>
+                                                <p>Updated on: {{ formattedFinishedUpdatedAt }} <br>Your device has been successfully repaired.</p>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="timeline-item" v-if="completedUpdatedAt" :class="{ active: isActive('Completed') }">
-                                        <div class="timeline-dot"></div>
-                                        <div class="timeline-content">
-                                            <p class="timeline-location">Repair Completed</p>
-                                            <p>Updated on: {{ formattedCompletedUpdatedAt }} <br>The device has been successfully returned, and the process is now complete.</p>
+                                        <div class="timeline-item" v-if="readyForPickupUpdatedAt" :class="{ active: isActive('Ready-for-Pickup') }">
+                                            <div class="timeline-dot"></div>
+                                            <div class="timeline-content">
+                                                <p class="timeline-location">Ready for Pickup</p>
+                                                <p>Updated on: {{ formattedReadyForPickupUpdatedAt }} <br>Our shop is open from 9 AM to 5 PM.<br>You can pick up your device from our shop at any time now.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="timeline-item" v-if="completedUpdatedAt" :class="{ active: isActive('Completed') }">
+                                            <div class="timeline-dot"></div>
+                                            <div class="timeline-content">
+                                                <p class="timeline-location">Repair Completed</p>
+                                                <p>Updated on: {{ formattedCompletedUpdatedAt }} <br>The device has been successfully returned, and the process is now complete.</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -114,7 +128,7 @@
                                     <div class="overlay">
                                         <h2 class="h2-1">Computer Repair</h2>
                                         <p class="p1">
-                                            Expert computer service and repair to fix hardware, software, and performance issues quickly and efficiently.
+                                            Expert computer repair to fix hardware, software, and performance issues quickly and efficiently.
                                         </p>
                                         <div class="buttons">
                                             <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
@@ -238,6 +252,8 @@ const authStore = useAuthStore();
 const token = authStore.access_token;
 const comment = ref('');
 const description = ref('');
+
+const repairs = ref([]);
 // const isInquireModalOpen = ref(false);
 // const selectedService = ref('');
 
@@ -315,7 +331,40 @@ const fetchHomeStatus = async () => {
     }
 };
 
-onMounted(fetchHomeStatus);
+const fetchRepairs = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/customer-details/my-list/repair`, getHeaderConfig(authStore.access_token));
+    repairs.value = response.data.data.map(repair => ({
+      ...repair,
+      user: repair.user || { first_name: 'N/A', last_name: 'N/A' },
+      description: repair.description || 'No description available',
+    }));
+
+    repairs.value.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  } catch (error) {
+    showToast("error", "Failed to load records. Please try again.");
+  }
+};
+
+const viewRepair = (repair) => {
+    if (!repair || !repair.description) {
+        console.error("Repair object or description is undefined");
+        return;  // Return early if the object is invalid
+    }
+
+    const description = repair.description.toLowerCase();
+    
+    if (description.includes("networking") || description.includes("cctv installation")) {
+        router.push({ name: 'user-inquiries-view', params: { id: repair.id } });
+    } else {
+        router.push({ name: 'user-form', params: { id: repair.id, view: 'view' } });
+    }
+};
+
+onMounted(() => {
+  fetchHomeStatus();
+  fetchRepairs();
+});
 
 const formattedDescriptionUpdatedAt = computed(() => formatDate(descriptionUpdatedAt.value));
 const formattedAdminCommentUpdatedAt = computed(() => formatDate(adminCommentUpdatedAt.value));
@@ -465,8 +514,19 @@ const isActive = (checkStatus) => {
         }
 
         .user-inqui {
+            position: relative;
             h4 {
                 font-size: 19px;
+            }
+
+            button {
+                display: flex;
+                align-items: center;
+                padding: 5px 10px;
+                position: absolute;
+                right: 0;
+                margin-right: 10px;
+                margin-top: 21px;
             }
         }
 

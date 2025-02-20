@@ -165,11 +165,12 @@ button {
 
 .user-container {
     width: 70%;
-    background-color: var(--header);
+    background-color: var(--grey);
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
     color: var(--light);
     padding: 30px;
     margin: 30px;
+    margin-top: 107px;
 
     .card-header {
         margin-bottom: 10px;

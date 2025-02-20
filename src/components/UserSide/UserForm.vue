@@ -13,6 +13,13 @@
                         <div class="buttons">
                             <h2>PRODUCT INFORMATION</h2>
                         </div>
+                        <div>
+                            <span class="input-group-text">Device Type: </span>
+                            <select v-model="productInfo.device_type" disabled>
+                                <option value="Laptop">Laptop</option>
+                                <option value="Desktop">Desktop</option>
+                            </select>
+                        </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text">Brand</span>
                             <input v-model="productInfo.brand" type="text" class="form-control" disabled style="text-transform: capitalize;" />
@@ -64,7 +71,7 @@
                 </div>
   
                 <div class="buttons">
-                    <h2>Issue Description</h2>
+                    <h2>Other Description</h2>
                 </div>
                 <div class="input-group mb-4">
                     <span class="input-group-text"></span>
@@ -118,6 +125,7 @@ export default {
             description: '',
         },
         productInfo: {
+            device_type: '',
             brand: '',
             model: '',
             serial_number: '',
@@ -236,24 +244,24 @@ h2 {
         gap: 30px; 
 
         .checklist {
-        width: 100%;
+            width: 100%;
         }
 
         .checklist:nth-child(2),
         .checklist:nth-child(3) {
-        padding-top: 57px;
+            padding-top: 57px;
         }
     }
     .checklist {
         margin: 0;
         .mb3 {
 
-        input {
-            width: 15px;
-            height: 15px;
-            margin-left: 40px;
-            margin-top: 10px;
-        }
+            input {
+                width: 15px;
+                height: 15px;
+                margin-left: 40px;
+                margin-top: 10px;
+            }
         }
     }
 
@@ -264,20 +272,33 @@ h2 {
         margin-bottom: 7px;
         
         .form-check {
-        display: inline-flex;
-        gap: 10px;
+            display: inline-flex;
+            gap: 10px;
 
-        .form-check-label {
-            width: auto;
-            left: 0;
-        }
-        .form-check-input {
-            height: 20px;
-            width: 20px;
-        }
+            .form-check-label {
+                width: auto;
+                left: 0;
+            }
+            
+            .form-check-input {
+                height: 20px;
+                width: 20px;
+            }
         }
     }
+
+    select {
+        font-family: "Poppins";
+        width: 110px;
+        height: 30px;
+        padding-left: 5px;
+        outline: none;
+        border: 1px solid var(--header);
+        border-radius: 5px;
+        margin-top: 10px;
+        margin-left: 5px;
     }
+}
 
     .whole-checklist {
     width: 100%;

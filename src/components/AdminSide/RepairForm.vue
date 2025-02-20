@@ -39,6 +39,13 @@
             <div class="buttons">
               <h2>PRODUCT INFORMATION</h2>
             </div>
+            <div>
+              <span class="input-group-text">Device Type: </span>
+              <select v-model="productInfo.device_type" :disabled="isEditing || isViewing">
+                  <option value="Laptop">Laptop</option>
+                  <option value="Desktop">Desktop</option>
+              </select>
+            </div>
             <div class="input-group mb-3">
               <span class="input-group-text">Brand</span>
               <input v-model="productInfo.brand" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
@@ -90,9 +97,9 @@
         </div>
 
         <div class="buttons">
-              <h2>Device Issue Description</h2>
+              <h2>Service: {{ model.description }}</h2>
             </div>
-            <div><h4>Service: {{ model.description }}</h4></div>
+            <div><h3>Other Description</h3></div>
             <div class="input-group mb-4">
               <span class="input-group-text"></span>
               <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isViewing || isEditing"></textarea>
@@ -174,7 +181,7 @@
           <h2>NOTE</h2>
         </div>
         <div class="input-group mb-3">
-          <textarea v-model="productInfo.documentation" class="form-control" :disabled="isViewing"></textarea>
+          <textarea v-model="productInfo.comment" class="form-control" :disabled="isViewing"></textarea>
         </div>
 
         <div class="buttons" v-if="userRole !== 0">
@@ -218,9 +225,10 @@ export default {
         phone_number: '',
         email: '',
         address: '',
-        description: '',
+        comment: '',
       },
       productInfo: {
+        device_type: '',
         brand: '',
         model: '',
         serial_number: '',
@@ -506,6 +514,17 @@ h2 {
         width: 20px;
       }
     }
+  }
+  select {
+    font-family: "Poppins";
+    width: 110px;
+    height: 30px;
+    padding-left: 5px;
+    outline: none;
+    border: 1px solid var(--header);
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-left: 5px;
   }
 }
 
