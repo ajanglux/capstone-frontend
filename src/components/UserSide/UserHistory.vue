@@ -15,22 +15,25 @@
           <div v-for="(repair, index) in paginatedRepairs" :key="repair.id" class="card">
             <div class="card-body">
               <h4>{{ repair?.code || 'N/A' }}</h4>
-              <p>{{ formatDate(repair.created_at) }}</p>
+              <p>{{ formatDate(repair.status_updated_at || repair.created_at) }}</p>
               <p><strong>Description:</strong> {{ repair.description || 'No description available' }}</p>
               <p><span :class="statusClass(repair.status)">{{ repair.status || 'Pending' }}</span></p>
-              <div class="card-actions">
-                <button v-if="repair.status.toLowerCase()" @click="openNoteModal(repair.comment)" class="btn-note" title="View note from admin">
-                  <i class='bx bxs-notepad'></i>
+              <div class="dropdown">
+                <input type="checkbox" id="dropdown-toggle" class="dropdown-toggle">
+                <label for="dropdown-toggle" class="button">
+                  <i class='bx bx-dots-horizontal-rounded'></i>
+                </label>
+                <div class="dropdown-content">
+                <button v-if="repair.status.toLowerCase()" @click="openNoteModal(repair.comment)" class="nav-link" title="View note from admin" > 
+                  Note from Admin
                 </button>
-                <button class="btn-note" @click="confirmStatusChange(repair, 'Cancelled')" :disabled="['Cancelled', 'On-Going', 'Finished', 'Ready-for-Pickup', 'Completed', 'Unrepairable', 'Responded'].includes(repair.status)" title="Cancel Repair Request">
-                  <i class='bx bxs-x-circle'></i>
-                </button>
-                <button class="btn-note" @click="confirmStatusChange(repair, 'Pending')" :disabled="['On-Going', 'Finished', 'Ready-for-Pickup', 'Completed', 'Pending', 'Unrepairable'].includes(repair.status)" title="Re-Inquire Repair Request">
-                  <i class='bx bxs-time'></i>
-                </button>
-                <button @click="viewRepair(repair)" class="btn btn-note" title="View Details">
-                  <i class="bx bx-show"></i>
-                </button>
+                <button class="nav-link" @click="confirmStatusChange(repair, 'Cancelled')" :disabled="['Cancelled', 'On-Going', 'Finished', 'Ready-for-Pickup', 'Completed', 'Unrepairable', 'Responded'].includes(repair.status)" title="Cancel Repair Request">
+                Cancel </button>
+                <button class="nav-link" @click="confirmStatusChange(repair, 'Pending')" :disabled="['On-Going', 'Finished', 'Ready-for-Pickup', 'Completed', 'Pending', 'Unrepairable'].includes(repair.status)" title="Re-Inquire Repair Request">
+                Re-inquire</button>
+                <button @click="viewRepair(repair)" class="nav-link" title="View Details">
+                View Details</button>
+              </div>
               </div>
             </div>
           </div>
@@ -118,22 +121,51 @@ const fetchRepairs = async () => {
 const confirmStatusChange = (repair, status) => {
   selectedRepair.value = repair;
   selectedStatusAction.value = status;
-  confirmationMessage.value = `Are you sure you want to update the status of this repair to ${status}?`;
-  showConfirmationDialog.value = true;
+
+  if (status === 'Cancelled') {
+    Swal.fire({
+      title: "Reason for Cancellation",
+      input: "text",
+      inputPlaceholder: "Enter reason...",
+      inputAttributes: {
+        maxlength: "255",
+      },
+      showCancelButton: true,
+      confirmButtonText: "Submit",
+      preConfirm: (cancelReason) => {
+        if (!cancelReason) {
+          Swal.showValidationMessage("Cancel reason is required.");
+        }
+        return cancelReason;
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        updateStatus(result.value);
+      }
+    });
+  } else {
+    confirmationMessage.value = `Are you sure you want to update the status of this repair to ${status}?`;
+    showConfirmationDialog.value = true;
+  }
 };
 
-const updateStatus = async () => {
+const updateStatus = async (cancelReason = null) => {
   if (!selectedRepair.value) return;
 
   isLoading.value = true;
   try {
+    const payload = { status: selectedStatusAction.value };
+    
+    if (selectedStatusAction.value === 'Cancelled') {
+      payload.cancel_reason = cancelReason;
+    }
+
     const response = await axios.patch(
       `${BASE_URL}/customer-details/${selectedRepair.value.id}/status`,
-      { status: selectedStatusAction.value }, // Ensure correct payload
+      payload,
       getHeaderConfig(authStore.access_token)
     );
 
-    // Update the status in the local list
     const repair = repairs.value.find(r => r.id === selectedRepair.value.id);
     if (repair) {
       repair.status = selectedStatusAction.value;
@@ -141,9 +173,8 @@ const updateStatus = async () => {
 
     showToast("success", `${selectedStatusAction.value} successfully`);
   } catch (error) {
-    console.error(`Error updating repair status to ${selectedStatusAction.value}:`, error);
-    const errorMessage = error.response?.data?.message || 'Error updating repair status';
-    showToast("error", errorMessage);
+    console.error(`Error updating repair status:`, error);
+    showToast("error", error.response?.data?.message || "Error updating repair status");
   } finally {
     isLoading.value = false;
     showConfirmationDialog.value = false;
@@ -317,6 +348,73 @@ h1 {
 .btn-note:hover {
   background-color: var(--main);
 }
+
+.dropdown {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+
+    :disabled {
+      background-color: lightgray;
+      cursor: not-allowed;
+    }
+
+    .dropdown-toggle {
+      display: none; /* Hide the checkbox */
+    }
+  
+    i {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      font-size: 20px;
+      color: var(--light);
+      background-color: var(--main-hover);
+      padding: 3px 10px;
+      border-radius: 5px;
+      transition: all 0.3s ease-out;
+      cursor: pointer;
+  
+      &:hover {
+        background-color: var(--main);
+      }
+    }
+  
+    .dropdown-content {
+      opacity: 0;
+      visibility: hidden;
+      position: absolute;
+      background-color: white;
+      width: 150px;
+      right: 0;
+      border-radius: 8px;
+      margin-top: 30px;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  
+      .nav-link {
+        width: 100%;
+        padding: 10px;
+        color: black;
+        font-weight: 500;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        transition: all 0.3s ease-in-out;
+      }
+  
+      .nav-link:hover {
+        background-color: var(--main);
+        color: white;
+        border-radius: 8px;
+      }
+    }
+  }
+  
+  .dropdown-toggle:checked + .button + .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
 
 .modal-overlay {
   position: fixed;

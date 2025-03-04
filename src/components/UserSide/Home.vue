@@ -110,8 +110,8 @@
                                 <div class="img">
                                     <img src="../../assets/Laptop-check.jpg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
-                                        <h2>Free: Check up for Laptop & Desktop</h2>
-                                        <p>Get a free check-up for your laptop or desktop to ensure optimal performance and catch potential issues early.</p>
+                                        <h2>Free Check up for Laptop & Desktop</h2>
+                                        <p>Inquire now, and get a free check-up for your laptop or desktop. Available for all your technical needs</p>
                                         <div class="buttons">
                                             <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <!-- <button @click="goToContactForm1('Free: Check up for Laptop & Desktop')"><i class='bx bxs-edit-alt'></i> Inquire Now</button> -->
@@ -224,17 +224,13 @@
     </div>
 </template>
 
-
 <script setup>
-import { ref, computed, onMounted  } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../../stores/useAuthStore';
 import { BASE_URL } from '../../helpers/baseUrl';
 import { getHeaderConfig } from '../../helpers/headerConfig';
-// import InquireModal from '../UserSide/ContactUs.vue';
-
-// const InquireModal = defineAsyncComponent(() => import("../UserSide/ContactUs.vue"));
 
 const code = ref('');
 const status = ref(null);
@@ -246,7 +242,6 @@ const errorMessage = ref('');
 const isLoading = ref(false);
 const finishedStatusAvailable = ref(false); // New reactive variable
 
-
 const router = useRouter();
 const authStore = useAuthStore();
 const token = authStore.access_token;
@@ -254,8 +249,6 @@ const comment = ref('');
 const description = ref('');
 
 const repairs = ref([]);
-// const isInquireModalOpen = ref(false);
-// const selectedService = ref('');
 
 const descriptionUpdatedAt = ref(null);
 const adminCommentUpdatedAt = ref(null);
@@ -264,13 +257,6 @@ const goToContactForm1 = (serviceTitle) => {
     router.push({
         name: 'form-1',
         query: { service: serviceTitle },
-    });
-};
-
-const goToContactUsForm2 = (serviceTitle) => {
-    router.push({
-        name: 'form-2', 
-        query: { service: serviceTitle }, 
     });
 };
 
@@ -362,8 +348,8 @@ const viewRepair = (repair) => {
 };
 
 onMounted(() => {
-  fetchHomeStatus();
-  fetchRepairs();
+    fetchHomeStatus();
+    fetchRepairs();
 });
 
 const formattedDescriptionUpdatedAt = computed(() => formatDate(descriptionUpdatedAt.value));

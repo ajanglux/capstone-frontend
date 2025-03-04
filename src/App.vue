@@ -6,7 +6,7 @@
           <AdminSidebar />
           <div class="headerAndContent">
             <AdminHeader />
-            <router-view v-slot="{ Component }">
+            <router-view v-slot="{ Component }" :key="$route.fullPath">
               <transition name="fade" mode="out-in">
                 <Component :is="Component" />
               </transition>
@@ -16,7 +16,7 @@
         <template v-else-if="isUser">
           <div class="headerAndContent">
             <UserHeader />
-            <router-view v-slot="{ Component }">
+            <router-view v-slot="{ Component }" :key="$route.fullPath">
               <transition name="fade" mode="out-in">
                 <Component :is="Component" />
               </transition>
@@ -27,7 +27,7 @@
           <Sidebar v-if="!isLandingPage" />
           <div class="headerAndContent">
             <Header v-if="isLandingPage || !isAdmin" />
-            <router-view v-slot="{ Component }">
+            <router-view v-slot="{ Component }" :key="$route.fullPath">
               <transition name="fade" mode="out-in">
                 <Component :is="Component" />
               </transition>
@@ -36,7 +36,7 @@
         </template>
       </template>
       <template v-else>
-        <router-view />
+        <router-view :key="$route.fullPath" />
       </template>
     </div>
   </v-app>

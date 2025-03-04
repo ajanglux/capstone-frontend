@@ -255,6 +255,7 @@ header {
     header {
         flex-direction: column;
         padding: 15px;
+        height: auto;
 
         .left-side {
             img {
@@ -288,7 +289,9 @@ header {
         margin-right: 0;
         max-height: 0; 
         overflow: hidden; 
+        height: auto;
         transition: max-height 0.4s ease, padding 0.4s ease;
+        justify-content: flex-start;
         
         &.open {
             width: 100%;
@@ -313,14 +316,18 @@ header {
         }
     }
     .dropdown-content{
-
-        display: contents;
-        
-        .nav-link {
-            padding: 10px;
-            color: white;
-            font-weight: 350;
-        }
+        visibility: hidden;
     }
+
+    .dropdown:hover .dropdown-content {
+            visibility: visible;
+            display: contents;
+            z-index: 1001;
+            .nav-link {
+                padding: 10px;
+                color: white;
+                font-weight: 350;
+            }
+        }
 }
 </style>

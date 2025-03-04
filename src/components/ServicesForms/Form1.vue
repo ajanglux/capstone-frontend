@@ -87,7 +87,7 @@
 
             <div class="input-group mb-3">
               <span class="input-group-text">Purchase Date</span>
-              <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isViewing"/>
+              <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isViewing" :max="maxDate"/>
             </div>
           </div>
         </div>
@@ -158,6 +158,9 @@ export default {
   computed: {
     isViewing() {
       return this.view;
+    },
+    maxDate() {
+      return new Date().toISOString().split('T')[0];
     }
   },
   watch: {
@@ -168,7 +171,7 @@ export default {
   },
   mounted() {
     const userData = useAuthStore();
-    this.userRole = userData.user ? userData.user.role : null; // Ensure userData is populated before accessing role
+    this.userRole = userData.user ? userData.user.role : null;
 
     this.handleQueryParams();
     this.fetchUserProfile();

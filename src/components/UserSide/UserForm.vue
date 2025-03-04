@@ -2,71 +2,29 @@
     <div class="content">
         <div class="container">
             <div class="card-header">
-                <h2>Service: {{ model.description }}</h2>
+                <h2 v-if="!loading">Service: {{ model.description }}</h2>
+                <div v-else class="skeleton skeleton-text"></div>
             </div>
             <div class="card-body">
                 <div class="whole">
-                    <div class="left" v-if="userRole !== 0">
-                    </div>
-                    
                     <div class="right">
                         <div class="buttons">
                             <h2>PRODUCT INFORMATION</h2>
                         </div>
-                        <div>
+                        <div v-if="!loading">
                             <span class="input-group-text">Device Type: </span>
                             <select v-model="productInfo.device_type" disabled>
                                 <option value="Laptop">Laptop</option>
                                 <option value="Desktop">Desktop</option>
                             </select>
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Brand</span>
-                            <input v-model="productInfo.brand" type="text" class="form-control" disabled style="text-transform: capitalize;" />
+                        <div v-else class="skeleton skeleton-input"></div>
+                        
+                        <div v-for="(field, index) in fields" :key="index" class="input-group mb-3">
+                            <span class="input-group-text">{{ field.label }}</span>
+                            <input v-if="!loading" v-model="productInfo[field.model]" type="text" class="form-control" disabled style="text-transform: capitalize;" />
+                            <div v-else class="skeleton skeleton-input"></div>
                         </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Model</span>
-                            <input v-model="productInfo.model" type="text" class="form-control" disabled style="text-transform: capitalize;" />
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Serial Number</span>
-                            <input
-                            v-model="productInfo.serial_number"
-                            @input="productInfo.serial_number = productInfo.serial_number.toUpperCase()"
-                            type="text"
-                            class="form-control"
-                            disabled
-                            />
-                        </div>
-  
-                        <!-- <div class="buttons">
-                            <h2>WARRANTY STATUS</h2>
-                        </div>
-                        <div class="custom-checkboxes">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="warranty" value="warranty" v-model="productInfo.warranty_status" disabled />
-                                <label class="form-check-label" for="warranty">Warranty</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="outOfWarranty" value="out_of_warranty" v-model="productInfo.warranty_status" disabled />
-                                <label class="form-check-label" for="outOfWarranty">Out Of Warranty</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" disabled />
-                                <label class="form-check-label" for="chargeable">Chargeable</label>
-                            </div>
-                        </div> -->
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Purchase Date</span>
-                            <input v-model="productInfo.purchase_date" type="date" class="form-control" disabled/>
-                        </div>
-            
-                    </div>
-                </div>
-  
-                <div class="whole">
-                    <div class="left">
                     </div>
                 </div>
   
@@ -75,18 +33,12 @@
                 </div>
                 <div class="input-group mb-4">
                     <span class="input-group-text"></span>
-                    <textarea v-model="productInfo.description_of_repair" class="form-control" disabled></textarea>
+                    <textarea v-if="!loading" v-model="productInfo.description_of_repair" class="form-control" disabled></textarea>
+                    <div v-else class="skeleton skeleton-textarea"></div>
                 </div>
-          
+                
                 <div class="buttons">
-                    <h2>NOTE</h2>
-                </div>
-                <div class="input-group mb-3">
-                    <textarea v-model="productInfo.documentation" class="form-control" disabled></textarea>
-                </div>
-        
-                <div class="buttons">
-                    <router-link to="/user-history" class="btn btn-secondary">Cancel</router-link>
+                    <router-link to="/user-history" class="btn btn-secondary" :class="{ 'disabled': loading }">Cancel</router-link>
                 </div>
             </div>
         </div>
@@ -104,101 +56,41 @@ export default {
     name: 'UserForm',
     props: {
         id: {
-        type: Number,
-        default: null,
+            type: Number,
+            default: null,
         },
         view: {
-        type: Boolean,
-        default: false,
+            type: Boolean,
+            default: false,
         }
     },
     data() {
         return {
-        errorList: [],
-        model: {
-            user_id: '',
-            first_name: '',
-            last_name: '',
-            phone_number: '',
-            email: '',
-            address: '',
-            description: '',
-        },
-        productInfo: {
-            device_type: '',
-            brand: '',
-            model: '',
-            serial_number: '',
-            purchase_date: '',
-            documentation: '',
-            warranty_status: '',
-            ac_adapter: '',
-            vga_cable: '',
-            dvi_cable: '',
-            display_cable: '',
-            bag_pn: '',
-            hdd: '',
-            ram_brand: '',
-            ram_size_gb: '',
-            power_cord_qty: '',
-        },
-        isEditing: false,
-        phoneNumber: '',
-        minDate: new Date().toISOString().split('T')[0],
+            loading: true,
+            model: {},
+            productInfo: {},
+            fields: [
+                { label: 'Brand', model: 'brand' },
+                { label: 'Model', model: 'model' },
+                { label: 'Serial Number', model: 'serial_number' },
+                { label: 'Purchase Date', model: 'purchase_date' }
+            ]
         };
     },
-    computed: {
-        isViewing() {
-        return this.view;
-        }
-    },
-    watch: {
-        phoneNumber(value) {
-        this.model.phone_number = value;
-        },
-        isViewing(newValue) {
-        if (newValue) {
-        }
-        }
-    },
     mounted() {
-        const userData = useAuthStore();
-        this.userRole = userData.user ? userData.user.role : null; // Ensure userData is populated before accessing role
-
-        this.handleQueryParams();
-        if (this.id) {
-        this.isEditing = !this.isViewing;
         this.getRepairDetails();
-        }
     },
     methods: {
-        toast() {
-        return useToast();
-        },
-        handleQueryParams() {
-            const queryParams = this.$route.query;
-            if (queryParams.first_name) this.model.first_name = queryParams.first_name;
-            if (queryParams.last_name) this.model.last_name = queryParams.last_name;
-            if (queryParams.phone_number) this.phoneNumber = queryParams.phone_number;
-            if (queryParams.email) this.model.email = queryParams.email;
-            if (queryParams.address) this.model.address = queryParams.address;
-        },
         async getRepairDetails() {
             try {
                 const authStore = useAuthStore();
                 const response = await axios.get(`${BASE_URL}/customer-details/${this.id}/with-product-info`, getHeaderConfig(authStore.access_token));
-                const customerDetail = response.data;
-                this.model = customerDetail || {};
-                this.model.first_name = customerDetail.user.first_name;
-                this.model.last_name = customerDetail.user.last_name;
-                this.model.address = customerDetail.user.address;
-                this.model.email = customerDetail.user.email;
-                this.model.user_id = customerDetail.user.id;
-                this.productInfo = customerDetail.product_infos[0] || {};
-                this.phoneNumber = this.model.user.phone_number;
+                this.model = response.data;
+                this.productInfo = response.data.product_infos[0] || {};
             } catch (error) {
-                const toast = this.toast();
-                toast.error('Failed to load repair details. Please try again.', { timeout: 3000 });
+                useToast().error('Failed to load repair details. Please try again.', { timeout: 3000 });
+            } finally {
+                this.loading = false;
             }
         },
     },
@@ -350,6 +242,17 @@ h2 {
         font-size: 22px;
     }
 }
+
+.skeleton {
+    background: #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.skeleton-text { height: 30px; width: 50%; }
+.skeleton-input { height: 35px; }
+.skeleton-textarea { height: 80px; }
+.disabled { pointer-events: none; opacity: 0.5; }
 
 @media (max-width: 1020px) {
     .container{

@@ -10,13 +10,13 @@
                 <i class='bx bx-grid-alt'></i>
                 <span class="text">Dashboard</span>
             </router-link>
-            <router-link class="button" active-class="active" to="/repair-list">
-                <i class='bx bx-list-plus' ></i>
-                <span class="text">Repair List</span>
-            </router-link>
             <router-link class="button" active-class="active" to="/inquiries">
                 <i class='bx bx-list-ul'></i>
                 <span class="text">Inquiries</span>
+            </router-link>
+            <router-link class="button" active-class="active" to="/repair-list">
+                <i class='bx bx-list-plus' ></i>
+                <span class="text">Repair List</span>
             </router-link>
             <!-- <router-link class="button" to="/responded-list">
                 <i class='bx bx-history'></i>

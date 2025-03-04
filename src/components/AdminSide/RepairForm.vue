@@ -404,12 +404,7 @@ export default {
         </div>
 
         <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-          <div style="width: 48%;">
-            <h3 style="font-size: 14px; margin-bottom: 5px;">Warranty Status</h3>
-            <p style="margin: 2px 0; font-size: 12px;">${warrantyStatusCheckboxes.warranty}</p>
-            <p style="margin: 2px 0; font-size: 12px;">${warrantyStatusCheckboxes.out_of_warranty}</p>
-            <p style="margin: 2px 0; font-size: 12px;">${warrantyStatusCheckboxes.chargeable}</p>
-          </div>
+        
           <div style="width: 48%;">
             <h3 style="font-size: 14px; margin-bottom: 5px;">Detailed Customer Problem/Error</h3>
             <p style="margin: 2px 0; font-size: 12px;">${displayValue(this.model.description)}</p>

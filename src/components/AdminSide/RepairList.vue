@@ -40,7 +40,7 @@
           <tbody>
             <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
               <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
-              <td>{{ formatDate(repair.created_at) }}</td>
+              <td>{{ formatDate(repair.status_updated_at || repair.created_at) }}</td>
               <td>{{ repair.code }}</td>
                <td>{{ repair.user?.first_name || 'N/A' }} {{ repair.user?.last_name || 'N/A' }}</td>
               <td>{{ repair.status || 'ON GOING' }}</td>

@@ -54,10 +54,10 @@
     <footer class="footer">
       <div class="footer-content">
         <div class="social-icons">
-          <p><i class='bx bx-phone' ></i> 0943434343</p>
+          <p><i class='bx bx-phone' ></i> 0966 190 8734</p>
           <p><i class='bx bx-envelope' ></i> techfixph.online@gmail.com</p>
-          <p><i class='bx bx-location-plus' ></i> Olongapo City</p>
-          <a href="https://facebook.com" target="_blank"><i class='bx bxl-facebook-circle' ></i> Facebook</a>
+          <p><i class='bx bx-location-plus' ></i> 12 street hansen East Tapinac, Olongapo City</p>
+          <a href="https://www.facebook.com/profile.php?id=100070807001007" target="_blank"><i class='bx bxl-facebook-circle' ></i> Facebook</a>
         </div>
         <div class="titles">
           <p class="rights">&copy; 2024 TechFix. All Rights Reserved.</p>

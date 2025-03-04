@@ -23,7 +23,7 @@
               <th>No.</th>
               <th>Client</th>
               <th>Date & Time</th>
-              <th>Description</th>
+              <th>Inquiry</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -32,7 +32,7 @@
               <tr v-for="(repair, index) in paginatedRepairs" :key="repair.id">
                 <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
                 <td>{{ repair.user?.first_name || 'N/A' }} {{ repair.user?.last_name || 'N/A' }}</td>
-                <td>{{ formatDate(repair.created_at) }}</td>
+                <td>{{ formatDate(repair.status_updated_at || repair.created_at) }}</td>
                 <td>{{ repair.description || 'No description available' }}</td>
                 <td>{{ repair.status || 'PENDING' }}</td>
                 <td class="actions">
@@ -132,17 +132,17 @@ const existingComment = ref('');
 const selectedStatusAction = ref(false);
 const isLoading = ref(false); 
 
-const openCommentModal = (repair) => {
-  if (!repair || !repair.id) {
-    toast.error('Invalid repair object!');
-    return;
-  }
+// const openCommentModal = (repair) => {
+//   if (!repair || !repair.id) {
+//     toast.error('Invalid repair object!');
+//     return;
+//   }
 
-  selectedRepair.value = repair;
-  existingComment.value = repair.comment || ''; 
-  commentText.value = repair.comment || ''; 
-  showCommentModal.value = true;
-};
+//   selectedRepair.value = repair;
+//   existingComment.value = repair.comment || ''; 
+//   commentText.value = repair.comment || ''; 
+//   showCommentModal.value = true;
+// };
 
 const submitComment = async () => {
   if (!commentText.value.trim()) {
@@ -175,17 +175,17 @@ const submitComment = async () => {
   }
 };
 
-const openRespondModal = (repair) => {
-  if (!repair || !repair.id) {
-    toast.error('Invalid repair object!');
-    return;
-  }
+// const openRespondModal = (repair) => {
+//   if (!repair || !repair.id) {
+//     toast.error('Invalid repair object!');
+//     return;
+//   }
 
-  selectedRepair.value = repair;
-  existingComment.value = repair.comment || ''; 
-  commentText.value = repair.comment || '';
-  showRespondModal.value = true;
-};
+//   selectedRepair.value = repair;
+//   existingComment.value = repair.comment || ''; 
+//   commentText.value = repair.comment || '';
+//   showRespondModal.value = true;
+// };
 
 const submitRespond = async () => {
   if (!commentText.value.trim()) {
