@@ -45,12 +45,6 @@ const routes = [
       }
     },
   },
-  {
-    path: "/admin-login",
-    name: "admin-login",
-    component: () => import('../components/auth/AdminLogin.vue'),
-    beforeEnter: [checkIfNotLogged],
-  },
 
   {
     path: '/change-password',
@@ -135,6 +129,12 @@ const routes = [
     name: 'ServiceForm',
     component: () => import('../components/AdminSide/ServiceForm.vue'),
     props: true,
+    beforeEnter: [checkIfLogged, checkIfAdmin],
+  },
+  {
+    path: "/users",
+    name: "users",
+    component: () => import('../components/AdminSide/UsersList.vue'),
     beforeEnter: [checkIfLogged, checkIfAdmin],
   },
 

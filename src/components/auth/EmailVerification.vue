@@ -34,7 +34,7 @@
   export default {
     data() {
       return {
-        status: 'pending', // pending, verified, failed
+        status: 'pending',
         isResending: false
       };
     },

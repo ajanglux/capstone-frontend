@@ -27,7 +27,6 @@
       </div>
     </div>
 
-    <!-- Reset Password Modal -->
     <div v-if="showResetModal" class="modal-overlay">
       <div class="modal">
         <ResetPassword :email="email" @close="showResetModal = false" />
@@ -41,7 +40,7 @@ import axios from "axios";
 import { ref } from "vue";
 import { BASE_URL } from "../../helpers/baseUrl";
 import Swal from "sweetalert2";
-import ResetPassword from "./ResetPassword.vue"; // Import ResetPassword as a modal
+import ResetPassword from "./ResetPassword.vue";
 
 export default {
   components: {
@@ -51,7 +50,7 @@ export default {
     const email = ref("");
     const message = ref("");
     const messageClass = ref("");
-    const showResetModal = ref(false); // Control modal visibility
+    const showResetModal = ref(false);
 
     const showToast = (icon, title) => {
       Swal.fire({
@@ -66,7 +65,6 @@ export default {
     };
 
     const submitEmail = async () => {
-      // Show SweetAlert loading before the request is sent
       Swal.fire({
         title: 'Sending...',
         text: 'Please wait while we send the code.',
@@ -81,18 +79,13 @@ export default {
         const response = await axios.post(`${BASE_URL}/user/forgot-password`, {
           email: email.value,
         });
-
-        // Hide the loading SweetAlert
         Swal.close();
 
         message.value = response.data.message;
         messageClass.value = "success";
         showToast("success", message.value);
-
-        // Show Reset Password Modal after successful email submission
         showResetModal.value = true;
       } catch (error) {
-        // Close the loading SweetAlert if an error occurs
         Swal.close();
 
         message.value = error.response?.data.error || "No Email Found";
@@ -123,23 +116,8 @@ export default {
   padding: 30px;
 }
 
-// .login-card-wrapper {
-//   display: flex;
-//   border-radius: 12px;
-//   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-//   width: 60%;
-// }
-
 .login-card {
-  // width: 100%;
-  // border-radius: 10px;
-  // box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  // background-color: var(--light);
-  // padding: 60px;
-  // transition: transform 0.3s ease, box-shadow 0.3s ease;
-  // display: flex;
-  // flex-direction: column;
-
+  
   .forgot {
     padding: 0;
     font-size: 13px;

@@ -18,13 +18,13 @@
                 <i class='bx bx-list-plus' ></i>
                 <span class="text">Repair List</span>
             </router-link>
-            <!-- <router-link class="button" to="/responded-list">
-                <i class='bx bx-history'></i>
-                <span class="text">Responded</span>
-            </router-link> -->
-            <router-link class="button" to="/repair-history">
+            <router-link class="button" active-class="active" to="/repair-history">
                 <i class='bx bx-history'></i>
                 <span class="text">History</span>
+          </router-link>
+           <router-link class="button" active-class="active" to="/users">
+                <i class='bx bx-user'></i> 
+                <span class="text">Registered Users</span>
           </router-link>
         </div>
     </aside>

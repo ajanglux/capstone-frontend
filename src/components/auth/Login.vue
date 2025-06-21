@@ -94,12 +94,11 @@ const showToast = (icon, title) => {
 };
 
 const verifyEmailToken = async () => {
-  const verificationUrl = route.query.url; // Ensure the URL contains the proper parameters
+  const verificationUrl = route.query.url;
 
   if (verificationUrl) {
     data.loading = true;
     try {
-      // Send the URL to the backend for verification
       const response = await axios.get(verificationUrl);
       
       if (response.data.success) {
@@ -130,15 +129,16 @@ const userAuth = async () => {
       const user = response.data.user;
       const token = response.data.currentToken;
 
+      store.setToken(token);
+      store.setUser(user);
+      showToast("success", response.data.message);
+
       if (user.role === 0) {
-        store.setToken(token);
-        store.setUser(user);
-        showToast("success", response.data.message);
         router.push("/home");
+      } else if (user.role === 1) {
+        router.push("/admin-dashboard");
       } else {
-        showToast("error", "Access Denied");
-        store.clearToken();
-        store.clearUser();
+        showToast("error", "Invalid user role.");
       }
     }
   } catch (error) {
@@ -157,6 +157,7 @@ const userAuth = async () => {
     console.error(error);
   }
 };
+
 
 onMounted(() => {
   verifyEmailToken()

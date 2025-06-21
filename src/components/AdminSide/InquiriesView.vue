@@ -69,24 +69,6 @@
               />
             </div>
 
-            <!-- <div class="buttons">
-              <h2>WARRANTY STATUS</h2>
-            </div>
-            <div class="custom-checkboxes">
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="warranty" value="warranty" v-model="productInfo.warranty_status" :disabled="isEditing" />
-                <label class="form-check-label" for="warranty">Warranty</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="outOfWarranty" value="out_of_warranty" v-model="productInfo.warranty_status"  :disabled="isEditing" />
-                <label class="form-check-label" for="outOfWarranty">Out Of Warranty</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" :disabled="isEditing" />
-                <label class="form-check-label" for="chargeable">Chargeable</label>
-              </div>
-            </div> -->
-
             <div class="input-group mb-3">
               <span class="input-group-text">Purchase Date</span>
               <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isEditing"/>
@@ -108,11 +90,6 @@
           <span class="input-group-text"></span>
           <textarea v-model="productInfo.description_of_repair" class="form-control" :disabled="isEditing"></textarea>
         </div>
-        
-        <!-- <div class="input-group mb-4">
-          <span class="input-group-text">Address ("optional address")</span>
-          <input v-model="productInfo.address" type="text" class="form-control" :disabled="isEditing" style="text-transform: capitalize;"/>
-        </div> -->
 
         <div class="buttons">
           <button v-if="isEditing" @click="goBack" class="btn">Back</button>

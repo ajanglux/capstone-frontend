@@ -122,9 +122,6 @@
                 true-value="yes" 
                 false-value="no"
               />
-              <!-- <label for="ac_adapter">
-                <span v-if="productInfo.ac_adapter === 'yes'">✔️</span>
-              </label> -->
             </div>
 
             <div class="accessory">
@@ -267,7 +264,7 @@ export default {
   },
   mounted() {
     const userData = useAuthStore();
-    this.userRole = userData.user ? userData.user.role : null; // Ensure userData is populated before accessing role
+    this.userRole = userData.user ? userData.user.role : null;
 
     this.handleQueryParams();
     if (this.id) {

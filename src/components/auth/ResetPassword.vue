@@ -55,7 +55,7 @@ import Swal from "sweetalert2";
 
 export default {
   props: {
-    email: String, // Receive email from ForgotPassword.vue
+    email: String,
   },
   setup(props, { emit }) {
     const token = ref("");
@@ -101,7 +101,7 @@ export default {
       try {
         const response = await axios.post(`${BASE_URL}/user/reset-password`, {
           token: token.value,
-          email: props.email, // Use passed email
+          email: props.email,
           password: password.value,
           password_confirmation: passwordConfirmation.value,
         });
@@ -110,7 +110,7 @@ export default {
         messageClass.value = "success";
         showToast("success", message.value);
 
-        emit("close"); // Close modal on success
+        emit("close");
       } catch (error) {
         message.value = error.response?.data?.error || "An error occurred";
         messageClass.value = "error";

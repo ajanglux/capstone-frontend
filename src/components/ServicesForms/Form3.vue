@@ -53,8 +53,8 @@
 
 
         <div class="buttons">
-          <button v-if="isEditing" @click="updateRepair()" type="button" class="btn btn-primary">Update</button>
-          <button v-else-if="!isViewing" @click="saveRepair()" type="button" class="btn btn-primary">{{ isEditing ? 'Update' : 'Submit' }}</button>
+          <button v-if="isEditing" @click="updateRepair()" type="button" class="btn btn-primary" :disabled="submitting">Update</button>
+          <button v-else-if="!isViewing" @click="saveRepair()" type="button" class="btn btn-primary" :disabled="submitting">{{ isEditing ? 'Update' : 'Submit' }}</button>
           <router-link to="/home" class="btn btn-secondary">Cancel</router-link>
         </div>
       </div>
@@ -83,6 +83,7 @@ export default {
   },
   data() {
     return {
+      submitting: false, 
       errorList: [],
       model: {
         user_id: '',

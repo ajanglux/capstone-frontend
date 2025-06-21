@@ -6,8 +6,6 @@
                 <img class="app-logo" src="/src/assets/techfix-no.png" alt="TechFix Logo" />
                 <h3>TechFix</h3>
             </div>
-
-            <!-- Menu Icon for small screens -->
             <div v-if="!isViewTerms" class="menu-icon" @click="toggleDropdown">
                 <i :class="isDropdownOpen ? 'bx bx-x' : 'bx bx-menu'"></i>
             </div>
@@ -24,10 +22,8 @@
             <span class="text">Status</span>
             </router-link>
         </div>
-
     </header>
 
-    <!-- Overlay for dark effect -->
     <div v-if="isDropdownOpen && !isViewTerms" class="overlay" @click.stop="closeDropdown"></div>
 </div> 
 </template>

@@ -9,7 +9,7 @@
           @click="goToContactUs('Computer Service & Repair')"
         >
           <div class="img">
-            <img src="../../assets/computer-repair.jpg" alt="Service Image" class="img-thumbnail" />
+            <img src="../../assets/computer-repair.jpeg" alt="Service Image" class="img-thumbnail" />
           </div>
           <div class="info">
             <h2>Computer Service & Repair</h2>
@@ -24,7 +24,7 @@
         @click="goToContactUs('Free: Check up for Laptop & Desktop')"
         >
           <div class="img">
-            <img src="../../assets/Laptop-check.jpg" alt="Service Image" class="img-thumbnail" />
+            <img src="../../assets/Laptop-check.jpeg" alt="Service Image" class="img-thumbnail" />
           </div>
           <div class="info">
             <h2>Free: Check up for Laptop & Desktop</h2>
@@ -38,7 +38,7 @@
         @click="goToContactUs('Software and Hardware Installation')"
         >
           <div class="img">
-            <img src="../../assets/hardware-installation.jpg" alt="Service Image" class="img-thumbnail" />
+            <img src="../../assets/hardware-installation.jpeg" alt="Service Image" class="img-thumbnail" />
           </div>
           <div class="info">
             <h2>Software and Hardware Installation</h2>
@@ -50,7 +50,7 @@
         @click="goToContactUs('Reformat & Reprogram')"
         >
           <div class="img">
-            <img src="../../assets/reset.jpg" alt="Service Image" class="img-thumbnail" />
+            <img src="../../assets/reset.jpeg" alt="Service Image" class="img-thumbnail" />
           </div>
           <div class="info">
             <h2>Reformat & Reprogram</h2>
@@ -64,7 +64,7 @@
         @click="goToContactUs('Remove Viruses and Malware')"
         >
           <div class="img">
-            <img src="../../assets/remove-viruses.jpg" alt="Service Image" class="img-thumbnail" />
+            <img src="../../assets/remove-viruses.jpeg" alt="Service Image" class="img-thumbnail" />
           </div>
           <div class="info">
             <h2>Remove Viruses and Malware</h2>
@@ -76,7 +76,7 @@
         @click="goToContactUs('Networking')"
         >
           <div class="img">
-            <img src="../../assets/networking.jpg" alt="Service Image" class="img-thumbnail" />
+            <img src="../../assets/networking.jpeg" alt="Service Image" class="img-thumbnail" />
           </div>
           <div class="info">
             <h2>Networking</h2>
@@ -88,7 +88,7 @@
         @click="goToContactUs('CCTV Installation')"
         >
           <div class="img">
-            <img src="../../assets/cctv.jpg" alt="Service Image" class="img-thumbnail" />
+            <img src="../../assets/cctv.jpeg" alt="Service Image" class="img-thumbnail" />
           </div>
           <div class="info">
             <h2>CCTV Installation</h2>
@@ -170,61 +170,51 @@ const goToContactUs = (serviceTitle) => {
     gap: 35px;
   }
 
-  // .line-card {
-    .card {
-      flex: 1;
-      // padding: 31px;
-      color: var(--light2);
-      transition: all 0.3s ease-in-out;
+  .card {
+    flex: 1;
+    color: var(--light2);
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-hover);
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+
+    &:hover {
+      background-color: var(--main);
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    }
+
+    .img {
       display: flex;
-      flex-direction: column;
-      background-color: var(--main-hover);
-      // border-radius: 20px;
-      cursor: pointer;
-      box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 10px;
 
-      &:hover {
-        background-color: var(--main);
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-        // border-radius: 20px;
-      }
-
-      .img {
-        display: flex;
-        justify-content: center;
+      img {
         width: 100%;
-        margin-bottom: 10px;
+        height: 330px;
+        object-fit: cover;
+        object-position: center;
+        align-content: center;
+      }
+    }
 
-        img {
-          width: 100%;
-          height: 330px;
-          object-fit: cover;
-          object-position: center;
-          align-content: center;
-          // border-radius: 10px;
-
-          // &:hover {
-          //   border-radius: 20px;
-          // }
-        }
+    .info {
+      h2 {
+        font-size: 20px;
+        margin-left: 17px;
+        margin-top: 15px
       }
 
-      .info {
-        h2 {
-          font-size: 20px;
-          margin-left: 17px;
-          margin-top: 15px
-        }
-
-        p {
-          font-size: 15px;
-          margin-left: 18px;
-          margin-bottom: 23px;
-          margin-right: 6px;
-          margin-top: 11px;
-        }
+      p {
+        font-size: 15px;
+        margin-left: 18px;
+        margin-bottom: 23px;
+        margin-right: 6px;
+        margin-top: 11px;
       }
-    // }
+    }
   }
 }
 

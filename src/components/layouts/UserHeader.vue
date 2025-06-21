@@ -38,10 +38,6 @@
                     </div>
                 </div>
 
-                <!-- <a class="button" @click="openInquireModal">
-                    <span class="text">Ticket</span>
-                </a> -->
-
                 <router-link class="button" active-class="active" to="/user-history" @click="closeDropdown">
                   <span class="text">Tickets</span>
                 </router-link>

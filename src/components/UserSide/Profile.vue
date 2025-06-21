@@ -45,9 +45,6 @@
         </div>
 
         <div class="button">
-          <!-- <p>
-            <router-link class="btn btn-primary" to="">Change Email</router-link>
-          </p> -->
           <button type="submit" class="btn btn-primary" :disabled="isProfileUnchanged">Update Profile</button>
         </div>
       </form>
@@ -132,8 +129,8 @@ const isProfileUnchanged = computed(() => {
 
 const validatePhoneNumber = () => {
   userProfile.value.phone_number = userProfile.value.phone_number
-    .replace(/\D/g, '')  // Remove non-numeric characters
-    .slice(0, 11);       // Limit to 11 digits
+    .replace(/\D/g, '') 
+    .slice(0, 11);
 };
 
 onMounted(fetchUserProfile);

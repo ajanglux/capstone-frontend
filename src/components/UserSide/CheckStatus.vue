@@ -15,16 +15,12 @@
         </div>
 
         <div v-if="status">
-
-          <!-- Show only the Cancelled or Unrepairable message, and hide the timeline -->
           <div v-if="status === 'Cancelled' || status === 'Unrepairable'" class="status-message">
             <p v-if="status === 'Cancelled'">Repair Cancelled.</p>
             <p v-if="status === 'Unrepairable'">Unrepairable Repair.</p>
           </div>
 
-          <!-- Show the timeline ONLY if status is not Cancelled or Unrepairable -->
           <div v-else class="timeline-container">
-            <!-- Show message if no updates exist -->
             <div v-if="!onGoingUpdatedAt && !finishedUpdatedAt && !finishedStatusAvailable && !readyForPickupUpdatedAt && !completedUpdatedAt">
               <p class="no-updates-message">No updates yet, please wait for the admin's response.</p>
             </div>
@@ -81,7 +77,7 @@ const readyForPickupUpdatedAt = ref(null);
 const completedUpdatedAt = ref(null);
 const errorMessage = ref('');
 const isLoading = ref(false);
-const finishedStatusAvailable = ref(false); // New reactive variable
+const finishedStatusAvailable = ref(false);
 
 const fetchStatus = async () => {
   status.value = null;
@@ -91,7 +87,7 @@ const fetchStatus = async () => {
   completedUpdatedAt.value = null;
   errorMessage.value = '';
   isLoading.value = true;
-  finishedStatusAvailable.value = false; // Reset on each fetch
+  finishedStatusAvailable.value = false;
 
   try {
     if (code.value) {
@@ -103,7 +99,7 @@ const fetchStatus = async () => {
       completedUpdatedAt.value = response.data.data.completed_updated_at;
 
       if (status.value === 'Ready-for-Pickup' && !finishedUpdatedAt.value) {
-        finishedStatusAvailable.value = true; // Set to available if condition met
+        finishedStatusAvailable.value = true;
       }
     }
   } catch (error) {
@@ -143,7 +139,6 @@ const isActive = (checkStatus) => {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  // align-items: center;
   padding-bottom: 20px;
 }
 h2 {

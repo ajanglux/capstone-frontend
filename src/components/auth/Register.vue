@@ -163,7 +163,6 @@ const data = reactive({
   },
 })
 
-// Validate Birthday (Age Restriction)
 const computedAge = computed(() => {
   if (!data.user.birthday) return null;
 
@@ -274,30 +273,13 @@ const validatePassword = () => {
 };
 
 const registerUser = async () => {
+  if (data.loading) return;
   data.loading = true;
 
   if (!validateBirthday()) {
     data.loading = false;
     return;
   }
-
-  // const age = parseInt(data.user.age, 10);
-
-  // if (isNaN(age) || age < 1) {
-  //   showToast("error", "Please enter a valid age.");
-  //   data.loading = false;
-  //   return;
-  // }
-
-  // if (age <= 11) {
-  //   showToast("error", "Users who are 11 years old or younger are not allowed to register.");
-  //   data.loading = false;
-  //   return;
-  // }
-
-  // if (age >= 12 && age <= 17) {
-  //   showToast("info", "Please use a parent's email to register.");
-  // }
 
   if (!validatePassword()) {
     data.loading = false;
@@ -329,7 +311,7 @@ const registerUser = async () => {
     Swal.fire({
       icon: 'success',
       title: 'Registration Successful',
-      html: '<strong>PLEASE READ:</strong> <br>If you do not see the message in your inbox, check your spam folder and mark the email as "Not Spam" before verifying.',
+      html: '<strong>PLEASE READ:</strong><br><div style="text-align: justify;">If you do not see the message in your inbox, check your spam folder and mark the email as "Not Spam" before verifying.</div>',
       confirmButtonColor: '#0C3C61FF',
       confirmButtonText: 'Okay',
     });
@@ -511,12 +493,12 @@ label {
 }
 
 .slide-in-enter-from {
-  transform: translateX(100px); /* Start from the right */
+  transform: translateX(100px);
   opacity: 0;
 }
 
 .slide-in-enter-to {
-  transform: translateX(0); /* Move to normal position */
+  transform: translateX(0);
   opacity: 1;
 }
 

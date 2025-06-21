@@ -61,7 +61,6 @@
         </div>
         <div class="titles">
           <p class="rights">&copy; 2024 TechFix. All Rights Reserved.</p>
-          <!-- <p class="rights-1">TechFix</p> -->
           <img class="footer-logo" src="/src/assets/techfix.png" alt="TechFix Logo" />
         </div>
       </div>
@@ -127,7 +126,7 @@ export default {
 
     .link {
       text-decoration: none;
-      padding: 3px 10px;
+      padding: 7px 10px;
       margin: 0 3px;
       background-color: var(--main-hover);
       color: var(--light);
@@ -161,7 +160,7 @@ export default {
   h2 {
     font-size: 2.5em;
     margin-bottom: 20px;
-    text-align: center;
+    // text-align: center;
   }
 
   p {
@@ -185,8 +184,7 @@ export default {
 
 .start {
   margin: 0px 40pc 20px 40pc;
-  padding: 18px;
-  padding-left: 35px;
+  padding: 15px;
   background-color: var(--header);
   border-radius: 5px;
 
@@ -206,11 +204,9 @@ export default {
   }
 }
 
-// footer
 .footer {
   background-color: var(--header);
   color: var(--light);
-  // text-align: center;
   padding-top: 33px;
 }
 
@@ -260,7 +256,6 @@ export default {
   a {
     color: var(--light);
     text-decoration: none;
-    // margin: 0 10px;
     font-weight: bold;
     transition: 0.3s;
     margin-top: 10px;
@@ -279,7 +274,6 @@ export default {
   }
 }
 
-// facts
 .faq-section {
   margin-left: 45px;
   margin-right: 45px;
@@ -288,12 +282,15 @@ export default {
 }
 
 .help {
-  font-size: 2.5em;
+  font-size: 30px;
+  margin-left: 20pc;
 }
 
 .faq-item {
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
+  margin-left: 20pc;
+  margin-right: 20pc;
 }
 
 .faq-question {
@@ -514,9 +511,7 @@ export default {
 
 @media (max-width: 500px) {
   .top-section {
-    // display: flex;
-    // flex-direction: column;
-  
+   
     .title {
       order: 2;
       font-size: 1.5em;

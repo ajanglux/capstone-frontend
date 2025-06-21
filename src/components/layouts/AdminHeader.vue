@@ -44,7 +44,7 @@
       await axios.post(`${BASE_URL}/user/logout`, {}, getHeaderConfig(store.access_token));
       toast.success("Logout successfully", { timeout: 3000 });
       store.clearStoredData();
-      router.push("/admin-login");
+      router.push("/");
     } catch (error) {
       console.log(error);
     }

@@ -27,16 +27,16 @@ body.sidebar-hidden .navbar {
 }
 
 body.sidebar-hidden .content {
-    padding-left: 40px !important; /* Adjust or set to 0px when the sidebar is hidden */
+    padding-left: 40px !important;
 }
 
 .content {
-    padding: 40px 40px 40px 260px; /* Default padding when sidebar is visible */
+    padding: 40px 40px 40px 260px;
     transition: padding-left 0.3s ease;
 }
 
 .content-expanded {
-    padding-left: 40px; /* Adjust this to 0 or a smaller value when sidebar is hidden */
+    padding-left: 40px;
 }
 
 button {
@@ -49,18 +49,6 @@ button {
 }
 
 .app {
-    /* main {
-        flex: 1 1 0;
-        padding: 2rem;
-        will-change: transform, opacity;
-
-        @media (max-width: 1050px){
-          justify-content: center;
-          flex-wrap: wrap;
-          margin: 0;
-          flex-direction: column;
-        }    
-    } */
     .headerAndContent {
         display: flex;
         flex-direction: column;
@@ -160,11 +148,10 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: var(--light2); */
 }
 
 .user-container {
-    width: 70%;
+    width: 55%;
     background-color: var(--grey);
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
     color: var(--light);

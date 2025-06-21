@@ -105,7 +105,7 @@ export default {
 }
 
 .container {
-    width: 70%;
+    width: 45%;
 }
 
 h2 {
@@ -123,11 +123,11 @@ h2 {
         gap: 20px;
 
         .left {
-        width: 100%;
+            width: 100%;
         }
 
         .right {
-        width: 100%;
+            width: 100%;
         }
     }
 

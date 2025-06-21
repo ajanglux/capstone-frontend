@@ -81,14 +81,12 @@
       if (response.data.error) {
         toast.error(response.data.error, { timeout: 2500 })
       } else {
-        // Check if the user is an admin
         if (response.data.user.role === 1) {
           store.setToken(response.data.currentToken)
           store.setUser(response.data.user)
           toast.success(response.data.message, { timeout: 2500 })
           router.push('/admin-dashboard')
         } else {
-          // Display message for non-admin users
           toast.error("You are not an admin", { timeout: 2500 })
           store.clearToken()
           store.clearUser()

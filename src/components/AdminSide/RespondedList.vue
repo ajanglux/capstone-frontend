@@ -25,7 +25,6 @@
               <th>Address</th>
               <th>Description</th>
               <th>Status</th>
-              <!-- <th>Actions</th> -->
             </tr>
           </thead>
           <tbody>
@@ -37,18 +36,6 @@
               <td>{{ repair.user?.address }}</td>
               <td>{{ repair.description }}</td>
               <td>{{ repair.status || 'PENDING' }}</td>
-              <!-- <td class="actions">
-                <button @click="openRespondModal(repair)"
-                title="Unrepairable">
-                  <i class='bx bxs-x-circle'></i>
-                </button>
-                <button 
-                  class="btn"
-                  @click="confirmStatusChange(repair)"
-                  title="On-Going">
-                  <i class="bx bx-show"></i>
-                </button>
-              </td> -->
             </tr>
             <tr v-if="paginatedRepairs.length === 0">
               <td colspan="7"><strong>No Responded found.</strong></td>
@@ -122,7 +109,6 @@ const fetchRepairs = async () => {
       selectedActions.value[repair.id] = '';
     });
   } catch (error) {
-    // toast.error('Failed to load Inquiries details. Please try again.', { timeout: 3000 });
   }
 };
 

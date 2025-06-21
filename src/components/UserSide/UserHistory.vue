@@ -18,22 +18,40 @@
               <p>{{ formatDate(repair.status_updated_at || repair.created_at) }}</p>
               <p><strong>Description:</strong> {{ repair.description || 'No description available' }}</p>
               <p><span :class="statusClass(repair.status)">{{ repair.status || 'Pending' }}</span></p>
+              
               <div class="dropdown">
-                <input type="checkbox" id="dropdown-toggle" class="dropdown-toggle">
-                <label for="dropdown-toggle" class="button">
+                <input :id="`dropdown-toggle-${repair.id}`" type="checkbox" class="dropdown-toggle">
+                <label :for="`dropdown-toggle-${repair.id}`" class="button">
                   <i class='bx bx-dots-horizontal-rounded'></i>
                 </label>
                 <div class="dropdown-content">
-                <button v-if="repair.status.toLowerCase()" @click="openNoteModal(repair.comment)" class="nav-link" title="View note from admin" > 
-                  Note from Admin
-                </button>
-                <button class="nav-link" @click="confirmStatusChange(repair, 'Cancelled')" :disabled="['Cancelled', 'On-Going', 'Finished', 'Ready-for-Pickup', 'Completed', 'Unrepairable', 'Responded'].includes(repair.status)" title="Cancel Repair Request">
-                Cancel </button>
-                <button class="nav-link" @click="confirmStatusChange(repair, 'Pending')" :disabled="['On-Going', 'Finished', 'Ready-for-Pickup', 'Completed', 'Pending', 'Unrepairable'].includes(repair.status)" title="Re-Inquire Repair Request">
-                Re-inquire</button>
-                <button @click="viewRepair(repair)" class="nav-link" title="View Details">
-                View Details</button>
-              </div>
+    
+                  <button 
+                    v-if="repair.comments && repair.comments.length" 
+                    @click="openNoteModal(repair.comments)" 
+                    class="nav-link" 
+                    title="View note from admin">
+                    Note from Admin
+                  </button>
+
+                  <button class="nav-link"
+                          @click="confirmStatusChange(repair, 'Cancelled')"
+                          :disabled="['Cancelled', 'On-Going', 'Finished', 'Ready-for-Pickup', 'Completed', 'Unrepairable', 'Responded'].includes(repair.status)"
+                          title="Cancel Repair Request">
+                    Cancel
+                  </button>
+
+                  <button class="nav-link"
+                          @click="confirmStatusChange(repair, 'Pending')"
+                          :disabled="['On-Going', 'Finished', 'Ready-for-Pickup', 'Completed', 'Pending', 'Unrepairable'].includes(repair.status)"
+                          title="Re-Inquire Repair Request">
+                    Re-inquire
+                  </button>
+
+                  <button @click="viewRepair(repair)" class="nav-link" title="View Details">
+                    View Details
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -51,11 +69,18 @@
     :message="confirmationMessage"
   />
 
-  <!-- Modal for Viewing Note -->
   <div v-if="showNoteModal" class="modal-overlay">
     <div class="modal-content">
-      <h3>Note From Admin</h3>
-      <p>{{ selectedNote || "No reason provided" }}</p>
+      <h3>Notes From Admin</h3>
+      <div v-if="selectedNote.length">
+        <div v-for="(note, idx) in recentComments" :key="idx" class="comment-box">
+          <p>{{ note.comment }}</p>
+          <p class="timestamp">{{ formatDate(note.created_at) }}</p>
+        </div>
+      </div>
+      <div v-else>
+        <p>No notes available.</p>
+      </div>
       <div class="modal-actions">
         <button @click="showNoteModal = false">Close</button>
       </div>
@@ -102,7 +127,6 @@ const showToast = (icon, title) => {
   });
 };
 
-// Fetch Repairs for User
 const fetchRepairs = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/customer-details/my-list/repair`, getHeaderConfig(authStore.access_token));
@@ -110,6 +134,7 @@ const fetchRepairs = async () => {
       ...repair,
       user: repair.user || { first_name: 'N/A', last_name: 'N/A' },
       description: repair.description || 'No description available',
+      comments: repair.comments || [],
     }));
 
     repairs.value.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -181,7 +206,6 @@ const updateStatus = async (cancelReason = null) => {
   }
 };
 
-// Format Date
 const formatDate = (dateString) => {
   if (dateString) {
     const date = new Date(dateString);
@@ -191,13 +215,18 @@ const formatDate = (dateString) => {
   return 'N/A';
 };
 
-// Open Note Modal
-const openNoteModal = (note) => {
-  selectedNote.value = note;
+const recentComments = computed(() => {
+  if (!Array.isArray(selectedNote.value)) return [];
+  return [...selectedNote.value]
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    .slice(0, 5);
+});
+
+const openNoteModal = (notes) => {
+  selectedNote.value = notes;
   showNoteModal.value = true;
 };
 
-// Filtered Repairs
 const filteredRepairs = computed(() => {
   return repairs.value.filter(repair => {
     const searchText = searchQuery.value.toLowerCase();
@@ -206,7 +235,6 @@ const filteredRepairs = computed(() => {
   });
 });
 
-// Paginated Repairs
 const paginatedRepairs = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   return filteredRepairs.value.slice(start, start + itemsPerPage.value);
@@ -223,12 +251,10 @@ const viewRepair = (repair) => {
   }
 };
 
-// Show "Note" Column only if at least one repair is Cancelled
 const showCancelledColumn = computed(() => {
   return repairs.value.some(repair => repair.status.toLowerCase() === 'cancelled');
 });
 
-// Status Styling
 const statusClass = (status) => {
   switch (status.toLowerCase()) {
     case 'pending':
@@ -277,7 +303,6 @@ h1 {
 
   h4 {
     color: var(--light);
-    // margin-bottom: 10px;
   }
 
   p {
@@ -360,7 +385,7 @@ h1 {
     }
 
     .dropdown-toggle {
-      display: none; /* Hide the checkbox */
+      display: none;
     }
   
     i {
@@ -432,8 +457,15 @@ h1 {
     font-weight: 500px;
   }
 
-  p {
-    padding-bottom: 20px;
+  .comment-box {
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+
+  .timestamp {
+    font-size: 12px;
   }
 
   button {

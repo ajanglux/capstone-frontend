@@ -32,7 +32,7 @@ export default {
   name: 'AdminDashboard',
   components: { BarChart },
   setup() {
-    const isLoading = ref(false); // Reactive loading state
+    const isLoading = ref(false);
     return { isLoading };
   },
   data() {
@@ -55,8 +55,7 @@ export default {
         return;
       }
 
-      this.isLoading = true; // Start loading
-
+      this.isLoading = true;
       try {
         const headers = getHeaderConfig(token);
         const response = await axios.get(`${BASE_URL}/admin-dashboard-stats`, headers);
@@ -68,7 +67,7 @@ export default {
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
       } finally {
-        this.isLoading = false; // End loading
+        this.isLoading = false;
       }
     },
     async fetchMonthlyCompletedRepairs() {
@@ -80,7 +79,7 @@ export default {
         return;
       }
 
-      this.isLoading = true; // Start loading
+      this.isLoading = true;
 
       try {
         const headers = getHeaderConfig(token);
@@ -90,7 +89,7 @@ export default {
         console.error('Error fetching monthly completed repairs data:', error);
         this.completedRepairsData = [0, 5, 2, 7, 0, 4, 3, 6, 1, 8, 0, 0];
       } finally {
-        this.isLoading = false; // End loading
+        this.isLoading = false;
       }
     },
   },
@@ -110,7 +109,6 @@ export default {
     width: 100%;
     flex: 1;
     padding: 20px;
-    // border-radius: 5px;
     background-color: var(--grey);
     color: var(--light2);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -141,7 +139,6 @@ export default {
     background-color: var(--light2);
     padding: 30px 100px;
     width: 100%;
-    // border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 
     .bar {

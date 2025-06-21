@@ -5,9 +5,6 @@
         <h2>{{ isEditing ? 'EDIT' : isViewing ? 'VIEW' : 'Add Repair' }}</h2>
       </div>
       <div class="card-body">
-
-        <!-- details in the form if the computer service & Repair, Check up for laptop & desktop, Reformat & Reprogram, and remove viruses & malware -->
-
         <!-- Customer Details -->
         <div class="whole">
           <div class="left" v-if="userRole !== 0">
@@ -41,6 +38,7 @@
             <div class="buttons">
               <h2>PRODUCT INFORMATION</h2>
             </div>
+
             <div>
               <span class="input-group-text">Device Type</span>
               <select v-model="productInfo.device_type">
@@ -48,46 +46,34 @@
                 <option value="Desktop">Desktop</option>
               </select>
             </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">Brand</span>
-              <input v-model="productInfo.brand" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">Model</span>
-              <input v-model="productInfo.model" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
-            </div>
-            <div class="input-group mb-3">
-              <span class="input-group-text">Serial Number</span>
-              <input
-                v-model="productInfo.serial_number"
-                @input="productInfo.serial_number = productInfo.serial_number.toUpperCase()"
-                type="text"
-                class="form-control"
-                :disabled="isViewing"
-              />
+
+            <div class="wait">
+              <div class="input-group mb-3">
+                <span class="input-group-text">Brand</span>
+                <input v-model="productInfo.brand" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">Model</span>
+                <input v-model="productInfo.model" type="text" class="form-control" :disabled="isViewing" style="text-transform: capitalize;" />
+              </div>
             </div>
 
-            <!-- <div class="buttons">
-              <h2>WARRANTY STATUS</h2>
-            </div>
-            <div class="custom-checkboxes">
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="warranty" value="warranty" v-model="productInfo.warranty_status" :disabled="isViewing" />
-                <label class="form-check-label" for="warranty">Warranty</label>
+            <div class="wait2">
+              <div class="input-group mb-3">
+                <span class="input-group-text">Serial Number</span>
+                <input
+                  v-model="productInfo.serial_number"
+                  @input="productInfo.serial_number = productInfo.serial_number.toUpperCase()"
+                  type="text"
+                  class="form-control"
+                  :disabled="isViewing"
+                />
               </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="outOfWarranty" value="out_of_warranty" v-model="productInfo.warranty_status" :disabled="isViewing" />
-                <label class="form-check-label" for="outOfWarranty">Out Of Warranty</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="chargeable" value="chargeable" v-model="productInfo.warranty_status" :disabled="isViewing" />
-                <label class="form-check-label" for="chargeable">Chargeable</label>
-              </div>
-            </div> -->
 
-            <div class="input-group mb-3">
-              <span class="input-group-text">Purchase Date</span>
-              <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isViewing" :max="maxDate"/>
+              <div class="input-group mb-3">
+                <span class="input-group-text">Purchase Date</span>
+                <input v-model="productInfo.purchase_date" type="date" class="form-control" :disabled="isViewing" :max="maxDate"/>
+              </div>
             </div>
           </div>
         </div>
@@ -95,6 +81,7 @@
         <div class="buttons">
           <h2>Service: {{ model.description }}</h2>
         </div>
+
         <div><h3>Other Description</h3></div>
         <div class="input-group mb-4">
           <span class="input-group-text"></span>
@@ -217,8 +204,6 @@ export default {
         this.model.email = customerDetail.user.email;
         this.model.user_id = customerDetail.user.id;
         this.productInfo = customerDetail.product_infos[0] || {};
-
-        // Ensure device_type is set
         this.productInfo.device_type = customerDetail.product_infos[0]?.device_type || '';
       } catch (error) {
         this.showToast("error", "Failed to load repair details. Please try again.")
@@ -227,7 +212,7 @@ export default {
     async fetchUserProfile() {
       try {
         const authStore = useAuthStore();
-        const headers = getHeaderConfig(authStore.access_token); // Ensure token is correctly fetched
+        const headers = getHeaderConfig(authStore.access_token);
 
         if (!authStore.access_token) {
           this.showToast("error", "Authentication token missing.");
@@ -250,6 +235,9 @@ export default {
       }
     },
     async saveRepair() {
+      if (this.submitting) return;
+
+      this.submitting = true;
       try {
         const authStore = useAuthStore();
 
@@ -278,8 +266,8 @@ export default {
             { 
               ...this.productInfo, 
               customer_detail_id: customerResponse.data.data.id,
-              device_type: this.productInfo.device_type, // <-- Added this
-              description_of_repair: this.productInfo.description_of_repair // <-- Added this
+              device_type: this.productInfo.device_type,
+              description_of_repair: this.productInfo.description_of_repair
             },
             getHeaderConfig(authStore.access_token)
           );
@@ -288,10 +276,15 @@ export default {
         setTimeout(() => this.$router.push({ name: 'home' }), 1500);
       } catch (error) {
         this.showToast("error", "Failed to save. There are missing details or an error occurred.");
+      } finally {
+        this.submitting = false;
       }
     },
 
     async updateRepair() {
+      if (this.submitting) return;
+
+      this.submitting = true;
       try {
         const authStore = useAuthStore();
         await axios.put(`${BASE_URL}/customer-details/${this.id}`, this.model, getHeaderConfig(authStore.access_token));
@@ -300,7 +293,7 @@ export default {
           await axios.put(`${BASE_URL}/product-infos/${this.productInfo.id}`, 
           { 
             ...this.productInfo, 
-            device_type: this.productInfo.device_type // <-- Added this
+            device_type: this.productInfo.device_type
           }, 
           getHeaderConfig(authStore.access_token));
         } else {
@@ -308,7 +301,7 @@ export default {
           { 
             ...this.productInfo, 
             customer_detail_id: this.id,
-            device_type: this.productInfo.device_type // <-- Added this
+            device_type: this.productInfo.device_type
           }, 
           getHeaderConfig(authStore.access_token));
         }
@@ -317,7 +310,9 @@ export default {
         setTimeout(() => this.$router.push({ name: 'home' }), 1500);
       } catch (error) {
         this.showToast("error", "Failed to update. There are missing details.");
-      }
+      } finally {
+        this.submitting = false;
+      } 
     },
 
   },
@@ -345,6 +340,17 @@ h2 {
 
     .right {
       width: 100%;
+
+      .wait {
+        margin-top: 10px;
+        display: flex;
+        gap: 15px;
+      }
+
+      .wait2 {
+        display: flex;
+        gap: 15px;
+      }
     }
   }
 

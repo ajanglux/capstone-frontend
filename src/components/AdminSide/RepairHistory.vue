@@ -17,7 +17,6 @@
               <div class="filters">
                 <select v-model="selectedStatus">
                   <option value="">All</option>
-                  <!-- <option value="Incomplete"></option> -->
                   <option value="Completed">Completed</option>
                   <option value="Cancelled">Cancelled</option>
                   <option value="Unrepairable">Unrepairable</option>
@@ -212,10 +211,10 @@ const filteredRepairs = computed(() => {
         return repairDate.toDateString() === filterValue.toDateString();
       } else if (filterType.value === 'weekly') {
         const weekStart = new Date(filterValue);
-        weekStart.setDate(weekStart.getDate() - (weekStart.getDay() === 0 ? 6 : weekStart.getDay() - 1)); // Move to Monday
+        weekStart.setDate(weekStart.getDate() - (weekStart.getDay() === 0 ? 6 : weekStart.getDay() - 1));
 
         const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekStart.getDate() + 6); // Move to Sunday
+        weekEnd.setDate(weekStart.getDate() + 6);
 
         return repairDate >= weekStart && repairDate <= weekEnd;
       } else if (filterType.value === 'monthly') {
@@ -272,9 +271,9 @@ const generateReport = async () => {
 
   if (filterType.value === 'weekly') {
     const startOfWeek = new Date(selectedFilterValue.value);
-    startOfWeek.setDate(startOfWeek.getDate() - (startOfWeek.getDay() === 0 ? 6 : startOfWeek.getDay() - 1)); // Adjust to Monday
+    startOfWeek.setDate(startOfWeek.getDate() - (startOfWeek.getDay() === 0 ? 6 : startOfWeek.getDay() - 1));
     const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); // End of the week (Sunday)
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
     fileName += `-${formatDate(startOfWeek)}_to_${formatDate(endOfWeek)}`;
   } else {
     fileName += `-${selectedFilterValue.value}`;
@@ -355,7 +354,6 @@ onMounted(() => {
     input {
       margin-left: 5px;
       padding: 6px;
-      // border: none;
       border-radius: 5px;
     }
 

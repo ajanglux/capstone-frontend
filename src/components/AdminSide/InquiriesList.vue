@@ -43,7 +43,6 @@
                         <option value="view">View Details</option>
                         <option value="Accept">Accept</option>
                         <option value="Unrepairable">Service Not Possible</option>
-                        <!-- <option value="Responded">Respond</option> -->
                       </select>
                     </div>
                   </div>
@@ -132,18 +131,6 @@ const existingComment = ref('');
 const selectedStatusAction = ref(false);
 const isLoading = ref(false); 
 
-// const openCommentModal = (repair) => {
-//   if (!repair || !repair.id) {
-//     toast.error('Invalid repair object!');
-//     return;
-//   }
-
-//   selectedRepair.value = repair;
-//   existingComment.value = repair.comment || ''; 
-//   commentText.value = repair.comment || ''; 
-//   showCommentModal.value = true;
-// };
-
 const submitComment = async () => {
   if (!commentText.value.trim()) {
     toast.error('Comment cannot be empty.');
@@ -174,18 +161,6 @@ const submitComment = async () => {
     toast.error('Failed to update comment & status.');
   }
 };
-
-// const openRespondModal = (repair) => {
-//   if (!repair || !repair.id) {
-//     toast.error('Invalid repair object!');
-//     return;
-//   }
-
-//   selectedRepair.value = repair;
-//   existingComment.value = repair.comment || ''; 
-//   commentText.value = repair.comment || '';
-//   showRespondModal.value = true;
-// };
 
 const submitRespond = async () => {
   if (!commentText.value.trim()) {
@@ -313,7 +288,7 @@ const confirmStatusChange = () => {
 };
 
 const updateStatus = async (id, status) => {
-  isLoading.value = true; // Start loading
+  isLoading.value = true;
   try {
     await axios.patch(`${BASE_URL}/customer-details/${id}/status`, { status }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
@@ -323,7 +298,7 @@ const updateStatus = async (id, status) => {
     const errorMessage = error.response?.data?.message || `Error updating repair status to ${status}`;
     toast.error(errorMessage, { timeout: 4700 });
   } finally {
-    isLoading.value = false; // Stop loading
+    isLoading.value = false;
   }
 };
 

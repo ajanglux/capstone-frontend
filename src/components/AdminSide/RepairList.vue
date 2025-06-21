@@ -18,7 +18,6 @@
           <div class="filters">
             <select v-model="selectedStatus">
               <option value="">All</option>
-              <!-- <option value="Incomplete"></option> -->
               <option value="On-Going">On-going</option>
               <option value="Finished">Finished</option>
               <option value="Ready-for-Pickup">Ready</option>
@@ -51,7 +50,7 @@
                     <option value="edit">Modify</option>
                     <option value="Note" title="Send Note for this User">Note</option>
                     <option value="view">Print Statement</option>
-                    <!-- <option value="Cancelled" :disabled="repair.status === 'Cancelled' || repair.status === 'Finished' || repair.status === 'On-Going' || repair.status === 'Ready-for-Pickup' || repair.status === 'Completed'">Cancel</option> -->
+                    <option value="view-note">View Notes</option>
                   </select>
                 </div>
               </td>
@@ -114,6 +113,24 @@
     </div>
   </div>
 
+  <div v-if="showViewNoteModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Notes for this User</h3>
+      <div v-if="selectedNote.length">
+        <div v-for="(note, idx) in recentComments" :key="idx" class="comment-box">
+          <p>{{ note.comment }}</p>
+          <p class="timestamp">{{ formatDate(note.created_at) }}</p>
+        </div>
+      </div>
+      <div v-else>
+        <p>No notes available for this repair.</p>
+      </div>
+      <div class="modal-actions">
+        <button class="cancel" @click="showViewNoteModal = false">Close</button>
+      </div>
+    </div>
+  </div>
+
 </template>
 
 <script setup>
@@ -146,6 +163,9 @@ const showNoteModal = ref(false);
 const commentText = ref('');
 const existingComment = ref('');
 const isLoading = ref(false);
+
+const showViewNoteModal = ref(false);
+const selectedNote = ref([]);
 
 const openCommentModal = (repair) => {
   if (!repair || !repair.id) {
@@ -231,10 +251,15 @@ const fetchRepairs = async () => {
   isLoading.value = true;
   try {
     const response = await axios.get(`${BASE_URL}/customer-details`, getHeaderConfig(authStore.access_token));
-    repairs.value = response.data.data.map(repair => ({
-      ...repair,
-      user: repair.user || { first_name: 'N/A', last_name: 'N/A' }
-    }));
+    repairs.value = response.data.data.map(repair => {
+      const allComments = (repair.product_infos || []).flatMap(p => p.comments || []);
+      return {
+        ...repair,
+        comments: allComments,
+        user: repair.user || { first_name: 'N/A', last_name: 'N/A' }
+      };
+    });
+
 
     repairs.value.sort((a, b) => {
       const aDate = a.on_going_updated_at ? new Date(a.on_going_updated_at) : new Date(0); 
@@ -283,6 +308,14 @@ const paginatedRepairs = computed(() => {
   return filteredRepairs.value.slice(start, start + itemsPerPage.value);
 });
 
+const recentComments = computed(() => {
+  if (!Array.isArray(selectedNote.value)) return [];
+  return [...selectedNote.value]
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    .slice(0, 5);
+});
+
+
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
@@ -307,6 +340,16 @@ const handleActionChange = (repairId) => {
     openNoteModal(repair);
   } else if (action === 'view') {
     router.push({ name: 'repair-form', params: { id: repairId, view: 'view' } });
+  } else if (action === 'view-note') {
+    const repair = repairs.value.find(r => r.id === repairId);
+    if (repair) {
+      selectedRepair.value = repair;
+      const allComments = (repair.product_infos || [])
+        .flatMap(info => info.comments || []);
+
+      selectedNote.value = allComments;
+      showViewNoteModal.value = true;
+    }
   } else if ( action === 'Unrepairable' ){
     const repair = repairs.value.find(r => r.id === repairId);
     if (repair) {
@@ -337,7 +380,7 @@ const confirmStatusChange = () => {
 };
 
 const updateStatus = async (id, status) => {
-  isLoading.value = true; // Start loading
+  isLoading.value = true; 
   try {
     await axios.patch(`${BASE_URL}/customer-details/${id}/status`, { status }, getHeaderConfig(authStore.access_token));
     fetchRepairs();
@@ -347,7 +390,7 @@ const updateStatus = async (id, status) => {
     const errorMessage = error.response?.data?.message || `Error updating repair status to ${status}`;
     toast.error(errorMessage, { timeout: 4700 });
   } finally {
-    isLoading.value = false; // Stop loading
+    isLoading.value = false;
   }
 };
 
@@ -438,6 +481,29 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  h3 {
+    padding-bottom: 20px;
+    font-weight: 500px;
+  }
+
+  .comment-box {
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+
+  .timestamp {
+    font-size: 12px;
+  }
+
+  button {
+    color: white;
+    background-color: var(--header);
+    padding: 10px;
+    border-radius: 5px;
+  }
 }
 
 .modal-content {
@@ -445,6 +511,7 @@ onMounted(() => {
   padding: 20px;
   border-radius: 10px;
   width: 400px;
+  text-align: center;
 }
 
 textarea {

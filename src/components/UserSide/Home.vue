@@ -15,9 +15,6 @@
 
                         <div class="user-inqui">
                             <h4>Your Inquiry:</h4>
-                            <!-- <router-link to="/user" class="button" style="cursor: pointer" title="View Details">
-                                <i class="bx bx-show"></i>
-                            </router-link> -->
                             <button v-for="repair in repairs" :key="repair.id" @click="viewRepair(repair)">
                                 <i class="bx bx-show"></i>
                             </button>
@@ -25,20 +22,20 @@
                             <p v-if="descriptionUpdatedAt" class="timestamp">Updated on: {{ formattedDescriptionUpdatedAt }}</p>
                         </div>
 
-                        <div 
-                        class="admin-respond" 
-                        v-if="comment && status !== 'Unrepairable'">
-                            <h4>Admin Note:</h4>
-                            <p class="comment-box">{{ comment }}</p>
-                            <p v-if="adminCommentUpdatedAt" class="timestamp">
-                                Updated on: {{ formattedAdminCommentUpdatedAt }}
-                            </p>
+                        <div class="admin-respond" v-if="comments.length && status !== 'Unrepairable'">
+                            <h4>Admin Notes:</h4>
+                            <div v-for="(item, index) in comments" :key="item.id" class="comment-box">
+                                <p>{{ item.comment }}</p>
+                                <p class="timestamp">{{ formatDate(item.created_at) }}</p>
+                            </div>
                         </div>
 
-                        <div class="admin-respond" v-if="status === 'Unrepairable'">
-                            <h4>Unrepairable (Admin Reason)</h4>
-                            <p class="comment-box">{{ comment }}</p>
-                            <p v-if="adminCommentUpdatedAt" class="timestamp">Updated on: {{ formattedAdminCommentUpdatedAt }}</p>
+                        <div class="admin-respond" v-if="status === 'Unrepairable' && comments.length">
+                            <h4>Unrepairable (Admin Note)</h4>
+                            <div v-for="(item, index) in comments" :key="item.id" class="comment-box">
+                                <p>{{ item.comment }}</p>
+                                <p class="timestamp">{{ formatDate(item.created_at) }}</p>
+                            </div>
                         </div>
 
                         <div v-else>
@@ -50,11 +47,9 @@
 
                                     <div v-if="status === 'Cancelled' || status === 'Unrepairable'" class="status-message">
                                         <p v-if="status === 'Cancelled'">Repair Cancelled.</p>
-                                        <!-- <p v-if="status === 'Unrepairable'">Repair is Unrepairable.</p> -->
                                     </div>
 
                                     <div v-else>
-                                        <!-- Show message if no status updates exist -->
                                         <div v-if="!onGoingUpdatedAt && !finishedUpdatedAt && !finishedStatusAvailable && !readyForPickupUpdatedAt && !completedUpdatedAt">
                                             <p class="no-updates-message">No updates yet, please wait for the admin's response.</p>
                                         </div>
@@ -108,13 +103,11 @@
                         <div class="line-card">
                             <div class="card1">
                                 <div class="img">
-                                    <img src="../../assets/Laptop-check.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <img src="../../assets/Laptop-check.jpeg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
                                         <h2>Free Check up for Laptop & Desktop</h2>
                                         <p>Inquire now, and get a free check-up for your laptop or desktop. Available for all your technical needs</p>
                                         <div class="buttons">
-                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
-                                            <!-- <button @click="goToContactForm1('Free: Check up for Laptop & Desktop')"><i class='bx bxs-edit-alt'></i> Inquire Now</button> -->
                                         </div>
                                     </div>
                                 </div>
@@ -124,14 +117,13 @@
                         <div class="side-card">
                             <div class="card1">
                                 <div class="img">
-                                    <img src="../../assets/computer-repair.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <img src="../../assets/computer-repair.jpeg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
                                         <h2 class="h2-1">Computer Repair</h2>
                                         <p class="p1">
                                             Expert computer repair to fix hardware, software, and performance issues quickly and efficiently.
                                         </p>
                                         <div class="buttons">
-                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactForm1('Computer Repair')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
                                         </div>
                                     </div>
@@ -140,12 +132,11 @@
 
                             <div class="card1">
                                 <div class="img">
-                                    <img src="../../assets/hardware-installation.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <img src="../../assets/hardware-installation.jpeg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
                                         <h2 class="h2-1">Software and Hardware Installation</h2>
                                         <p class="p1">Professional software and hardware installation services to ensure your devices are set up and running smoothly.</p>
                                         <div class="buttons">
-                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactForm1('Software and Hardware Installation')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
                                         </div>
                                     </div>
@@ -159,12 +150,11 @@
                             
                             <div class="card1">
                                 <div class="img">
-                                    <img src="../../assets/reset.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <img src="../../assets/reset.jpeg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
                                         <h2 class="h2-1">Reformat & Reprogram</h2>
                                         <p class="p1">Reliable reformat and reprogram services to restore your system’s performance and resolve software issues.</p>
                                         <div class="buttons">
-                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactForm1('Reformat & Reprogram')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
                                         </div>
                                     </div>
@@ -173,12 +163,11 @@
 
                             <div class="card1">
                                 <div class="img">
-                                    <img src="../../assets/remove-viruses.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <img src="../../assets/remove-viruses.jpeg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
                                         <h2 class="h2-1">Remove Viruses and Malware</h2>
                                         <p class="p1">Effective virus and malware removal to protect your device and restore its security and performance.</p>
                                         <div class="buttons">
-                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactForm1('Remove Viruses and Malware')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
                                         </div>
                                     </div>
@@ -191,12 +180,11 @@
 
                             <div class="card1">
                                 <div class="img">
-                                    <img src="../../assets/networking.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <img src="../../assets/networking.jpeg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
                                         <h2 class="h2-1">Networking</h2>
                                         <p class="p1">Expert networking solutions for seamless connectivity, setup, and troubleshooting of your home or office network.</p>
                                         <div class="buttons">
-                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactUsForm3('Networking')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
                                         </div>
                                     </div>
@@ -205,12 +193,11 @@
 
                             <div class="card1">
                                 <div class="img">
-                                    <img src="../../assets/cctv.jpg" alt="Service Image" class="img-thumbnail" />
+                                    <img src="../../assets/cctv.jpeg" alt="Service Image" class="img-thumbnail" />
                                     <div class="overlay">
                                         <h2 class="h2-1">CCTV Installation</h2>
                                         <p class="p1">Enhancing security with professional setup of surveillance systems for homes and businesses.</p>
                                         <div class="buttons">
-                                            <!-- <button @click.stop="viewDetails('Computer Service & Repair')">View Details</button> -->
                                             <button @click="goToContactUsForm3('CCTV Installation')"><i class='bx bxs-edit-alt'></i> Inquire Now</button>
                                         </div>
                                     </div>
@@ -240,11 +227,12 @@ const readyForPickupUpdatedAt = ref(null);
 const completedUpdatedAt = ref(null);
 const errorMessage = ref('');
 const isLoading = ref(false);
-const finishedStatusAvailable = ref(false); // New reactive variable
+const finishedStatusAvailable = ref(false);
 
 const router = useRouter();
 const authStore = useAuthStore();
 const token = authStore.access_token;
+const comments = ref([]);
 const comment = ref('');
 const description = ref('');
 
@@ -297,17 +285,21 @@ const fetchHomeStatus = async () => {
         descriptionUpdatedAt.value = response.data.data.description_updated_at;
         adminCommentUpdatedAt.value = response.data.data.admin_comment_updated_at;
 
-        comment.value = response.data.data.comment && response.data.data.comment.trim() ? response.data.data.comment : '';
+        const productInfos = response.data.data.productInfos || [];
+        const allComments = productInfos.flatMap(info => info.comments || []);
+        comments.value = allComments
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+        .slice(0, 3);
         description.value = response.data.data.description && response.data.data.description.trim() ? response.data.data.description : '';
         
         if (status.value === 'Ready-for-Pickup' && !finishedUpdatedAt.value) {
-            finishedStatusAvailable.value = true; // Set to available if condition met
+            finishedStatusAvailable.value = true;
         }
 
         if (status.value === "Responded") {
-            statusUpdateVisible.value = false;  // Hide status updates when "Responded"
+            statusUpdateVisible.value = false; 
         } else {
-            statusUpdateVisible.value = true;   // Show status updates for all other statuses
+            statusUpdateVisible.value = true;
         }
     
     } catch (error) {
@@ -335,7 +327,7 @@ const fetchRepairs = async () => {
 const viewRepair = (repair) => {
     if (!repair || !repair.description) {
         console.error("Repair object or description is undefined");
-        return;  // Return early if the object is invalid
+        return;
     }
 
     const description = repair.description.toLowerCase();
@@ -384,7 +376,6 @@ const isActive = (checkStatus) => {
     margin-bottom: 2pc;
     gap: 30px;
     width: 100%;
-    /* align-items: stretch; */
     transition: all 0.5s ease;
     margin-left: 20px;
     padding-right: 2.3pc;
@@ -554,10 +545,9 @@ const isActive = (checkStatus) => {
             display: flex;
             flex-direction: column;
             border-radius: 20px;
-            /* cursor: pointer; */
 
-            position: relative; /* Needed for positioning the overlay */
-            overflow: hidden; /* Ensures the overlay is contained within the card */
+            position: relative;
+            overflow: hidden;
             border-radius: 10px;
 
             .overlay {
@@ -566,13 +556,13 @@ const isActive = (checkStatus) => {
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0, 0, 0, 0.6); /* Semi-transparent overlay */
+                background: rgba(0, 0, 0, 0.6);
                 color: white;
                 padding: 20px;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
-                z-index: 1; /* Ensure overlay is above the image */
+                z-index: 1;
                 border-radius: 8px;
 
                 h2 {
@@ -599,7 +589,7 @@ const isActive = (checkStatus) => {
 
                 .buttons {
                     display: flex;
-                    gap: 10px; /* Spacing between buttons */
+                    gap: 10px;
 
                     button {
                         padding: 10px 20px;
@@ -620,7 +610,6 @@ const isActive = (checkStatus) => {
 
 
             &:hover {
-                /* background-color: var(--main-hover); */
                 border-radius: 5px;
             }
 

@@ -60,7 +60,7 @@ export default {
   computed: {
     isUser() {
       const store = useAuthStore();
-      return store.isUser; // correctly checks if user is a regular user
+      return store.isUser;
     },
     isRegisterPage() {
       return this.$route.path === '/register';
@@ -77,21 +77,11 @@ export default {
     isResetPass() {
       return this.$route.path === '/reset-password';
     },
-    // isForm1() {
-    //   return this.$route.path === '/form-1';
-    // },
-    // isForm2() {
-    //   return this.$route.path === '/form-2';
-    // },
-    // isForm3() {
-    //   return this.$route.path === '/form-3';
-    // },
-
 
     // ADMIN
     isAdmin() {
       const store = useAuthStore();
-      return store.isAdmin; // correctly checks if user is admin
+      return store.isAdmin;
     },
     isLandingPage() {
       return this.$route.path === '/';
