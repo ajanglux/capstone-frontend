@@ -107,7 +107,7 @@ export default {
     },
     async trackLandingPageView() {
       try {
-        await fetch('https://techfix.online/api/track-view', {
+        await fetch('http://127.0.0.1:8000/api/track-view', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ export default {
     },
     async getViewCount() {
       try {
-        const res = await fetch('https://techfix.online/api/track-view/landing-page');
+        const res = await fetch('http://127.0.0.1:8000/api/track-view/landing-page');
         const data = await res.json();
         this.viewCount = data.count;
       } catch (error) {
