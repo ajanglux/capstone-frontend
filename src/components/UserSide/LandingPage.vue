@@ -11,6 +11,7 @@
                 <router-link class="link" to="/login">Login</router-link>
                 to get started.
               </p>
+              <p class="view-count">Visitor Count: {{ viewCount }}</p>
             </div>
 
             <img class="side-image" src="/src/assets/pngegg.png" 
@@ -74,20 +75,64 @@ export default {
   data() {
     return {
       activeIndex: null,
+      viewCount: 0,
       faqs: [
-        { question: "How does TechFix work?", answer: "TechFix allows you to submit your device for repair, track its status using a unique code, and receive updates from the admin about what is happening to your device." },
-        { question: "What services do you offer?", answer: "We provide repair services for laptops and other computer devices, along with various other services you may need. Please visit the 'Services' section in the upper right corner of your screen to explore our available offers." },
-        { question: "How can I track my repair?", answer: "First, you need to log in or sign up for an account to make a repair request. After submitting your device, you'll receive a unique code to check real-time updates on the status of your repair. You can enter this code in the 'Status' section to track your device without logging in." }
+        {
+          question: "How does TechFix work?",
+          answer: "TechFix allows you to submit your device for repair, track its status using a unique code, and receive updates from the admin about what is happening to your device."
+        },
+        {
+          question: "What services do you offer?",
+          answer: "We provide repair services for laptops and other computer devices, along with various other services you may need..."
+        },
+        {
+          question: "How can I track my repair?",
+          answer: "After submitting your device, you'll receive a unique code to check real-time updates..."
+        }
       ]
     };
+  },
+  mounted() {
+    const viewedLanding = sessionStorage.getItem('viewedLanding');
+    if (!viewedLanding) {
+      this.trackLandingPageView();
+      sessionStorage.setItem('viewedLanding', 'true');
+    } else {
+      this.getViewCount();
+    }
   },
   methods: {
     toggleFAQ(index) {
       this.activeIndex = this.activeIndex === index ? null : index;
+    },
+    async trackLandingPageView() {
+      try {
+        await fetch('https://techfix.online/api/track-view', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ page: 'landing-page' })
+        });
+
+        this.getViewCount();
+      } catch (error) {
+        console.error('Failed to track landing page view:', error);
+      }
+    },
+    async getViewCount() {
+      try {
+        const res = await fetch('https://techfix.online/api/track-view/landing-page');
+        const data = await res.json();
+        this.viewCount = data.count;
+      } catch (error) {
+        console.error('Failed to fetch view count:', error);
+      }
     }
   }
 };
 </script>
+
 
 <style lang="scss" scoped>
 .landing-page {
